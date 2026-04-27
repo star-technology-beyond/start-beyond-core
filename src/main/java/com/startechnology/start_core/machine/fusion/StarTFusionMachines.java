@@ -27,10 +27,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collector;
 
 public class StarTFusionMachines {
@@ -283,19 +280,20 @@ public class StarTFusionMachines {
                 .tooltips(
                     Component.translatable("start_core.machine.auxiliary_boosted_fusion_reactor.line"),
                     Component.translatable("start_core.machine.auxiliary_boosted_fusion_reactor.description"),
-                    Component.translatable("block.start_core.breaker_line"),
-                    Component.translatable("start_core.machine.auxiliary_boosted_fusion_reactor.fusion_info"),
-                    Component.translatable("gtceu.machine.fusion_reactor.capacity",
-                        ReflectorFusionReactorMachine.calculateEnergyStorageFactor(tier, 16) / 1000000L),
-                    Component.translatable("start_core.machine.fusion_reactor.overclocking"),
-                    Component.literal(""),
-                    Component.translatable("start_core.machine.auxiliary_boosted_fusion_reactor.specific",
-                        GTValues.VN[tier], ReflectorFusionReactorMachine.calculateEnergyStorageFactor(tier, 1) / 1000000L
-                    ),
-                    Component.translatable("block.start_core.breaker_line"),
-                    Component.translatable("start_core.machine.auxiliary_boosted_fusion_reactor.parallel_info"),
-                    Component.translatable("start_core.machine.auxiliary_boosted_fusion_reactor.parallel_info_1"),
-                    Component.translatable("block.start_core.breaker_line"));
+                    Component.translatable("block.start_core.breaker_line")
+                )
+                .paginatedTooltips(
+                    List.of(
+                        Component.translatable("start_core.machine.auxiliary_boosted_fusion_reactor.fusion_info"),
+                        Component.translatable("gtceu.machine.fusion_reactor.capacity",
+                            ReflectorFusionReactorMachine.calculateEnergyStorageFactor(tier, 16) / 1000000L),
+                        Component.translatable("start_core.machine.fusion_reactor.overclocking"),
+                        Component.empty(),
+                        Component.translatable("start_core.machine.auxiliary_boosted_fusion_reactor.specific",
+                            GTValues.VN[tier], ReflectorFusionReactorMachine.calculateEnergyStorageFactor(tier, 1) / 1000000L
+                        )
+                    )
+                );
 
         } else {
             builder

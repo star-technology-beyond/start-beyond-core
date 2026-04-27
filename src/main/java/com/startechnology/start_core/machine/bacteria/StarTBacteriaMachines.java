@@ -18,6 +18,8 @@ import com.startechnology.start_core.recipe.StarTRecipeTypes;
 import dev.latvian.mods.kubejs.KubeJS;
 import net.minecraft.network.chat.Component;
 
+import java.util.List;
+
 import static com.startechnology.start_core.StarTCore.START_REGISTRATE;
 
 public class StarTBacteriaMachines {
@@ -25,19 +27,6 @@ public class StarTBacteriaMachines {
         .multiblock("bacterial_breeding_vat", BacterialVatMachine::new)
         .appearanceBlock(() -> StarTMachineUtils.getKjsBlock(("peek_casing")))
         .langValue("Bacterial Breeding Vat")
-        .tooltips(
-            Component.translatable("block.start_core.bacteria_multiblock_line"),
-            Component.translatable("block.start_core.vat_description"),
-            Component.translatable("block.start_core.breaker_line"),
-            Component.translatable("block.start_core.vat1"),
-            Component.translatable("block.start_core.vat2"),
-            Component.translatable("block.start_core.gap"),
-            Component.translatable("block.start_core.vat3"),
-            Component.translatable("block.start_core.gap"),
-            Component.translatable("block.start_core.vat4"),
-            Component.translatable("block.start_core.breaker_line"),
-            Component.translatable("block.start_core.parallels")
-        )
         .rotationState(RotationState.NON_Y_AXIS)
         .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE)
         .recipeTypes(StarTRecipeTypes.BACTERIAL_BREEDING_VAT_RECIPES)
@@ -69,6 +58,21 @@ public class StarTBacteriaMachines {
             .where("H", Predicates.blocks(GTBlocks.FUSION_GLASS.get()))
             .where("@", Predicates.controller(Predicates.blocks(definition.get())))
             .build()
+        )
+        .tooltips(
+            Component.translatable("block.start_core.bacteria_multiblock_line"),
+            Component.translatable("block.start_core.vat_description"),
+            Component.translatable("block.start_core.breaker_line")
+        )
+        .paginatedTooltips(
+            List.of(
+                Component.translatable("block.start_core.vat1"),
+                Component.translatable("block.start_core.vat2"),
+                Component.empty(),
+                Component.translatable("block.start_core.vat3"),
+                Component.empty(),
+                Component.translatable("block.start_core.vat4")
+            )
         )
         .workableCasingModel(KubeJS.id("block/casings/basic/machine_casing_peek"), GTCEu.id("block/machines/brewery"))
         .register();
@@ -128,19 +132,6 @@ public class StarTBacteriaMachines {
         .multiblock("bacterial_hydrocarbon_harvester", WorkableElectricMultiblockMachine::new)
         .appearanceBlock(() -> StarTMachineUtils.getKjsBlock(("peek_casing")))
         .langValue("Bacterial Hydrocarbon Harvester")
-        .tooltips(
-            Component.translatable("block.start_core.bacteria_multiblock_line"),
-            Component.translatable("block.start_core.harvester_description"),
-            Component.translatable("block.start_core.breaker_line"),
-            Component.translatable("block.start_core.hv0"),
-            Component.translatable("block.start_core.hv1"),
-            Component.translatable("block.start_core.gap"),
-            Component.translatable("block.start_core.hv2"),
-            Component.translatable("block.start_core.gap"),
-            Component.translatable("block.start_core.hv3"),
-            Component.translatable("block.start_core.breaker_line"),
-            Component.translatable("block.start_core.parallels")
-        )
         .rotationState(RotationState.NON_Y_AXIS)
         .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.OC_NON_PERFECT, GTRecipeModifiers.BATCH_MODE)
         .recipeTypes(StarTRecipeTypes.BACTERIAL_HYDROCARBON_HARVESTER_RECIPES)
@@ -164,6 +155,21 @@ public class StarTBacteriaMachines {
             .where("T", Predicates.blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTCEuAPI.materialManager.getMaterial("gtceu:trinaquadalloy"))))
             .where(" ", Predicates.any())
             .build()
+        )
+        .tooltips(
+            Component.translatable("block.start_core.bacteria_multiblock_line"),
+            Component.translatable("block.start_core.harvester_description"),
+            Component.translatable("block.start_core.breaker_line")
+        )
+        .paginatedTooltips(
+            List.of(
+                Component.translatable("block.start_core.hv0"),
+                Component.translatable("block.start_core.hv1"),
+                Component.empty(),
+                Component.translatable("block.start_core.hv2"),
+                Component.empty(),
+                Component.translatable("block.start_core.hv3")
+            )
         )
         .workableCasingModel(KubeJS.id("block/casings/basic/machine_casing_peek"), GTCEu.id("block/machines/distillery"))
         .register();

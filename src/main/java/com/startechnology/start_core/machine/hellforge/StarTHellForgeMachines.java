@@ -98,10 +98,6 @@ public class StarTHellForgeMachines {
                 Component.translatable("block.start_core.hellforge_d8")
             )
         )
-        .bottomTooltips(
-            Component.translatable("block.start_core.breaker_line"),
-            Component.translatable("block.start_core.hellforge_rm")
-        )
         .workableCasingModel(KubeJS.id("block/casings/nether_multis/extreme_temperature_smelting_casing"),
             GTCEu.id("block/machines/alloy_smelter"))
         .register();
@@ -181,10 +177,6 @@ public class StarTHellForgeMachines {
                 Component.translatable("machine.start_core.redstone_interfacing"),
                 Component.translatable("block.start_core.hellforge_d8")
             )
-        )
-        .bottomTooltips(
-            Component.translatable("block.start_core.breaker_line"),
-            Component.translatable("block.start_core.fornaxs_infernal_rotary_engine_rm")
         )
         .workableCasingModel(KubeJS.id("block/casings/riftic_multis/absolute_temperature_smelting_casing"),
             GTCEu.id("block/machines/alloy_smelter"))

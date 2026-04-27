@@ -82,10 +82,6 @@ public class StarTAbyssalharvesterMachines {
                 Component.translatable("start_core.machine.abyssal_harvester.ah6")
             )
         )
-        .bottomTooltips(
-            Component.translatable("block.start_core.breaker_line"),
-            Component.translatable("block.start_core.parallels")
-        )
         .workableCasingModel(KubeJS.id("block/casings/end_multis/draneko_casing"),
             GTCEu.id("block/machines/alloy_smelter"))
         .register();
