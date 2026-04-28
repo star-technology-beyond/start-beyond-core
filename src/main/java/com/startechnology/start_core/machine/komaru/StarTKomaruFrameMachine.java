@@ -1,11 +1,5 @@
 package com.startechnology.start_core.machine.komaru;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -29,12 +23,12 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.startechnology.start_core.StarTCore;
 import com.startechnology.start_core.machine.modular.StarTModularConduitAutoScalingHatchPartMachine;
-import com.startechnology.start_core.machine.redstone.IStarTRedstoneIndicatorMachine;
-import com.startechnology.start_core.machine.redstone.StarTRedstoneIndicatorRecord;
+import com.startechnology.start_core.machine.redstone.IRedstoneIndicatorMachine;
+import com.startechnology.start_core.machine.redstone.RedstoneIndicatorRecord;
 import com.startechnology.start_core.mixin.LaserHatchPartMachineAccessor;
-
 import lombok.Getter;
 import net.minecraft.ChatFormatting;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -42,7 +36,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
-public class StarTKomaruFrameMachine extends WorkableElectricMultiblockMachine implements IStarTRedstoneIndicatorMachine {
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+public class StarTKomaruFrameMachine extends WorkableElectricMultiblockMachine implements IRedstoneIndicatorMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             StarTKomaruFrameMachine.class,
@@ -276,8 +279,7 @@ public class StarTKomaruFrameMachine extends WorkableElectricMultiblockMachine i
     public void onLoad() {
         super.onLoad();
 
-        if (getLevel().isClientSide)
-            return;
+        if (isRemote()) return;
 
         tryTickSub = subscribeServerTick(tryTickSub, this::tryTransferTerminalEnergy);
         consumptionTickSub = subscribeServerTick(consumptionTickSub, this::checkConsumption);
@@ -287,8 +289,7 @@ public class StarTKomaruFrameMachine extends WorkableElectricMultiblockMachine i
     public void onUnload() {
         super.onUnload();
 
-        if (getLevel().isClientSide)
-            return;
+        if (isRemote()) return;
 
         if (tryTickSub != null) {
             tryTickSub.unsubscribe();
@@ -308,8 +309,8 @@ public class StarTKomaruFrameMachine extends WorkableElectricMultiblockMachine i
     }
 
     protected void transferModuleInterfacesTick() {
-        if (getLevel().isClientSide || !this.readyToUpdate || !isWorkingEnabled() || inputLaserContainer == null
-                || terminals == null) {
+        if (isRemote()) return;
+        if (!readyToUpdate || !isWorkingEnabled() || inputLaserContainer == null || terminals == null) {
             return;
         }
 
@@ -371,9 +372,8 @@ public class StarTKomaruFrameMachine extends WorkableElectricMultiblockMachine i
     }
 
     private void checkConsumption() {
-        if (!checkOffset(CONSUMPTION_CYCLE_TICKS) || getLevel().isClientSide || !isFormed()) {
-            return;
-        }
+        if (isRemote() || !isFormed()) return;
+        if (!checkOffset(CONSUMPTION_CYCLE_TICKS)) return;
 
         int basicModules = countLinked(basicTerminals);
         int advancedModules = countLinked(advancedTerminals);
@@ -416,9 +416,7 @@ public class StarTKomaruFrameMachine extends WorkableElectricMultiblockMachine i
     }
 
     private static int countLinked(List<StarTModularConduitAutoScalingHatchPartMachine> terminals) {
-        if (terminals == null || terminals.isEmpty()) {
-            return 0;
-        }
+        if (terminals.isEmpty()) return 0;
 
         int count = 0;
         for (StarTModularConduitAutoScalingHatchPartMachine terminal : terminals) {
@@ -548,11 +546,11 @@ public class StarTKomaruFrameMachine extends WorkableElectricMultiblockMachine i
     }
 
     @Override
-    public List<StarTRedstoneIndicatorRecord> getInitialIndicators() {
-        List<StarTRedstoneIndicatorRecord> indicators = new ArrayList<>();
+    public List<RedstoneIndicatorRecord> getInitialIndicators() {
+        var indicators = new ArrayList<RedstoneIndicatorRecord>();
 
         for (int marker : C_REDSTONE_MARKERS) {
-            indicators.add(new StarTRedstoneIndicatorRecord(
+            indicators.add(new RedstoneIndicatorRecord(
                     cIndicatorKey(marker),
                     Component.translatable("variadic.start_core.indicator.komaru.c", marker),
                     Component.translatable("variadic.start_core.description.komaru.c", marker),
@@ -561,7 +559,7 @@ public class StarTKomaruFrameMachine extends WorkableElectricMultiblockMachine i
         }
 
         for (int marker : FAE_SCALING_REDSTONE_MARKERS) {
-            indicators.add(new StarTRedstoneIndicatorRecord(
+            indicators.add(new RedstoneIndicatorRecord(
                     faeScalingIndicatorKey(marker),
                     Component.translatable("variadic.start_core.indicator.komaru.fae_scaling", marker),
                     Component.translatable("variadic.start_core.description.komaru.fae_scaling", marker),
