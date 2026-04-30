@@ -10,7 +10,7 @@
   "gtceu.modifier.bulk_processing.name": "%sBulk Processing:",
   "grceu.modifier.bulk_processing.description.0": "  §7If the machine has enough inputs to run at least 16 parallels,",
   "grceu.modifier.bulk_processing.description.1": "  §7it will run only at 13x the duration",
-  "grceu.modifier.bulk_processing.description.2": "  7Will not bulk if it does not have enough inputs",
+  "grceu.modifier.bulk_processing.description.2": "  §7Will not bulk if it does not have enough inputs",
   "gtceu.modifier.throughput_boosting.name": "%sThroughput Boosting:",
   "grceu.modifier.throughput_boosting.description.0": "  §7The machine can run by default with 4 parallels",
   "grceu.modifier.throughput_boosting.description.1": "  §7The duration of the recipe is increased 1.6x and EU/t 0.95x"
