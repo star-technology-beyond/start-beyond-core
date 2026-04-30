@@ -33,9 +33,9 @@ public class StarTModularCombustionMachines {
                     Component.translatable("block.start_core.t1_combustion_module_description"),
                     Component.translatable("block.start_core.t1_combustion_module_d0",
                             FormattingUtil.formatNumbers(GTValues.V[GTValues.LuV])),
-                    Component.translatable("block.start_core.t1_combustion_module_d1",FormattingUtil.formatNumbers(1000)),
+                    Component.translatable("block.start_core.t1_combustion_module_d1",FormattingUtil.formatNumbers(100)),
                     Component.translatable("block.start_core.t1_combustion_module_d2",
-                            FormattingUtil.formatNumbers(GTValues.V[GTValues.LuV] * 4))
+                            FormattingUtil.formatNumbers(GTValues.V[GTValues.LuV] * 5))
             )
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeTypes(GTRecipeTypes.COMBUSTION_GENERATOR_FUELS)
@@ -72,9 +72,9 @@ public class StarTModularCombustionMachines {
                     Component.translatable("block.start_core.t2_combustion_module_description"),
                     Component.translatable("block.start_core.t2_combustion_module_d0",
                         FormattingUtil.formatNumbers(GTValues.V[GTValues.ZPM])),
-                    Component.translatable("block.start_core.t2_combustion_module_d1",FormattingUtil.formatNumbers(1000)),
+                    Component.translatable("block.start_core.t2_combustion_module_d1",FormattingUtil.formatNumbers(200)),
                     Component.translatable("block.start_core.t2_combustion_module_d2",
-                            FormattingUtil.formatNumbers(GTValues.V[GTValues.ZPM] * 4))
+                            FormattingUtil.formatNumbers(GTValues.V[GTValues.ZPM] * 6))
 
             )
             .rotationState(RotationState.NON_Y_AXIS)
@@ -111,9 +111,9 @@ public class StarTModularCombustionMachines {
             .langValue("Supreme Rocket Module")
             .tooltips(
                     Component.translatable("block.start_core.t1_rocket_module_description"),
-                    Component.translatable("block.start_core.t1_rocket_module_d0", FormattingUtil.formatNumbers(GTValues.V[GTValues.UV])),
-                    Component.translatable("block.start_core.t1_rocket_module_d1",FormattingUtil.formatNumbers(1000)),
-                    Component.translatable("block.start_core.t1_rocket_module_d2", FormattingUtil.formatNumbers(GTValues.V[GTValues.UV] * 4))
+                    Component.translatable("block.start_core.t1_rocket_module_d0", FormattingUtil.formatNumbers(GTValues.V[GTValues.UV] *2)),
+                    Component.translatable("block.start_core.t1_rocket_module_d1",FormattingUtil.formatNumbers(200)),
+                    Component.translatable("block.start_core.t1_rocket_module_d2", FormattingUtil.formatNumbers(GTValues.V[GTValues.UV] * 8))
 
             )
             .rotationState(RotationState.NON_Y_AXIS)
@@ -150,9 +150,9 @@ public class StarTModularCombustionMachines {
             .langValue("Nyinsane Rocket Module")
             .tooltips(
                     Component.translatable("block.start_core.t2_rocket_module_description"),
-                    Component.translatable("block.start_core.t2_rocket_module_d0",FormattingUtil.formatNumbers(GTValues.V[GTValues.UHV])),
-                    Component.translatable("block.start_core.t2_rocket_module_d1",FormattingUtil.formatNumbers(1000)),
-                    Component.translatable("block.start_core.t2_rocket_module_d2",FormattingUtil.formatNumbers(GTValues.V[GTValues.UHV] * 4))
+                    Component.translatable("block.start_core.t2_rocket_module_d0",FormattingUtil.formatNumbers(GTValues.V[GTValues.UEV] * 2)),
+                    Component.translatable("block.start_core.t2_rocket_module_d1",FormattingUtil.formatNumbers(400)),
+                    Component.translatable("block.start_core.t2_rocket_module_d2",FormattingUtil.formatNumbers(GTValues.V[GTValues.UEV] * 12))
 
             )
             .appearanceBlock(() -> StarTMachineUtils.getKjsBlock("nyanium_turbine_casing"))
@@ -187,7 +187,14 @@ public class StarTModularCombustionMachines {
             .multiblock("modular_combustion_frame", (holder) -> new ModularFrameBoosting(holder, StarTCore.resourceLocation("uv_combustion_module"),StarTCore.resourceLocation("uev_combustion_module"),StarTCore.resourceLocation("luv_combustion_module"),StarTCore.resourceLocation("zpm_combustion_module")))
             .langValue("Modular Combustion Frame")
             .tooltips(
-                    Component.translatable("block.start_core.modular_combustion_frame_description")
+                    Component.translatable("block.start_core.modular_combustion_frame_description"),
+                    Component.translatable("block.start_core.modular_combustion_frame_d1"),
+                    Component.translatable("block.start_core.breaker_line"),
+                    Component.translatable("block.start_core.modular_combustion_frame_d2"),
+                    Component.translatable("block.start_core.breaker_line"),
+                    Component.translatable("block.start_core.modular_combustion_frame_d3"),
+                    Component.translatable("block.start_core.breaker_line"),
+                    Component.translatable("block.start_core.modular_combustion_frame_tooltip_laser")
             )
             .appearanceBlock(GTBlocks.CASING_PALLADIUM_SUBSTATION)
             .rotationState(RotationState.NON_Y_AXIS)
