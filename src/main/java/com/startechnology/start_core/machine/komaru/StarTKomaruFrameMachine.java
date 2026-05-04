@@ -57,7 +57,7 @@ public class StarTKomaruFrameMachine extends WorkableElectricMultiblockMachine i
     private static final Pattern FILAMENT_TAG_PATTERN = Pattern.compile("^start_core:komaru/filaments/tier_(\\d+)$");
 
     private static final int CONSUMPTION_CYCLE_TICKS = 200;
-    private static final double DEFAULT_PREVIOUS_C = 3.0;
+    private static final double DEFAULT_PREVIOUS_C = 10.0;
     private static final List<Integer> C_REDSTONE_MARKERS = List.of(10, 20, 30);
     private static final List<Integer> FAE_SCALING_REDSTONE_MARKERS = List.of(2, 5, 10);
 
