@@ -33,7 +33,7 @@ public class StarTHellForgeMachines {
     public static final MultiblockMachineDefinition HELL_FORGE = START_REGISTRATE
         .multiblock("hellforge", holder -> (new StarTHellForgeMachine(holder, 0, 5, 125)))
         .appearanceBlock(() -> StarTMachineUtils.getKjsBlock(("extreme_temperature_smelting_casing")))
-        .langValue("Hell Forge")
+        .langValue("Hell Forge [HF]")
         .tooltips(
             Component.translatable("block.start_core.hellforge_multiblock_line"),
             Component.translatable("block.start_core.hellforge_description"),

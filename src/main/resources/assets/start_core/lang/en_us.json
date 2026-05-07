@@ -293,7 +293,7 @@
   "behaviour.start_core.hellforge.max_heat": "§cMaximum temperature of this heating fluid is §l%sMK",
   "gtceu.recipe.category.hellforge_heating": "§6Hadean Crucible Heating",
   "gtceu.hellforge": "§6Infernal Forging",
-  "block.start_core.hellforge": "§6Hell Forge",
+  "block.start_core.hellforge": "§6Hell Forge [HF]",
   "block.start_core.fornaxs_infernal_rotary_engine": "§bFornaxs Infernal Rotary Engine [FIRE]",
   "block.start_core.fornaxs_infernal_rotary_engine_rm": "Has §bThroughput Boosting§r and §eBatching",
   "block.start_core.fornaxs_infernal_rotary_engine_line": "§3§lSovereign of Soulflame",
@@ -332,7 +332,7 @@
   "ui.start_core.redstone_signal": "§6Redstone Level: §c{0}",
   "ui.start_core.indicator": "§dIndicator: §f%s",
 
-  "block.start_core.abyssal_harvester": "Abyssal Harvester",
+  "block.start_core.abyssal_harvester": "Abyssal Harvester [AH]",
   "start_core.machine.abyssal_harvester.line": "§5§lAbyssal Harvesting",
   "start_core.machine.abyssal_harvester.description": "§7Absorbs the latent tides of the end abyss, the harvester draws forth exotic abyssal fluids from dimensional fractures and concentrates it as a material fluid.",
   "start_core.machine.abyssal_harvester.ah0": "§6Abyssal Saturation:",
