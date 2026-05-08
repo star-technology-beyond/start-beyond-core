@@ -153,7 +153,8 @@ public class StarTSolarMachine extends WorkableElectricMultiblockMachine impleme
             if (runningTimer > 600) runningTimer %= 600;
         }
 
-        var heatDiff = isDay ? getHeatGain() : getHeatLoose();
+        var dayGain = getHeatGain();
+        var nightLoose = getHeatLoose();
 
         for (SolarCellInstance solarCell : cells) {
             StarTSolarCellType solarCellType = solarCell.cellType();
@@ -177,7 +178,7 @@ public class StarTSolarMachine extends WorkableElectricMultiblockMachine impleme
 
             if (isDay && level.canSeeSky(solarCell.blockPos())) {
                 int maxTemp = solarCellType.getMaxTemperature();
-                double currentTemp = solarCellBlockEntity.getTemperature() + (solarCellType.getTemperatureScale() * heatDiff);
+                double currentTemp = solarCellBlockEntity.getTemperature() + (solarCellType.getTemperatureScale() * dayGain);
 
                 if (currentTemp > maxTemp) {
                     solarCellBlockEntity.setBroken(true);
@@ -203,9 +204,10 @@ public class StarTSolarMachine extends WorkableElectricMultiblockMachine impleme
 
                 totalTemp += currentTemp;
                 totalDura += newDurability;
+
                 newEuT += solarCellType.getEuT();
             } else {
-                double currentTemp = Math.max(solarCellBlockEntity.getTemperature() - heatDiff, solarCellType.getMinTemperature());
+                double currentTemp = Math.max(solarCellBlockEntity.getTemperature() - nightLoose, solarCellType.getMinTemperature());
 
                 solarCellBlockEntity.setTemperature(currentTemp);
 
