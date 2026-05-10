@@ -24,9 +24,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.PushReaction;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.startechnology.start_core.StarTCore.START_REGISTRATE;
@@ -38,14 +40,33 @@ public class StarTSolarMachines {
         .multiblock("ev_solar_panel", holder -> new StarTSolarMachine(holder, EV))
         .langValue("EV Solar Panel")
         .tooltips(
-            Component.translatable("block.start_core.solar_multiblock_line").setStyle(Style.EMPTY.withColor(customGoldColor)),
-            Component.translatable("solar.start_core.solar_machine.tooltip1"),
-            Component.translatable("solar.start_core.solar_machine.tooltip2"),
-            Component.translatable("solar.start_core.solar_machine.tooltip3"),
-            Component.translatable("block.start_core.breaker_line"),
-            Component.translatable("solar.start_core.solar_machine.tooltip4", StarTSolarMachine.getOutputModifier(EV)),
-            Component.translatable("solar.start_core.solar_machine.tooltip5")
+            Component.translatable("block.start_core.solar_machine.tooltip0").setStyle(Style.EMPTY.withColor(customGoldColor)),
+            Component.translatable("block.start_core.solar_machine.tooltip1"),
+            Component.translatable("block.start_core.solar_machine.tooltip2")
         )
+        .paginatedTooltips(List.of(
+            List.of(
+                Component.translatable("block.start_core.solar_machine.paginated1.1", StarTSolarMachine.getOutputModifier(EV)),
+                Component.translatable("block.start_core.solar_machine.paginated1.2"),
+                Component.translatable("block.start_core.breaker_line"),
+                Component.translatable("block.start_core.solar_machine.paginated1.3"),
+                Component.translatable("block.start_core.solar_machine.paginated1.4"),
+                Component.translatable("block.start_core.breaker_line"),
+                Component.translatable("block.start_core.solar_panel.paginated1.1"),
+                Component.translatable("block.start_core.solar_panel.paginated1.2"),
+                Component.translatable("block.start_core.solar_panel.paginated1.3")
+            ),
+            List.of(
+                Component.translatable("block.start_core.solar_machine.paginated2.1"),
+                Component.translatable("block.start_core.solar_machine.paginated2.2"),
+                Component.translatable("block.start_core.solar_machine.paginated2.3"),
+                Component.translatable("block.start_core.solar_machine.paginated2.4"),
+                Component.translatable("block.start_core.solar_machine.paginated2.5"),
+                Component.translatable("block.start_core.solar_machine.paginated2.6"),
+                Component.translatable("block.start_core.solar_machine.paginated2.7"),
+                Component.translatable("block.start_core.solar_machine.paginated2.8")
+            )
+        ))
         .rotationState(RotationState.NON_Y_AXIS)
         .recipeType(GTRecipeTypes.DUMMY_RECIPES)
         .appearanceBlock(GTBlocks.CASING_STEEL_SOLID)
@@ -92,14 +113,33 @@ public class StarTSolarMachines {
         .multiblock("iv_solar_panel", holder -> new StarTSolarMachine(holder, IV))
         .langValue("IV Solar Panel")
         .tooltips(
-            Component.translatable("block.start_core.solar_multiblock_line").setStyle(Style.EMPTY.withColor(customGoldColor)),
-            Component.translatable("solar.start_core.solar_machine.tooltip1"),
-            Component.translatable("solar.start_core.solar_machine.tooltip2"),
-            Component.translatable("solar.start_core.solar_machine.tooltip3"),
-            Component.translatable("block.start_core.breaker_line"),
-            Component.translatable("solar.start_core.solar_machine.tooltip4", StarTSolarMachine.getOutputModifier(IV)),
-            Component.translatable("solar.start_core.solar_machine.tooltip5")
+            Component.translatable("block.start_core.solar_machine.tooltip0").setStyle(Style.EMPTY.withColor(customGoldColor)),
+            Component.translatable("block.start_core.solar_machine.tooltip1"),
+            Component.translatable("block.start_core.solar_machine.tooltip2")
         )
+        .paginatedTooltips(List.of(
+            List.of(
+                Component.translatable("block.start_core.solar_machine.paginated1.1", StarTSolarMachine.getOutputModifier(IV)),
+                Component.translatable("block.start_core.solar_machine.paginated1.2"),
+                Component.translatable("block.start_core.breaker_line"),
+                Component.translatable("block.start_core.solar_machine.paginated1.3"),
+                Component.translatable("block.start_core.solar_machine.paginated1.4"),
+                Component.translatable("block.start_core.breaker_line"),
+                Component.translatable("block.start_core.solar_panel.paginated1.1"),
+                Component.translatable("block.start_core.solar_panel.paginated1.2"),
+                Component.translatable("block.start_core.solar_panel.paginated1.3")
+            ),
+            List.of(
+                Component.translatable("block.start_core.solar_machine.paginated2.1"),
+                Component.translatable("block.start_core.solar_machine.paginated2.2"),
+                Component.translatable("block.start_core.solar_machine.paginated2.3"),
+                Component.translatable("block.start_core.solar_machine.paginated2.4"),
+                Component.translatable("block.start_core.solar_machine.paginated2.5"),
+                Component.translatable("block.start_core.solar_machine.paginated2.6"),
+                Component.translatable("block.start_core.solar_machine.paginated2.7"),
+                Component.translatable("block.start_core.solar_machine.paginated2.8")
+            )
+        ))
         .rotationState(RotationState.NON_Y_AXIS)
         .recipeType(GTRecipeTypes.DUMMY_RECIPES)
         .appearanceBlock(GTBlocks.CASING_STEEL_SOLID)
@@ -146,14 +186,33 @@ public class StarTSolarMachines {
         .multiblock("luv_solar_panel", holder -> new StarTSolarMachine(holder, LuV))
         .langValue("LuV Solar Panel")
         .tooltips(
-            Component.translatable("block.start_core.solar_multiblock_line").setStyle(Style.EMPTY.withColor(customGoldColor)),
-            Component.translatable("solar.start_core.solar_machine.tooltip1"),
-            Component.translatable("solar.start_core.solar_machine.tooltip2"),
-            Component.translatable("solar.start_core.solar_machine.tooltip3"),
-            Component.translatable("block.start_core.breaker_line"),
-            Component.translatable("solar.start_core.solar_machine.tooltip4", StarTSolarMachine.getOutputModifier(LuV)),
-            Component.translatable("solar.start_core.solar_machine.tooltip5")
+            Component.translatable("block.start_core.solar_machine.tooltip0").setStyle(Style.EMPTY.withColor(customGoldColor)),
+            Component.translatable("block.start_core.solar_machine.tooltip1"),
+            Component.translatable("block.start_core.solar_machine.tooltip2")
         )
+        .paginatedTooltips(List.of(
+            List.of(
+                Component.translatable("block.start_core.solar_machine.paginated1.1", StarTSolarMachine.getOutputModifier(LuV)),
+                Component.translatable("block.start_core.solar_machine.paginated1.2"),
+                Component.translatable("block.start_core.breaker_line"),
+                Component.translatable("block.start_core.solar_machine.paginated1.3"),
+                Component.translatable("block.start_core.solar_machine.paginated1.4"),
+                Component.translatable("block.start_core.breaker_line"),
+                Component.translatable("block.start_core.solar_panel.paginated1.1"),
+                Component.translatable("block.start_core.solar_panel.paginated1.2"),
+                Component.translatable("block.start_core.solar_panel.paginated1.3")
+            ),
+            List.of(
+                Component.translatable("block.start_core.solar_machine.paginated2.1"),
+                Component.translatable("block.start_core.solar_machine.paginated2.2"),
+                Component.translatable("block.start_core.solar_machine.paginated2.3"),
+                Component.translatable("block.start_core.solar_machine.paginated2.4"),
+                Component.translatable("block.start_core.solar_machine.paginated2.5"),
+                Component.translatable("block.start_core.solar_machine.paginated2.6"),
+                Component.translatable("block.start_core.solar_machine.paginated2.7"),
+                Component.translatable("block.start_core.solar_machine.paginated2.8")
+            )
+        ))
         .rotationState(RotationState.NON_Y_AXIS)
         .recipeType(GTRecipeTypes.DUMMY_RECIPES)
         .appearanceBlock(GTBlocks.CASING_STEEL_SOLID)
@@ -200,18 +259,40 @@ public class StarTSolarMachines {
         .multiblock("uv_solar_array", holder -> new StarTSolarMachine(holder, UV))
         .langValue("UV Solar Array")
         .tooltips(
-            Component.translatable("block.start_core.solar_multiblock_line").setStyle(Style.EMPTY.withColor(customGoldColor)),
-            Component.translatable("solar.start_core.solar_machine.tooltip1"),
-            Component.translatable("solar.start_core.solar_machine.tooltip2"),
-            Component.translatable("solar.start_core.solar_machine.tooltip3"),
-            Component.translatable("block.start_core.gap"),
-            Component.translatable("solar.start_core.solar_machine.tooltip7"),
-            Component.translatable("block.start_core.breaker_line"),
-            Component.translatable("solar.start_core.solar_machine.tooltip4", StarTSolarMachine.getOutputModifier(UV)),
-            Component.translatable("solar.start_core.solar_machine.tooltip5"),
-            Component.translatable("block.start_core.breaker_line"),
-            Component.translatable("solar.start_core.solar_machine.tooltip6", "§71000", Component.translatable("material.gtceu.deionized_water"))
+            Component.translatable("block.start_core.solar_machine.tooltip0").setStyle(Style.EMPTY.withColor(customGoldColor)),
+            Component.translatable("block.start_core.solar_machine.tooltip1"),
+            Component.translatable("block.start_core.solar_machine.tooltip2")
         )
+        .paginatedTooltips(List.of(
+            List.of(
+                Component.translatable("block.start_core.solar_machine.paginated1.1", StarTSolarMachine.getOutputModifier(UV)),
+                Component.translatable("block.start_core.solar_machine.paginated1.2"),
+                Component.translatable("block.start_core.breaker_line"),
+                Component.translatable("block.start_core.solar_machine.paginated1.3"),
+                Component.translatable("block.start_core.solar_machine.paginated1.4"),
+                Component.translatable("block.start_core.breaker_line"),
+                Component.translatable("block.start_core.solar_panel.paginated1.1"),
+                Component.translatable("block.start_core.solar_panel.paginated1.2"),
+                Component.translatable("block.start_core.solar_panel.paginated1.3")
+            ),
+            List.of(
+                Component.translatable("block.start_core.solar_machine.paginated2.1"),
+                Component.translatable("block.start_core.solar_machine.paginated2.2"),
+                Component.translatable("block.start_core.solar_machine.paginated2.3"),
+                Component.translatable("block.start_core.solar_machine.paginated2.4"),
+                Component.translatable("block.start_core.solar_machine.paginated2.5"),
+                Component.translatable("block.start_core.solar_machine.paginated2.6"),
+                Component.translatable("block.start_core.solar_machine.paginated2.7"),
+                Component.translatable("block.start_core.solar_machine.paginated2.8")
+            ),
+            List.of(
+                Component.translatable("block.start_core.solar_array.paginated2.1"),
+                Component.translatable("block.start_core.solar_array.paginated2.2", "§71000", Component.translatable("material.gtceu.deionized_water")),
+                Component.translatable("block.start_core.solar_array.paginated2.3"),
+                Component.translatable("block.start_core.solar_array.paginated2.4"),
+                Component.translatable("block.start_core.solar_array.paginated2.5")
+            )
+        ))
         .rotationState(RotationState.NON_Y_AXIS)
         .recipeType(GTRecipeTypes.DUMMY_RECIPES)
         .appearanceBlock(() -> StarTMachineUtils.getKjsBlock("enriched_naquadah_machine_casing"))
@@ -277,18 +358,40 @@ public class StarTSolarMachines {
         .multiblock("uhv_solar_array", holder -> new StarTSolarMachine(holder, UHV))
         .langValue("UHV Solar Array")
         .tooltips(
-            Component.translatable("block.start_core.solar_multiblock_line").setStyle(Style.EMPTY.withColor(customGoldColor)),
-            Component.translatable("solar.start_core.solar_machine.tooltip1"),
-            Component.translatable("solar.start_core.solar_machine.tooltip2"),
-            Component.translatable("solar.start_core.solar_machine.tooltip3"),
-            Component.translatable("block.start_core.gap"),
-            Component.translatable("solar.start_core.solar_machine.tooltip7"),
-            Component.translatable("block.start_core.breaker_line"),
-            Component.translatable("solar.start_core.solar_machine.tooltip4", StarTSolarMachine.getOutputModifier(UHV)),
-            Component.translatable("solar.start_core.solar_machine.tooltip5"),
-            Component.translatable("block.start_core.breaker_line"),
-            Component.translatable("solar.start_core.solar_machine.tooltip6", "§72500", Component.translatable("material.gtceu.deionized_water"))
+            Component.translatable("block.start_core.solar_machine.tooltip0").setStyle(Style.EMPTY.withColor(customGoldColor)),
+            Component.translatable("block.start_core.solar_machine.tooltip1"),
+            Component.translatable("block.start_core.solar_machine.tooltip2")
         )
+        .paginatedTooltips(List.of(
+            List.of(
+                Component.translatable("block.start_core.solar_machine.paginated1.1", StarTSolarMachine.getOutputModifier(UHV)),
+                Component.translatable("block.start_core.solar_machine.paginated1.2"),
+                Component.translatable("block.start_core.breaker_line"),
+                Component.translatable("block.start_core.solar_machine.paginated1.3"),
+                Component.translatable("block.start_core.solar_machine.paginated1.4"),
+                Component.translatable("block.start_core.breaker_line"),
+                Component.translatable("block.start_core.solar_panel.paginated1.1"),
+                Component.translatable("block.start_core.solar_panel.paginated1.2"),
+                Component.translatable("block.start_core.solar_panel.paginated1.3")
+            ),
+            List.of(
+                Component.translatable("block.start_core.solar_machine.paginated2.1"),
+                Component.translatable("block.start_core.solar_machine.paginated2.2"),
+                Component.translatable("block.start_core.solar_machine.paginated2.3"),
+                Component.translatable("block.start_core.solar_machine.paginated2.4"),
+                Component.translatable("block.start_core.solar_machine.paginated2.5"),
+                Component.translatable("block.start_core.solar_machine.paginated2.6"),
+                Component.translatable("block.start_core.solar_machine.paginated2.7"),
+                Component.translatable("block.start_core.solar_machine.paginated2.8")
+            ),
+            List.of(
+                Component.translatable("block.start_core.solar_array.paginated2.1"),
+                Component.translatable("block.start_core.solar_array.paginated2.2", "§72500", Component.translatable("material.gtceu.deionized_water")),
+                Component.translatable("block.start_core.solar_array.paginated2.3"),
+                Component.translatable("block.start_core.solar_array.paginated2.4"),
+                Component.translatable("block.start_core.solar_array.paginated2.5")
+            )
+        ))
         .recipeType(GTRecipeTypes.DUMMY_RECIPES)
         .appearanceBlock(() -> StarTMachineUtils.getKjsBlock("enriched_naquadah_machine_casing"))
         .pattern(definition -> FactoryBlockPattern.start()

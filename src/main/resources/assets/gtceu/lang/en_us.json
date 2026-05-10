@@ -14,5 +14,21 @@
   "gtceu.modifier.throughput_boosting.name": "%sThroughput Boosting:",
   "gtceu.modifier.throughput_boosting.description.0": "  §7The machine can run by default with 4 parallels",
   "gtceu.modifier.throughput_boosting.description.1": "  §7The duration of the recipe is increased 1.6x and EU/t 0.95x",
-  "gtceu.modifier.reflector_fusion_reactor.name": "Reflector Fusion Reactor:"
+  "gtceu.modifier.fake_fusion_overclock.name": "%sFusion Overclock:",
+  "gtceu.modifier.fake_fusion_overclock.description.0": "  §7Unlike most machines Fusion Reactors can not overclock by increasing the energy hatches on them.",
+  "gtceu.modifier.fake_fusion_overclock.description.1": "  §7Instead the way to overclock Fusion Reactors is to use the next tier of reactor.",
+  "gtceu.modifier.fake_fusion_overclock.description.2": "  §7Each overclock is special as it only doubles the energy cost while halfing the duration. §b[2:2]",
+  "gtceu.modifier.fake_fusion_overclock.description.3": "  §7Example Reactors and their Tiers:",
+  "gtceu.modifier.fake_fusion_overclock.description.4": "    §fMK1 §7= §dLuV",
+  "gtceu.modifier.fake_fusion_overclock.description.5": "    §fMK2 §7= §cZPM",
+  "gtceu.modifier.fake_fusion_overclock.description.6": "    §fMK3 §7= §3UV",
+  "gtceu.modifier.fake_fusion_overclock.description.7": "    §fAUXI §7= §4UHV",
+  "gtceu.modifier.fake_fusion_overclock.description.8": "    §fMK4 §7= §aUEV",
+  "gtceu.modifier.fake_fusion_overclock.description.9": "    §fAUXII §7= §2UIV",
+  "gtceu.modifier.reflector_fusion_reactor.name": "%sReflector Overclock:",
+  "gtceu.modifier.reflector_fusion_reactor.description.0": "  §7Fusion Reflectors allow another way to tier up your Fusion Reactors.",
+  "gtceu.modifier.reflector_fusion_reactor.description.1": "  §7Instead of relying on higher tier fusion reactors you can upgrade the Reflectors to speed up recipes.",
+  "gtceu.modifier.reflector_fusion_reactor.description.2": "  §7Each tier up of a Fusion Reflector doubles the energy cost and halves the duration independant of other factors. §b[2:2]",
+  "gtceu.modifier.reflector_fusion_reactor.description.3": "  §7This stacks with Fusion Overclock but keep in mind while power cost may increase it will not tier up recipes in a lower tier reactor.",
+  "gtceu.modifier.reflector_fusion_reactor.description.4": "  §7No §dLuV §7to §cZPM §7tier up from increasing Reflectors in a §fMK1§7."
 }

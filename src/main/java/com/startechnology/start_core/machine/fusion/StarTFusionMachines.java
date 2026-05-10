@@ -276,7 +276,7 @@ public class StarTFusionMachines {
 
         if (aux) {
             builder
-                .recipeModifiers(GTRecipeModifiers.DEFAULT_ENVIRONMENT_REQUIREMENT, StarTRecipeModifiers.REFLECTOR_FUSION_REACTOR, StarTRecipeModifiers.ABSOLUTE_PARALLEL, GTRecipeModifiers.BATCH_MODE)
+                .recipeModifiers(GTRecipeModifiers.DEFAULT_ENVIRONMENT_REQUIREMENT, StarTRecipeModifiers.FAKE_FUSION_OVERCLOCK, StarTRecipeModifiers.REFLECTOR_FUSION_REACTOR, StarTRecipeModifiers.ABSOLUTE_PARALLEL, GTRecipeModifiers.BATCH_MODE)
                 .tooltips(
                     Component.translatable("start_core.machine.auxiliary_boosted_fusion_reactor.line"),
                     Component.translatable("start_core.machine.auxiliary_boosted_fusion_reactor.description"),
@@ -288,7 +288,6 @@ public class StarTFusionMachines {
                             Component.translatable("start_core.machine.auxiliary_boosted_fusion_reactor.fusion_info"),
                             Component.translatable("gtceu.machine.fusion_reactor.capacity",
                                 ReflectorFusionReactorMachine.calculateEnergyStorageFactor(tier, 16) / 1000000L),
-                            Component.translatable("start_core.machine.fusion_reactor.overclocking"),
                             Component.empty(),
                             Component.translatable("start_core.machine.auxiliary_boosted_fusion_reactor.specific",
                                 GTValues.VN[tier], ReflectorFusionReactorMachine.calculateEnergyStorageFactor(tier, 1) / 1000000L
@@ -300,11 +299,10 @@ public class StarTFusionMachines {
 
         } else {
             builder
-                .recipeModifiers(GTRecipeModifiers.DEFAULT_ENVIRONMENT_REQUIREMENT, StarTRecipeModifiers.REFLECTOR_FUSION_REACTOR, GTRecipeModifiers.BATCH_MODE)
+                .recipeModifiers(GTRecipeModifiers.DEFAULT_ENVIRONMENT_REQUIREMENT, StarTRecipeModifiers.FAKE_FUSION_OVERCLOCK, StarTRecipeModifiers.REFLECTOR_FUSION_REACTOR, GTRecipeModifiers.BATCH_MODE)
                 .tooltips(
                     Component.translatable("gtceu.machine.fusion_reactor.capacity",
                         ReflectorFusionReactorMachine.calculateEnergyStorageFactor(tier, 16) / 1000000L),
-                    Component.translatable("gtceu.machine.fusion_reactor.overclocking"),
                     Component.translatable(tier == GTValues.UEV ?
                             "start_core.multiblock.uev_fusion_reactor.description" :
                             "gtceu.multiblock.%s_fusion_reactor.description".formatted(GTValues.VN[tier].toLowerCase(Locale.ROOT))));

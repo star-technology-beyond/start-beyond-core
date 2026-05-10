@@ -33,7 +33,7 @@ public class StarTHellForgeMachines {
     public static final MultiblockMachineDefinition HELL_FORGE = START_REGISTRATE
         .multiblock("hellforge", holder -> (new StarTHellForgeMachine(holder, 0, 5, 125)))
         .appearanceBlock(() -> StarTMachineUtils.getKjsBlock(("extreme_temperature_smelting_casing")))
-        .langValue("Hell Forge")
+        .langValue("Hell Forge [HF]")
         .tooltips(
             Component.translatable("block.start_core.hellforge_multiblock_line"),
             Component.translatable("block.start_core.hellforge_description"),
@@ -107,7 +107,7 @@ public class StarTHellForgeMachines {
     public static final MultiblockMachineDefinition BOOSTED_HELL_FORGE = START_REGISTRATE
         .multiblock("fornaxs_infernal_rotary_engine", holder -> (new StarTHellForgeMachine(holder, 925, 3, 75)))
         .appearanceBlock(() -> StarTMachineUtils.getKjsBlock(("absolute_temperature_smelting_casing")))
-        .langValue("Fornaxs Infernal Rotary Engine")
+        .langValue("Fornaxs Infernal Rotary Engine [FIRE]")
         .tooltips(
             Component.translatable("block.start_core.fornaxs_infernal_rotary_engine_line"),
             Component.translatable("block.start_core.fornaxs_infernal_rotary_engine_description"),
