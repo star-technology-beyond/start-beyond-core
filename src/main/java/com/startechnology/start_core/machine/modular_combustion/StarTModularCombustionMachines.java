@@ -1,4 +1,4 @@
-package com.startechnology.start_core.machine.modular;
+package com.startechnology.start_core.machine.modular_combustion;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.RotationState;
@@ -14,8 +14,6 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.startechnology.start_core.StarTCore;
 import com.startechnology.start_core.machine.StarTMachineUtils;
 import com.startechnology.start_core.machine.StarTPartAbility;
-import com.startechnology.start_core.machine.boosting.ModularCombustionBoosting;
-import com.startechnology.start_core.machine.boosting.ModularFrameBoosting;
 import com.startechnology.start_core.recipe.StarTRecipeTypes;
 import dev.latvian.mods.kubejs.KubeJS;
 import net.minecraft.network.chat.Component;
@@ -53,7 +51,6 @@ public class StarTModularCombustionMachines {
                     .where("D", Predicates.blocks(StarTMachineUtils.getKjsBlock("pallaridium_gearbox")))
                     .where("E", Predicates.blocks(StarTMachineUtils.getKjsBlock("pallaridium_turbine_casing"))
                                     .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS))
-                                    .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS))
                     )
                     .where("F", Predicates.abilities(PartAbility.MAINTENANCE))
                     .where("H", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("luv_rotor_holder")))
@@ -94,7 +91,6 @@ public class StarTModularCombustionMachines {
                     .where("D", Predicates.blocks(StarTMachineUtils.getKjsBlock("enriched_naquadah_gearbox")))
                     .where("E", Predicates.blocks(StarTMachineUtils.getKjsBlock("enriched_naquadah_turbine_casing"))
                                     .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS))
-                                    .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS))
                     )
                     .where("F", Predicates.abilities(PartAbility.MAINTENANCE))
                     .where("H", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("zpm_rotor_holder")))
@@ -134,7 +130,6 @@ public class StarTModularCombustionMachines {
                     .where("E", Predicates.abilities(PartAbility.MUFFLER))
                     .where("F", Predicates.blocks(StarTMachineUtils.getKjsBlock("enriched_naquadah_turbine_casing"))
                                     .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS))
-                                    .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS))
                     )
                     .where("G", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("zpm_rotor_holder")))
                     .where("H", Predicates.abilities(PartAbility.MAINTENANCE))
@@ -173,7 +168,6 @@ public class StarTModularCombustionMachines {
                     .where("E", Predicates.abilities(PartAbility.MUFFLER))
                     .where("F", Predicates.blocks(StarTMachineUtils.getKjsBlock("nyanium_turbine_casing"))
                                     .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS))
-                                    .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS))
                     )
                     .where("G", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("uhv_rotor_holder")))
                     .where("H", Predicates.abilities(PartAbility.MAINTENANCE))
@@ -198,6 +192,7 @@ public class StarTModularCombustionMachines {
             )
             .appearanceBlock(GTBlocks.CASING_PALLADIUM_SUBSTATION)
             .rotationState(RotationState.NON_Y_AXIS)
+            .allowExtendedFacing(false)
             .recipeTypes(StarTRecipeTypes.COMBUSTION_FRAME_RECIPE_TYPE)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("  B                     B  ", "                           ", "                           ", "                           ", "                           ", "                           ", "                           ", "                           ", "                           ", "                           ", "                           ")
