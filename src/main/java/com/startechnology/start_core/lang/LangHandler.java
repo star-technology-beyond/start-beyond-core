@@ -91,7 +91,10 @@ public class LangHandler {
         provider.add("start_core.machine.auxiliary_boosted_fusion_reactor.parallel_info_1", "§7Any Absolute Parallel Mastery Hatches can be used enabling high rates of production.");
 
         provider.add("gtceu.reflector_fusion_reactor", "Fusion Reactor");
-        provider.add("start_core.multiblock.uev_fusion_reactor.description", "The Fusion Reactor MK 4 is a large multiblock structure used for fusing elements into heavier ones. It can only use UEV Energy Hatches. For every Hatch it has, its buffer increases by 80M EU, and has a maximum of 1280M.");
+        provider.add("start_core.multiblock.luv_fusion_reactor.description", "The Fusion Reactor MK I is a large multiblock structure used for fusing elements into heavier ones. It can only use LuV Energy Hatches. For every Hatch it has, its buffer increases by 10M EU, and has a maximum of 160M.");
+        provider.add("start_core.multiblock.zpm_fusion_reactor.description", "The Fusion Reactor MK II is a large multiblock structure used for fusing elements into heavier ones. It can only use ZPM Energy Hatches. For every Hatch it has, its buffer increases by 20M EU, and has a maximum of 320M.");
+        provider.add("start_core.multiblock.uv_fusion_reactor.description", "The Fusion Reactor MK III is a large multiblock structure used for fusing elements into heavier ones. It can only use UV Energy Hatches. For every Hatch it has, its buffer increases by 40M EU, and has a maximum of 640M.");
+        provider.add("start_core.multiblock.uev_fusion_reactor.description", "The Fusion Reactor MK IV is a large multiblock structure used for fusing elements into heavier ones. It can only use UEV Energy Hatches. For every Hatch it has, its buffer increases by 160M EU, and has a maximum of 2560M.");
 
         provider.add("start_core.multiblock.pattern.error.reflector", "§cAll fusion reflectors must be the same§r");
         provider.add("start_core.recipe.min_reflector_tier", "Min. Reflector Tier, §bT%d§r");

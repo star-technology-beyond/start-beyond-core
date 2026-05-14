@@ -303,9 +303,8 @@ public class StarTFusionMachines {
                 .tooltips(
                     Component.translatable("gtceu.machine.fusion_reactor.capacity",
                         ReflectorFusionReactorMachine.calculateEnergyStorageFactor(tier, 16) / 1000000L),
-                    Component.translatable(tier == GTValues.UEV ?
-                            "start_core.multiblock.uev_fusion_reactor.description" :
-                            "gtceu.multiblock.%s_fusion_reactor.description".formatted(GTValues.VN[tier].toLowerCase(Locale.ROOT))));
+                    Component.translatable("start_core.multiblock.%s_fusion_reactor.description"
+                        .formatted(GTValues.VN[tier].toLowerCase(Locale.ROOT))));
         }
 
         return builder.register();
