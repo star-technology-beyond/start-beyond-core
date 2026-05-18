@@ -442,10 +442,10 @@ public class LangHandler {
         provider.add("block.start_core.solar_machine.paginated2.2", "§7Each Solar Cell has its own max temperature, and have a minimum temperature of §f273K§7.");
         provider.add("block.start_core.solar_machine.paginated2.3", "§4Overheat§f%§7 = §f[Current Temperature - 273]§7 / §f[Max Temperature - 273]");
         provider.add("block.start_core.solar_machine.paginated2.4", "§7Based on the §4overheat§f%§7 durability loss per cycle is increased, with the following multipliers:");
-        provider.add("block.start_core.solar_machine.paginated2.5", "    §f<75%§7 = 1x Durability loss per cycle");
-        provider.add("block.start_core.solar_machine.paginated2.6", "    §f<85%§7 = 2x Durability loss per cycle");
-        provider.add("block.start_core.solar_machine.paginated2.7", "    §f<95%§7 = 4x Durability loss per cycle");
-        provider.add("block.start_core.solar_machine.paginated2.8", "    §f>95%§7 = 8x Durability loss per cycle");
+        provider.add("block.start_core.solar_machine.paginated2.5", "    §f<70%§7 = 1x Durability loss per cycle");
+        provider.add("block.start_core.solar_machine.paginated2.6", "    §f<80%§7 = 2x Durability loss per cycle");
+        provider.add("block.start_core.solar_machine.paginated2.7", "    §f<90%§7 = 4x Durability loss per cycle");
+        provider.add("block.start_core.solar_machine.paginated2.8", "    §f>90%§7 = 8x Durability loss per cycle");
 
         provider.add("block.start_core.solar_panel.paginated1.1", "§e§lSolar Cell Thermodynamics");
         provider.add("block.start_core.solar_panel.paginated1.2", "§7Each cell will increase its temperature by §f0.2K§7 per 6 second cycle while producing power.");
@@ -459,22 +459,9 @@ public class LangHandler {
         provider.add("block.start_core.solar_array.paginated2.2", "§7By providing §f%s§7 buckets of §f%s§7 every hour the array will become cooled.");
         provider.add("block.start_core.solar_array.paginated2.3", "§7While cooled solar cell thermodynamics will be adjusted.");
         provider.add("block.start_core.solar_array.paginated2.4", "§7Each cell will increase its temperature by §f0.18K§7 per 6 second cycle while producing power.");
-        provider.add("block.start_core.solar_array.paginated2.5", "§7Each cell will decrease its temperature by §f0.15K§7 per 6 second cycle while inactive.");
+        provider.add("block.start_core.solar_array.paginated2.5", "§7While cooled the solar array will increase its voltage multiplier to §fx%s");
 
-        // These seem redundant
-        // provider.add("solar.start_core.solar_panel.tooltip1", "§7Produces energy during the day, using the different cells its made out of.");
-        // provider.add("solar.start_core.solar_panel.tooltip2", "§7During the night it cools down the cells.");
-        // provider.add("solar.start_core.solar_panel.tooltip3", "§7Replaces broken cells with new ones, when provided.");
-        // provider.add("solar.start_core.solar_panel.tooltip4", "§7Every 6s a cycle is completed where all effects and changes are applied.");
-        // provider.add("solar.start_core.solar_panel.tooltip5", "§aVoltage multiplier:§f x%s");
-        // provider.add("solar.start_core.solar_panel.tooltip6", "§7Total EU/t gets multiplied by this factor.");
-        // provider.add("solar.start_core.solar_panel.tooltip7", "§6Repair: §7Broken cells can be replaced next cycle.");
-
-        // provider.add("solar.start_core.solar_array.tooltip1", "Can use §dLaser Hatches");
-        // provider.add("solar.start_core.solar_array.tooltip2", "§3Cooling: §7Consumes %s§7B of §f%s§7 per hour.");
-        // provider.add("solar.start_core.solar_array.tooltip3", "  §7- Day: §4-0.05 K§7 heat gain.");
-        // provider.add("solar.start_core.solar_array.tooltip4", "  §7- Night: §a+0.05 K§7 cooling.");
-        // provider.add("solar.start_core.solar_array.tooltip5", "  §7- Missing resources increases heat gain (day) and reduces cooling (night).");
+        provider.add("solar.start_core.solar_array.tooltip1", "Can use §dLaser Hatches");
 
         provider.add("solar.start_core.solar_machine.cell_tooltip", "Working Cells: %s/%s");
         provider.add("solar.start_core.solar_machine.avg_temp_tooltip", "§cAverage Temperature:§f %s K");

@@ -104,7 +104,7 @@ public class StarTSolarCell extends Block implements EntityBlock {
         tooltip.add(Component.translatable("solar.start_core.solar_cell.tooltip1"));
         tooltip.add(Component.translatable("solar.start_core.solar_cell.tooltip2"));
         tooltip.add(Component.translatable("solar.start_core.solar_cell.tooltip3"));
-        tooltip.add(Component.translatable("gtceu.universal.tooltip.voltage_out", FormattingUtil.formatNumbers(solarCellType.getEuT()), GTValues.VNF[solarCellType.getTier()]));
+        tooltip.add(Component.translatable("gtceu.universal.tooltip.voltage_out", FormattingUtil.formatNumbers(solarCellType.getEuT()), GTValues.VNF[solarCellType.getTier() - 1]));
 
         if (tag != null && tag.contains("BlockEntityTag", Tag.TAG_COMPOUND)) {
             CompoundTag beTag = tag.getCompound("BlockEntityTag");

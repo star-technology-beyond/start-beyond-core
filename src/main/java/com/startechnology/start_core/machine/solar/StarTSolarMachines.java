@@ -262,7 +262,9 @@ public class StarTSolarMachines {
         .tooltips(
             Component.translatable("block.start_core.solar_machine.tooltip0").setStyle(Style.EMPTY.withColor(customGoldColor)),
             Component.translatable("block.start_core.solar_machine.tooltip1"),
-            Component.translatable("block.start_core.solar_machine.tooltip2")
+            Component.translatable("block.start_core.solar_machine.tooltip2"),
+            Component.empty(),
+            Component.translatable("solar.start_core.solar_array.tooltip1")
         )
         .paginatedTooltips(List.of(
             List.of(
@@ -291,7 +293,7 @@ public class StarTSolarMachines {
                 Component.translatable("block.start_core.solar_array.paginated2.2", "§71000", Component.translatable("material.gtceu.deionized_water")),
                 Component.translatable("block.start_core.solar_array.paginated2.3"),
                 Component.translatable("block.start_core.solar_array.paginated2.4"),
-                Component.translatable("block.start_core.solar_array.paginated2.5")
+                Component.translatable("block.start_core.solar_array.paginated2.5", StarTSolarMachine.getOutputModifier(UV, true))
             )
         ))
         .rotationState(RotationState.NON_Y_AXIS)
@@ -361,7 +363,9 @@ public class StarTSolarMachines {
         .tooltips(
             Component.translatable("block.start_core.solar_machine.tooltip0").setStyle(Style.EMPTY.withColor(customGoldColor)),
             Component.translatable("block.start_core.solar_machine.tooltip1"),
-            Component.translatable("block.start_core.solar_machine.tooltip2")
+            Component.translatable("block.start_core.solar_machine.tooltip2"),
+            Component.empty(),
+            Component.translatable("solar.start_core.solar_array.tooltip1")
         )
         .paginatedTooltips(List.of(
             List.of(
@@ -390,7 +394,7 @@ public class StarTSolarMachines {
                 Component.translatable("block.start_core.solar_array.paginated2.2", "§72500", Component.translatable("material.gtceu.deionized_water")),
                 Component.translatable("block.start_core.solar_array.paginated2.3"),
                 Component.translatable("block.start_core.solar_array.paginated2.4"),
-                Component.translatable("block.start_core.solar_array.paginated2.5")
+                Component.translatable("block.start_core.solar_array.paginated2.5", StarTSolarMachine.getOutputModifier(UHV, true))
             )
         ))
         .recipeType(GTRecipeTypes.DUMMY_RECIPES)
