@@ -429,22 +429,23 @@ public class LangHandler {
         provider.add("config.jade.plugin_start_core.solar_cells", "[Star Technology] Solar Cell Block");
 
         provider.add("block.start_core.solar_machine.tooltip0", "§lPhotovoltaic Energy Production");
-        provider.add("block.start_core.solar_machine.tooltip1", "§7Harvesting the power of the §eSUN§7 by using §fSolar Cells§7. This machine will add the power production of all attached cells and replace broken cells when they decay by having you input new cells into the machine.");
-        provider.add("block.start_core.solar_machine.tooltip2", "§fSolar Cells§7 will only produce power if there are no solid blocks above them and it is day.");
+        provider.add("block.start_core.solar_machine.tooltip1", "§7Use §fSolar Cells§7 to harvest the power of the §eSUN§7. This machine will combine the produced power of all connected solar cells and replace broken ones when they decay if you supply it with new ones.");
+        provider.add("block.start_core.solar_machine.tooltip2", "§fSolar Cells§7 will only produce power if they can see the sun.");
 
         provider.add("block.start_core.solar_machine.paginated1.1", "§a§lVoltage multiplier:§f x%s");
-        provider.add("block.start_core.solar_machine.paginated1.2", "§7Total EU/t gets multiplied by this factor.");
+        provider.add("block.start_core.solar_machine.paginated1.2", "§7Total EU/t generation is increased by this factor.");
 
         provider.add("block.start_core.solar_machine.paginated1.3", "§c§lSolar Cell Decay");
-        provider.add("block.start_core.solar_machine.paginated1.4", "§7Every 6 seconds this machine will run a cycle during which every cell will lose 1 durability. This durability loss in increased by §4Overheat§7.");
-        provider.add("block.start_core.solar_machine.paginated2.1", "§4§lOverheat");
-        provider.add("block.start_core.solar_machine.paginated2.2", "§7Each cell has its own max temperature in Kelvin. All cells cannot drop below §f273K§7.");
+        provider.add("block.start_core.solar_machine.paginated1.4", "§7Solar cells complete a cycle every 6 seconds, after which they will lose a part of their durability, depending on their heat.");
+
+        provider.add("block.start_core.solar_machine.paginated2.1", "§4§lOverheating");
+        provider.add("block.start_core.solar_machine.paginated2.2", "§7Each Solar Cell has its own max temperature, and have a minimum temperature of §f273K§7.");
         provider.add("block.start_core.solar_machine.paginated2.3", "§4Overheat§f%§7 = §f[Current Temperature - 273]§7 / §f[Max Temperature - 273]");
-        provider.add("block.start_core.solar_machine.paginated2.4", "§7Based on the §4overheat§f%§7 durability lose per cycle is increased. This represents thresholds and their associated losses.");
-        provider.add("block.start_core.solar_machine.paginated2.5", "    §f<75%§7 = 1x Durability loss");
-        provider.add("block.start_core.solar_machine.paginated2.6", "    §f<85%§7 = 2x Durability loss");
-        provider.add("block.start_core.solar_machine.paginated2.7", "    §f<95%§7 = 4x Durability loss");
-        provider.add("block.start_core.solar_machine.paginated2.8", "    §f>95%§7 = 8x Durability loss");
+        provider.add("block.start_core.solar_machine.paginated2.4", "§7Based on the §4overheat§f%§7 durability loss per cycle is increased, with the following multipliers:");
+        provider.add("block.start_core.solar_machine.paginated2.5", "    §f<75%§7 = 1x Durability loss per cycle");
+        provider.add("block.start_core.solar_machine.paginated2.6", "    §f<85%§7 = 2x Durability loss per cycle");
+        provider.add("block.start_core.solar_machine.paginated2.7", "    §f<95%§7 = 4x Durability loss per cycle");
+        provider.add("block.start_core.solar_machine.paginated2.8", "    §f>95%§7 = 8x Durability loss per cycle");
 
         provider.add("block.start_core.solar_panel.paginated1.1", "§e§lSolar Cell Thermodynamics");
         provider.add("block.start_core.solar_panel.paginated1.2", "§7Each cell will increase its temperature by §f0.2K§7 per 6 second cycle while producing power.");
@@ -454,24 +455,26 @@ public class LangHandler {
         provider.add("block.start_core.solar_array.paginated1.2", "§7Each cell will increase its temperature by §f0.3K§7 per 6 second cycle while producing power.");
         provider.add("block.start_core.solar_array.paginated1.3", "§7Each cell will decrease its temperature by §f0.1K§7 per 6 second cycle while inactive.");
 
-        provider.add("block.start_core.solar_array.paginated2.1", "§3§lArray Cooling");
-        provider.add("block.start_core.solar_array.paginated2.2", "§7By providing %s of §f%s§7 every hour the array enters a cooled state.");
-        provider.add("block.start_core.solar_array.paginated2.3", "§7While cooled thermodynamics are adjusted.");
-        provider.add("block.start_core.solar_array.paginated2.4", "§7Each cell will increase its temperature by §f0.25K§7 per 6 second cycle while producing power.");
+        provider.add("block.start_core.solar_array.paginated2.1", "§3§lSolar Array Cooling");
+        provider.add("block.start_core.solar_array.paginated2.2", "§7By providing §f%s§7 buckets of §f%s§7 every hour the array will become cooled.");
+        provider.add("block.start_core.solar_array.paginated2.3", "§7While cooled solar cell thermodynamics will be adjusted.");
+        provider.add("block.start_core.solar_array.paginated2.4", "§7Each cell will increase its temperature by §f0.18K§7 per 6 second cycle while producing power.");
         provider.add("block.start_core.solar_array.paginated2.5", "§7Each cell will decrease its temperature by §f0.15K§7 per 6 second cycle while inactive.");
 
-        provider.add("solar.start_core.solar_panel.tooltip1", "§7Produces energy during the day, using the different cells its made out of.");
-        provider.add("solar.start_core.solar_panel.tooltip2", "§7During the night it cools down the cells.");
-        provider.add("solar.start_core.solar_panel.tooltip3", "§7Replaces broken cells with new ones, when provided.");
-        provider.add("solar.start_core.solar_panel.tooltip4", "§7Every 6s a cycle is completed where all effects and changes are applied.");
-        provider.add("solar.start_core.solar_panel.tooltip5", "§aVoltage multiplier:§f x%s");
-        provider.add("solar.start_core.solar_panel.tooltip6", "§7Total EU/t gets multiplied by this factor.");
-        provider.add("solar.start_core.solar_panel.tooltip7", "§6Repair: §7Broken cells can be replaced next cycle.");
-        provider.add("solar.start_core.solar_array.tooltip1", "Can use §dLaser Hatches");
-        provider.add("solar.start_core.solar_array.tooltip2", "§3Cooling: §7Consumes %s§7B of §f%s§7 per hour.");
-        provider.add("solar.start_core.solar_array.tooltip3", "  §7- Day: §4-0.05 K§7 heat gain.");
-        provider.add("solar.start_core.solar_array.tooltip4", "  §7- Night: §a+0.05 K§7 cooling.");
-        provider.add("solar.start_core.solar_array.tooltip5", "  §7- Missing resources increases heat gain (day) and reduces cooling (night).");
+        // These seem redundant
+        // provider.add("solar.start_core.solar_panel.tooltip1", "§7Produces energy during the day, using the different cells its made out of.");
+        // provider.add("solar.start_core.solar_panel.tooltip2", "§7During the night it cools down the cells.");
+        // provider.add("solar.start_core.solar_panel.tooltip3", "§7Replaces broken cells with new ones, when provided.");
+        // provider.add("solar.start_core.solar_panel.tooltip4", "§7Every 6s a cycle is completed where all effects and changes are applied.");
+        // provider.add("solar.start_core.solar_panel.tooltip5", "§aVoltage multiplier:§f x%s");
+        // provider.add("solar.start_core.solar_panel.tooltip6", "§7Total EU/t gets multiplied by this factor.");
+        // provider.add("solar.start_core.solar_panel.tooltip7", "§6Repair: §7Broken cells can be replaced next cycle.");
+
+        // provider.add("solar.start_core.solar_array.tooltip1", "Can use §dLaser Hatches");
+        // provider.add("solar.start_core.solar_array.tooltip2", "§3Cooling: §7Consumes %s§7B of §f%s§7 per hour.");
+        // provider.add("solar.start_core.solar_array.tooltip3", "  §7- Day: §4-0.05 K§7 heat gain.");
+        // provider.add("solar.start_core.solar_array.tooltip4", "  §7- Night: §a+0.05 K§7 cooling.");
+        // provider.add("solar.start_core.solar_array.tooltip5", "  §7- Missing resources increases heat gain (day) and reduces cooling (night).");
 
         provider.add("solar.start_core.solar_machine.cell_tooltip", "Working Cells: %s/%s");
         provider.add("solar.start_core.solar_machine.avg_temp_tooltip", "§cAverage Temperature:§f %s K");
