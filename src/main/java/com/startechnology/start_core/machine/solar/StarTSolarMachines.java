@@ -47,7 +47,7 @@ public class StarTSolarMachines {
         )
         .paginatedTooltips(List.of(
             List.of(
-                Component.translatable("block.start_core.solar_machine.paginated1.1", StarTSolarMachine.getOutputModifier(EV)),
+                Component.translatable("block.start_core.solar_machine.paginated1.1", StarTSolarMachine.getOutputModifier(EV, false)),
                 Component.translatable("block.start_core.solar_machine.paginated1.2"),
                 Component.translatable("block.start_core.breaker_line"),
                 Component.translatable("block.start_core.solar_machine.paginated1.3"),
@@ -120,7 +120,7 @@ public class StarTSolarMachines {
         )
         .paginatedTooltips(List.of(
             List.of(
-                Component.translatable("block.start_core.solar_machine.paginated1.1", StarTSolarMachine.getOutputModifier(IV)),
+                Component.translatable("block.start_core.solar_machine.paginated1.1", StarTSolarMachine.getOutputModifier(IV, false)),
                 Component.translatable("block.start_core.solar_machine.paginated1.2"),
                 Component.translatable("block.start_core.breaker_line"),
                 Component.translatable("block.start_core.solar_machine.paginated1.3"),
@@ -193,7 +193,7 @@ public class StarTSolarMachines {
         )
         .paginatedTooltips(List.of(
             List.of(
-                Component.translatable("block.start_core.solar_machine.paginated1.1", StarTSolarMachine.getOutputModifier(LuV)),
+                Component.translatable("block.start_core.solar_machine.paginated1.1", StarTSolarMachine.getOutputModifier(LuV, false)),
                 Component.translatable("block.start_core.solar_machine.paginated1.2"),
                 Component.translatable("block.start_core.breaker_line"),
                 Component.translatable("block.start_core.solar_machine.paginated1.3"),
@@ -266,7 +266,7 @@ public class StarTSolarMachines {
         )
         .paginatedTooltips(List.of(
             List.of(
-                Component.translatable("block.start_core.solar_machine.paginated1.1", StarTSolarMachine.getOutputModifier(UV)),
+                Component.translatable("block.start_core.solar_machine.paginated1.1", StarTSolarMachine.getOutputModifier(UV, false)),
                 Component.translatable("block.start_core.solar_machine.paginated1.2"),
                 Component.translatable("block.start_core.breaker_line"),
                 Component.translatable("block.start_core.solar_machine.paginated1.3"),
@@ -365,7 +365,7 @@ public class StarTSolarMachines {
         )
         .paginatedTooltips(List.of(
             List.of(
-                Component.translatable("block.start_core.solar_machine.paginated1.1", StarTSolarMachine.getOutputModifier(UHV)),
+                Component.translatable("block.start_core.solar_machine.paginated1.1", StarTSolarMachine.getOutputModifier(UHV, false)),
                 Component.translatable("block.start_core.solar_machine.paginated1.2"),
                 Component.translatable("block.start_core.breaker_line"),
                 Component.translatable("block.start_core.solar_machine.paginated1.3"),
