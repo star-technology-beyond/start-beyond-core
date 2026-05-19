@@ -65,7 +65,7 @@ public class WireRecipeHandlerMixin {
      * @reason more materials
      */
     @Overwrite
-    public static void generateCableCovering(@NotNull Consumer<FinishedRecipe> provider,
+    private static void generateCableCovering(@NotNull Consumer<FinishedRecipe> provider,
                                              @NotNull WireProperties property,
                                              @NotNull TagPrefix prefix, @NotNull Material material) {
 

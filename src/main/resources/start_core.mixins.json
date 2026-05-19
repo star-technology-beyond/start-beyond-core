@@ -28,6 +28,8 @@
     "MultiBufferSourceBufferSourceMixin",
     "PostPassMixin",
     "RenderBuffersMixin",
+    "embeddium.ShaderLoaderMixin",
+    "embeddium.ChunkShaderOptionsMixin",
     "ponder.PonderIndexAccessor",
     "ponder.PonderIndexMixin",
     "ponder.PonderInstructionMixin",

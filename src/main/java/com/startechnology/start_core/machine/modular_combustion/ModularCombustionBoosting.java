@@ -1,4 +1,4 @@
-package com.startechnology.start_core.machine.boosting;
+package com.startechnology.start_core.machine.modular_combustion;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.startechnology.start_core.machine.modular.StarTModularInterfaceHatchPartMachine;
 import net.minecraft.ChatFormatting;
@@ -39,20 +40,27 @@ public class ModularCombustionBoosting extends LargeCombustionEngineMachine {
     public static final int T3_COMBUSTION_MODULE = GTValues.UV;
     public static final int T4_COMBUSTION_MODULE = GTValues.UEV;
 
-    private int tier;
-    private boolean isActiveBoosting;
     @Persisted
+    @DescSynced
+    private final int tier;
+
+    @Persisted
+    @DescSynced
+    private boolean isActiveBoosting;
+
+    @Persisted
+    @DescSynced
     private int runningTimer = 0;
 
     private final List<ResourceLocation> acceptedFrameIds;
 
-    private Material LUBRICANT = GTMaterials.get("lubricant");
-    private Material WS2_FLUID = GTMaterials.get("tungsten_disulfide");//t2 Lube
+    private final Material LUBRICANT = GTMaterials.get("lubricant");
+    private final Material WS2_FLUID = GTMaterials.get("tungsten_disulfide");//t2 Lube
 
-    private Material T1COXIDIZER = GTMaterials.get("white_fuming_nitric_acid");
-    private Material T2COXIDIZER = GTMaterials.get("red_fuming_nitric_acid");
-    private Material T1ROXIDIZER = GTMaterials.get("dioxygen_difluoride");
-    private Material T2ROXIDIZER = GTMaterials.get("ferrocenium_superoxide");
+    private final Material T1COXIDIZER = GTMaterials.get("white_fuming_nitric_acid");
+    private final Material T2COXIDIZER = GTMaterials.get("red_fuming_nitric_acid");
+    private final Material T1ROXIDIZER = GTMaterials.get("dioxygen_difluoride");
+    private final Material T2ROXIDIZER = GTMaterials.get("ferrocenium_superoxide");
 
     public ModularCombustionBoosting(IMachineBlockEntity holder, int tier, ResourceLocation... acceptedFrameIds) {
         super(holder, tier);

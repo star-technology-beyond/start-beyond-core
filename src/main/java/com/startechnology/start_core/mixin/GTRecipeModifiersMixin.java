@@ -24,12 +24,16 @@ public class GTRecipeModifiersMixin {
             var maximumParallels = hatch instanceof StarTAbsoluteParallelHatchMachine ?
                     ParallelLogic.getParallelAmountWithoutEU(machine, recipe, hatch.getCurrentParallel()) :
                     hatch != null ? ParallelLogic.getParallelAmount(machine, recipe, hatch.getCurrentParallel()) : 1;
-            var minimumParallels = hatch instanceof IStarTMinimumParallelHatch minHatch ? minHatch.getMinimumParallels() : 1;
+            var minimumParallels = hatch instanceof IStarTMinimumParallelHatch minHatch ? minHatch.start_core$getMinimumParallels() : 1;
 
-            if (maximumParallels < minimumParallels) cir.setReturnValue(ModifierFunction.NULL);
-            if (maximumParallels == 1) cir.setReturnValue(ModifierFunction.IDENTITY);
-
-            // actually... I think I could make it better still
+            if (maximumParallels < minimumParallels) {
+                cir.setReturnValue(ModifierFunction.NULL);
+                return;
+            }
+            if (maximumParallels == 1) {
+                cir.setReturnValue(ModifierFunction.IDENTITY);
+                return;
+            }
 
             cir.setReturnValue(ModifierFunction.builder()
                     .modifyAllContents(ContentModifier.multiplier(maximumParallels))

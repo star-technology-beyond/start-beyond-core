@@ -8,6 +8,10 @@ import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMac
 
 @Mixin(value=FusionReactorMachine.class, remap=false)
 public class FusionEnergyPowerMixin {
+    /**
+     * @author stellaurora
+     * @reason change fusion reactor energy storage formula
+     */
     @Overwrite
     public static long calculateEnergyStorageFactor(int tier, int energyInputAmount) {
         long energyFactor = switch (tier - GTValues.LuV) {

@@ -2,22 +2,18 @@ package com.startechnology.start_core.machine.komaru.client;
 
 import cofh.core.client.PostEffect;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
-import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 import com.mojang.blaze3d.platform.GlConst;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.startechnology.start_core.StarTCore;
 import com.startechnology.start_core.machine.komaru.StarTKomaruFrameMachine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.client.renderer.PostPass;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.common.MinecraftForge;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
@@ -26,25 +22,36 @@ import org.lwjgl.opengl.GL30;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = StarTCore.MOD_ID, value = Dist.CLIENT)
-public final class HookLevelRenderer {
+public final class KomaruRendererManager {
 
-    public static List<StarTKomaruFrameMachine> COLLECTED_RENDERS = new ArrayList<>();
+    private static @Nullable List<StarTKomaruFrameMachine> COLLECTED_RENDERS;
+    private static CubeMapTexture CUBE_MAP_TEXTURE;
+    private static PostEffect KOMARU_POST_EFFECT;
+    private static PostEffect KOMARU_FANCY_POST_EFFECT;
 
-    private static final CubeMapTexture CUBE_MAP_TEXTURE = new CubeMapTexture(StarTCore.resourceLocation("textures/rift_skybox"), false);
-
-    static {
-        DynamicRenderManager.register(StarTCore.resourceLocation("komaru_renderer"), KomaruRenderer.TYPE);
+    public static void init() {
+        CUBE_MAP_TEXTURE = new CubeMapTexture(StarTCore.resourceLocation("textures/rift_skybox"), false);
+        COLLECTED_RENDERS = new ArrayList<>();
+        KOMARU_POST_EFFECT = makeKomaruPostEffect();
+        KOMARU_FANCY_POST_EFFECT = makeKomaruFancyPostEffect();
+        MinecraftForge.EVENT_BUS.addListener(KomaruRendererManager::onRenderLevelStageEvent);
     }
 
-    private static void onRenderAfterParticles(RenderLevelStageEvent event) {
-        if (Minecraft.useShaderTransparency()) {
-            updateKomaruFancyPostEffect();
-        } else {
-            updateKomaruPostEffect();
+    public static void addRenderer(StarTKomaruFrameMachine machine) {
+        if (COLLECTED_RENDERS == null) return;
+        COLLECTED_RENDERS.add(machine);
+    }
+
+    public static void onRenderLevelStageEvent(RenderLevelStageEvent event) {
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+            if (Minecraft.useShaderTransparency()) {
+                // TODO: readd
+                // updateKomaruFancyPostEffect();
+            } else {
+                updateKomaruPostEffect();
+            }
         }
     }
-
 
     private static void updateKomaruPostEffect() {
         var rtMain = Minecraft.getInstance().getMainRenderTarget();
@@ -58,53 +65,54 @@ public final class HookLevelRenderer {
         GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, 0);
     }
 
-    public static final PostEffect KOMARU_POST_EFFECT = new PostEffect(new ResourceLocation("start_core", "komaru")) {
-        public boolean isEnabled() {
-            // return super.isEnabled() && !Minecraft.useShaderTransparency();
-            return false;
-        }
-
-        @Override
-        public void begin(float partialTick) {
-            super.begin(partialTick);
-            COLLECTED_RENDERS.clear();
-        }
-
-        @Override
-        public void end(float partialTick) {
-            if (COLLECTED_RENDERS.isEmpty()) return;
-
-            if (!CUBE_MAP_TEXTURE.loaded()) {
-                CUBE_MAP_TEXTURE.load(Minecraft.getInstance().getResourceManager());
+    private static PostEffect makeKomaruPostEffect() {
+        return new PostEffect(new ResourceLocation("start_core", "komaru")) {
+            public boolean isEnabled() {
+                return super.isEnabled() && !Minecraft.useShaderTransparency();
             }
 
-            var pass = chain.passes.get(0);
-            var effect = pass.getEffect();
-            fillCommonEffectUniforms(effect);
+            @Override
+            public void begin(float partialTick) {
+                super.begin(partialTick);
+                COLLECTED_RENDERS.clear();
+            }
 
-            for (var machine : COLLECTED_RENDERS) {
-                // TODO: actually save the resulting buffer between renders so we don't clear the stuff
-                var beamOrigin = getBeamOrigin(machine);
+            @Override
+            public void end(float partialTick) {
+                if (COLLECTED_RENDERS.isEmpty()) return;
 
-                effect.safeGetUniform("AnimationTicks").set(machine.getRendererAnimationTicks());
-                effect.safeGetUniform("AnimationType").set(machine.getRendererAnimationType());
-                effect.safeGetUniform("BeamOrigin").set(beamOrigin);
-                RenderSystem.activeTexture(GL30.GL_TEXTURE0 + 2);
-                GL11.glBindTexture(GL30.GL_TEXTURE_CUBE_MAP, CUBE_MAP_TEXTURE.getId());
-                effect.safeGetUniform("CubeMapSampler").set(2);
-
-                RenderSystem.depthMask(true);
-
-                // super.end(partialTick);
-                for(PostPass postpass : chain.passes) {
-                    postpass.process(partialTick / 20.0f);
+                if (!CUBE_MAP_TEXTURE.loaded()) {
+                    CUBE_MAP_TEXTURE.load(Minecraft.getInstance().getResourceManager());
                 }
 
-                RenderSystem.activeTexture(GL30.GL_TEXTURE0 + 2);
-                GL11.glBindTexture(GL30.GL_TEXTURE_CUBE_MAP, 0);
+                var pass = chain.passes.get(0);
+                var effect = pass.getEffect();
+                fillCommonEffectUniforms(effect, partialTick);
+
+                for (var machine : COLLECTED_RENDERS) {
+                    // TODO: actually save the resulting buffer between renders so we don't clear the stuff
+                    var beamOrigin = getBeamOrigin(machine);
+
+                    effect.safeGetUniform("AnimationTicks").set(machine.getRendererAnimationTicks());
+                    effect.safeGetUniform("AnimationType").set(machine.getRendererAnimationType());
+                    effect.safeGetUniform("BeamOrigin").set(beamOrigin);
+                    RenderSystem.activeTexture(GL30.GL_TEXTURE0 + 2);
+                    GL11.glBindTexture(GL30.GL_TEXTURE_CUBE_MAP, CUBE_MAP_TEXTURE.getId());
+                    effect.safeGetUniform("CubeMapSampler").set(2);
+
+                    RenderSystem.depthMask(true);
+
+                    // super.end(partialTick);
+                    for (PostPass postpass : chain.passes) {
+                        postpass.process(partialTick / 20.0f);
+                    }
+
+                    RenderSystem.activeTexture(GL30.GL_TEXTURE0 + 2);
+                    GL11.glBindTexture(GL30.GL_TEXTURE_CUBE_MAP, 0);
+                }
             }
-        }
-    };
+        };
+    }
 
     private static void updateKomaruFancyPostEffect() {
         var levelRenderer = Minecraft.getInstance().levelRenderer;
@@ -166,46 +174,48 @@ public final class HookLevelRenderer {
         }
     }
 
-    public static final PostEffect KOMARU_FANCY_POST_EFFECT = new PostEffect(new ResourceLocation("start_core", "komaru_fancy")) {
-        public boolean isEnabled() {
-            // return super.isEnabled() && Minecraft.useShaderTransparency();
-            return false;
-        }
-
-        @Override
-        public void begin(float partialTick) {
-            super.begin(partialTick);
-            COLLECTED_RENDERS.clear();
-        }
-
-        @Override
-        public void end(float partialTick) {
-            if (COLLECTED_RENDERS.isEmpty()) return;
-
-            if (!CUBE_MAP_TEXTURE.loaded()) {
-                CUBE_MAP_TEXTURE.load(Minecraft.getInstance().getResourceManager());
+    public static PostEffect makeKomaruFancyPostEffect() {
+        return new PostEffect(new ResourceLocation("start_core", "komaru_fancy")) {
+            public boolean isEnabled() {
+                return false;
+                // return super.isEnabled() && Minecraft.useShaderTransparency();
             }
 
-            var pass = chain.passes.get(0);
-            var machine = COLLECTED_RENDERS.get(0);
-            var beamOrigin = getBeamOrigin(machine);
-            var effect = pass.getEffect();
+            @Override
+            public void begin(float partialTick) {
+                super.begin(partialTick);
+                COLLECTED_RENDERS.clear();
+            }
 
-            fillCommonEffectUniforms(effect);
-            effect.safeGetUniform("AnimationTicks").set(machine.getRendererAnimationTicks());
-            effect.safeGetUniform("AnimationType").set(machine.getRendererAnimationType());
-            effect.safeGetUniform("BeamOrigin").set(beamOrigin);
-            RenderSystem.activeTexture(GL30.GL_TEXTURE0 + 12);
-            GL11.glBindTexture(GL30.GL_TEXTURE_CUBE_MAP, CUBE_MAP_TEXTURE.getId());
-            effect.safeGetUniform("CubeMapSampler").set(12);
+            @Override
+            public void end(float partialTick) {
+                if (COLLECTED_RENDERS.isEmpty()) return;
 
-            RenderSystem.depthMask(true);
-            super.end(partialTick);
+                if (!CUBE_MAP_TEXTURE.loaded()) {
+                    CUBE_MAP_TEXTURE.load(Minecraft.getInstance().getResourceManager());
+                }
 
-            RenderSystem.activeTexture(GL30.GL_TEXTURE0 + 12);
-            GL11.glBindTexture(GL30.GL_TEXTURE_CUBE_MAP, 0);
-        }
-    };
+                var pass = chain.passes.get(0);
+                var machine = COLLECTED_RENDERS.get(0);
+                var beamOrigin = getBeamOrigin(machine);
+                var effect = pass.getEffect();
+
+                fillCommonEffectUniforms(effect, partialTick);
+                effect.safeGetUniform("AnimationTicks").set(machine.getRendererAnimationTicks());
+                effect.safeGetUniform("AnimationType").set(machine.getRendererAnimationType());
+                effect.safeGetUniform("BeamOrigin").set(beamOrigin);
+                RenderSystem.activeTexture(GL30.GL_TEXTURE0 + 12);
+                GL11.glBindTexture(GL30.GL_TEXTURE_CUBE_MAP, CUBE_MAP_TEXTURE.getId());
+                effect.safeGetUniform("CubeMapSampler").set(12);
+
+                RenderSystem.depthMask(true);
+                super.end(partialTick);
+
+                RenderSystem.activeTexture(GL30.GL_TEXTURE0 + 12);
+                GL11.glBindTexture(GL30.GL_TEXTURE_CUBE_MAP, 0);
+            }
+        };
+    }
 
     private static Vector3f getBeamOrigin(StarTKomaruFrameMachine machine) {
         var blockPos = machine.getPos();
@@ -220,21 +230,19 @@ public final class HookLevelRenderer {
         return new Vector3f(centerX, centerY, centerZ);
     }
 
-    // @SubscribeEvent
-    public static void onRenderLevelStageEvent(RenderLevelStageEvent event) {
-        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) onRenderAfterParticles(event);
-    }
-
-    private static void fillCommonEffectUniforms(EffectInstance instance) {
+    private static void fillCommonEffectUniforms(EffectInstance instance, float partialTicks) {
         var mc = Minecraft.getInstance();
         var projectionMatrix = RenderSystem.getProjectionMatrix();
-        var invProjectionMatrix = new Matrix4f(projectionMatrix).invert();
-        var invViewRotMatrix = new Matrix4f(RenderSystem.getInverseViewRotationMatrix()); // bug in MC, doesn't support mat3 in EffectInstance
+        var invViewRotMatrix = new Matrix4f(RenderSystem.getInverseViewRotationMatrix());
         var camera = mc.gameRenderer.getMainCamera();
         var cameraPosition = camera.getPosition().toVector3f();
 
+        var viewRotMatrix = new Matrix4f(invViewRotMatrix).invert();
+        var invProjViewRotMatrix = new Matrix4f(RenderSystem.getProjectionMatrix())
+                .mul(viewRotMatrix).invert();
+
+        instance.safeGetUniform("InvProjViewRotMat").set(invProjViewRotMatrix);
         instance.safeGetUniform("GameProjMat").set(projectionMatrix);
-        instance.safeGetUniform("GameInvProjMat").set(invProjectionMatrix);
         instance.safeGetUniform("GameInvViewRotMat").set(invViewRotMatrix);
         instance.safeGetUniform("CameraNearPlane").set(0.05F);
         instance.safeGetUniform("CameraFarPlane").set(mc.gameRenderer.getDepthFar());
