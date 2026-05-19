@@ -530,6 +530,7 @@
   "solar.start_core.solar_array.tooltip1": "Can use §dLaser Hatches",
   "solar.start_core.solar_cell.durability_tooltip": "§dDurability:§f %s/%s",
   "solar.start_core.solar_cell.is_broken": "§4Cell is broken",
+  "solar.start_core.solar_cell.temperature_scale_tooltip": "§9Heating Modifier:§f %sx",
   "solar.start_core.solar_cell.temperature_tooltip": "§cTemperature:§f %s/%s K",
   "solar.start_core.solar_cell.tooltip1": "§7Produces energy during the day, while heating up.",
   "solar.start_core.solar_cell.tooltip2": "§7Cools down during the night.",

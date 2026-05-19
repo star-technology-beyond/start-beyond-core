@@ -423,6 +423,7 @@ public class LangHandler {
         provider.add("solar.start_core.solar_cell.tooltip2", "§7Cools down during the night.");
         provider.add("solar.start_core.solar_cell.tooltip3", "§7Produces power only when used in a Solar Panel or Array.");
 
+        provider.add("solar.start_core.solar_cell.temperature_scale_tooltip", "§9Heating Modifier:§f %sx");
         provider.add("solar.start_core.solar_cell.temperature_tooltip", "§cTemperature:§f %s/%s K");
         provider.add("solar.start_core.solar_cell.durability_tooltip", "§dDurability:§f %s/%s");
         provider.add("solar.start_core.solar_cell.is_broken", "§4Cell is broken");
