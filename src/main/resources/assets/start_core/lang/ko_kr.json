@@ -25,7 +25,7 @@
   "block.start_core.bacterial_hydrocarbon_harvester": "박테리아 탄화수소 수집기 [BHH]",
 
   "behaviour.start_core.bacteria.primary_output": "§5첫 번째 출력물",
-  "behaviour.start_core.bacteria.any_affinity": "§d다음 중 하나를 가지고 있을 수 있음:",
+  "behaviour.start_core.bacteria.any_affinity": "§d다음 중 하나를 가지고 있을 수 있습니다",
   "behaviour.start_core.bacteria.maximum_shown_input": "§7최대 소모량 표시",
   "behaviour.start_core.bacteria.harvester_biomass_input": "§7실질적인 바이오매스 소모량은 §6100 * (2 ^ 신진대사)§7입니다",
   "behaviour.start_core.bacteria.harvester_sugar_input": "§7실질적인 설탕 소모량은 §62 ^ 신진대사§7입니다.",
