@@ -51,9 +51,6 @@ loom {
             mod(mod_id)
         }
     }
-    runConfigs.named("client").configure {
-        vmArg("-XX:+AllowEnhancedClassRedefinition")
-    }
     runConfigs.named("data").configure {
         programArg("--existing=" + file("src/main/resources").absolutePath)
         programArg("--existing-mod=gtceu")
