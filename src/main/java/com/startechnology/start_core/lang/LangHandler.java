@@ -473,5 +473,13 @@ public class LangHandler {
 
         provider.add("variadic.start_core.indicator.solar_machine", "Percentage to %s K");
         provider.add("variadic.start_core.description.solar_machine", "A clamped value between 0-15 of the (avg temp / %s K) * 15 (In Celsius, K - 273)");
+
+        provider.add("block.start_core.cross_dimensional_laser_line", "§f§lCross-Dimensional Energy");
+        provider.add("start_core.cross_dimensional_laser_line.line0", "§7A high-energy laser focusing array that tears a tunnel through dimensional boundaries to transmit a singular beam of pure light.");
+        provider.add("start_core.cross_dimensional_laser_line.line1", "§6Array Type");
+        provider.add("start_core.cross_dimensional_laser_line.line2", "§7An array with a §fLaser Target Hatch §7is a §esender§7. An array with a §fLaser Source Hatch §7 is a §ereceiver§7.");
+        provider.add("start_core.cross_dimensional_laser_line.line3", "§bSingularity-Linking");
+        provider.add("start_core.cross_dimensional_laser_line.line4", "§7To link a §esender §7and §ereceiver §7array, place two corresponding AE2 Quantum Entangled Singularities into the input busses of the arrays.");
+        provider.add("start_core.cross_dimensional_laser_line.line5", "§7Energy will then be transmitted from the §esender§7 to the §ereceiver§7 array through the laser hatches.");
     }
 }
