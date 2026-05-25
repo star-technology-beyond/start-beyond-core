@@ -2,12 +2,13 @@ package com.startechnology.start_core.machine.cross_dim_laser;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
+import java.util.Optional;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
@@ -16,22 +17,26 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableLaserContainer;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.LaserHatchPartMachine;
+import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
+import com.lowdragmc.lowdraglib.syncdata.ISubscription;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.startechnology.start_core.mixin.LaserHatchPartMachineAccessor;
 
 import appeng.blockentity.qnb.QuantumBridgeBlockEntity;
-import appeng.core.definitions.AEItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -48,8 +53,7 @@ public class StarTCrossDimensionalLaserMachine extends WorkableMultiblockMachine
 
     public enum LinkedStatus {
         Linked,
-        Unlinked,
-        LinkedToWrongType
+        Unlinked
     }
 
     @Persisted
@@ -63,7 +67,12 @@ public class StarTCrossDimensionalLaserMachine extends WorkableMultiblockMachine
     private LinkedStatus linkStatus = LinkedStatus.Unlinked;
 
     private NotifiableLaserContainer laserContainer = null;
+    private ISubscription laserSubscription = null;
+
     private NotifiableItemStackHandler inputInventory = null;
+    private TickableSubscription tryCrossDimTickSub = null;
+    private ISubscription inputSubscription = null;
+
     protected boolean readyToUpdate = false;
 
     public StarTCrossDimensionalLaserMachine(IMachineBlockEntity holder) {
@@ -90,31 +99,82 @@ public class StarTCrossDimensionalLaserMachine extends WorkableMultiblockMachine
         for (IMultiPart part : getParts()) {
             if (part instanceof LaserHatchPartMachine laserHatch) {
                 laserContainer = ((LaserHatchPartMachineAccessor) laserHatch).start_core$getLaserContainer();
-                laserContainer.addChangedListener(this::transferEnergyTick);
-                break;
-            }
-
-            if (part instanceof ItemBusPartMachine inputBus) {
+                laserSubscription = laserContainer.addChangedListener(this::transferEnergyTick);
+            } else if (part instanceof ItemBusPartMachine inputBus) {
                 inputInventory = inputBus.getInventory();
+                inputSubscription = inputInventory.addChangedListener(this::tryCrossDimTick);
             }
         }
 
         if (laserContainer.getHandlerIO().support(IO.IN)) {
-            direction = StarTCrossDimensionalLaserMachine.CrossDimensionalLaserDirection.SENDER;
+            direction = CrossDimensionalLaserDirection.SENDER;
         } else {
-            direction = StarTCrossDimensionalLaserMachine.CrossDimensionalLaserDirection.RECEIVER;
+            direction = CrossDimensionalLaserDirection.RECEIVER;
         }
 
         readyToUpdate = true;
+        tryCrossDimTickSub = subscribeServerTick(tryCrossDimTickSub,
+                this::tryCrossDimTick);
         discoverSingularityOrReset();
+    }
+
+    protected void tryCrossDimTick() {
+        if (isRemote())
+            return;
+        if (getOffsetTimer() % 60 == 0) {
+            discoverSingularityOrReset();
+        }
+        transferEnergyTick();
     }
 
     protected void transferEnergyTick() {
         if (isRemote())
             return;
-        if (!readyToUpdate || !isWorkingEnabled() || laserContainer == null || linkStatus != LinkedStatus.Linked) {
+        if (!readyToUpdate || !isWorkingEnabled() || laserContainer == null
+                || linkStatus != LinkedStatus.Linked || linkKey == null) {
             return;
         }
+
+        // Only the SENDER pushes energy.
+        if (direction != CrossDimensionalLaserDirection.SENDER)
+            return;
+
+        long available = laserContainer.getEnergyStored();
+        if (available <= 0)
+            return;
+
+        Level level = getLevel();
+        CrossDimensionalLaserSavedData savedData = CrossDimensionalLaserSavedData.get(level);
+        if (savedData == null)
+            return;
+
+        savedData.getReceiver(linkKey).ifPresent(receiverPos -> {
+            // Yoink the block entity of the reciever
+            ServerLevel receiverLevel = level.getServer().getLevel(receiverPos.dimension());
+            if (receiverLevel == null)
+                return;
+
+            if (!(receiverLevel.getBlockEntity(
+                    receiverPos.pos()) instanceof com.gregtechceu.gtceu.api.machine.IMachineBlockEntity receiverBE)) {
+                return;
+            }
+
+            // Make sure its another StarTCrossDimensionalLaserMachine
+            if (!(receiverBE.getMetaMachine() instanceof StarTCrossDimensionalLaserMachine receiverMachine)) {
+                return;
+            }
+
+            NotifiableLaserContainer receiverLaser = receiverMachine.laserContainer;
+            if (receiverLaser == null)
+                return;
+
+            // Limit by the reciever hatch amps
+            long toTransfer = Math.min(available, receiverLaser.getOutputVoltage() * receiverLaser.getOutputAmperage());
+
+            // lasery laser laser :3
+            long transferredAmount = receiverLaser.changeEnergy(toTransfer);
+            laserContainer.changeEnergy(-transferredAmount);
+        });
     }
 
     protected void discoverSingularityOrReset() {
@@ -125,6 +185,9 @@ public class StarTCrossDimensionalLaserMachine extends WorkableMultiblockMachine
         if (wasRegistered && Objects.isNull(linkKey)) {
             unRegisterPair();
         }
+
+        // Refresh link status from saved data after any change.
+        refreshLinkStatus();
     }
 
     protected void tryDiscoverSingularity() {
@@ -132,56 +195,95 @@ public class StarTCrossDimensionalLaserMachine extends WorkableMultiblockMachine
 
         if (isRemote())
             return;
-        if (!readyToUpdate || !isWorkingEnabled() || inputInventory == null) {
+        if (!readyToUpdate || !isWorkingEnabled() || inputInventory == null)
             return;
-        }
 
+        // Try read the AE2 singularity in slot 0 of the bus
         ItemStack stack = inputInventory.getStackInSlot(0);
-        if (!QuantumBridgeBlockEntity.isValidEntangledSingularity(stack)) {
+        if (!QuantumBridgeBlockEntity.isValidEntangledSingularity(stack))
             return;
-        }
 
-        // Get the AE2 frequency from the stack as our link key
-        long newLinkKey = stack.getOrCreateTag().getLong(QuantumBridgeBlockEntity.TAG_FREQUENCY); 
+        // Update the linking if we get a new link key
+        long newLinkKey = stack.getOrCreateTag().getLong(QuantumBridgeBlockEntity.TAG_FREQUENCY);
         Level level = getLevel();
-        CrossDimensionalLaserSavedData savedData = CrossDimensionalLaserSavedData.get(level)
+        CrossDimensionalLaserSavedData savedData = CrossDimensionalLaserSavedData.get(level);
+        if (savedData == null)
+            return;
 
-        // Update the link key if it changed, or theres no pair for this 
-        if (newLinkKey != linkKey || !savedData.hasPair(newLinkKey)) {
-            linkKey = newLinkKey;
-            registerSelf(newLinkKey, level, savedData);
-        }
+        linkKey = newLinkKey;
+        registerSelf(newLinkKey, level, savedData);
     }
 
     protected void registerSelf(long linkId, Level level, CrossDimensionalLaserSavedData savedData) {
         GlobalPos position = GlobalPos.of(level.dimension(), getPos());
 
-        
-
         switch (direction) {
-            case RECEIVER:
-                savedData.registerReceiver(linkKey, position);
-                break;
-            case SENDER:
-                savedData.registerSender(linkKey, position);
-                break;
-            default:
-                break;
+            case SENDER -> {
+                savedData.registerSender(linkId, position);
+            }
+            case RECEIVER -> {
+                savedData.registerReceiver(linkId, position);
+            }
         }
+    }
+
+    protected void refreshLinkStatus() {
+        if (isRemote())
+            return;
+
+        if (linkKey == null) {
+            linkStatus = LinkedStatus.Unlinked;
+            return;
+        }
+
+        Level level = getLevel();
+        CrossDimensionalLaserSavedData savedData = CrossDimensionalLaserSavedData.get(level);
+        if (savedData == null) {
+            linkStatus = LinkedStatus.Unlinked;
+            return;
+        }
+
+        boolean hasSender = savedData.getSender(linkKey).isPresent();
+        boolean hasReceiver = savedData.getReceiver(linkKey).isPresent();
+
+        linkStatus = (hasSender && hasReceiver)
+                ? LinkedStatus.Linked
+                : LinkedStatus.Unlinked;
     }
 
     protected void unRegisterPair() {
         Level level = getLevel();
         GlobalPos position = GlobalPos.of(level.dimension(), getPos());
         CrossDimensionalLaserSavedData savedData = CrossDimensionalLaserSavedData.get(level);
-        savedData.unregister(position);
+        if (savedData != null) {
+            savedData.unregister(position);
+        }
+        linkStatus = LinkedStatus.Unlinked;
     }
 
     @Override
     public void onStructureInvalid() {
+        if (!isRemote() && linkKey != null) {
+            unRegisterPair();
+            linkKey = null;
+        }
+
         super.onStructureInvalid();
         this.readyToUpdate = false;
         this.laserContainer = null;
+        this.inputInventory = null;
+
+        if (!Objects.isNull(laserSubscription)) {
+            laserSubscription.unsubscribe();
+        }
+
+        if (!Objects.isNull(tryCrossDimTickSub)) {
+            tryCrossDimTickSub.unsubscribe();
+        }
+
+        if (!Objects.isNull(inputSubscription)) {
+            inputSubscription.unsubscribe();
+        }
     }
 
     public void addLinkDisplayText(List<Component> textList) {
@@ -193,29 +295,46 @@ public class StarTCrossDimensionalLaserMachine extends WorkableMultiblockMachine
 
         textList.add(Component.empty());
 
-        /* Display for the current direction of the laser array */
         textList.add(Component.translatable("ui.start_core.cross_dimensional_laser.type"));
         textList.add(Component.translatable(direction == CrossDimensionalLaserDirection.SENDER
                 ? "ui.start_core.cross_dimensional_laser.sender"
                 : "ui.start_core.cross_dimensional_laser.receiver"));
 
-        /* Display of the current linked status of the multiblock */
         textList.add(Component.empty());
         textList.add(Component.translatable("ui.start_core.cross_dimensional_laser.link_status"));
-        switch (linkStatus) {
-            case Linked:
-                textList.add(Component.translatable("ui.start_core.cross_dimensional_laser.linked"));
-                textList.add(Component.translatable("ui.start_core.cross_dimensional_laser.linked_location", "meow"));
-                break;
-            case LinkedToWrongType:
-                textList.add(Component.translatable("ui.start_core.cross_dimensional_laser.linked_to_wrong_type"));
-                break;
-            case Unlinked:
-                textList.add(Component.translatable("ui.start_core.cross_dimensional_laser.unlinked"));
-                break;
-            default:
-                break;
 
+        switch (linkStatus) {
+            case Linked -> {
+                textList.add(Component.translatable("ui.start_core.cross_dimensional_laser.linked"));
+
+                // Show linked coords if available
+                if (linkKey != null) {
+                    Level level = getLevel();
+                    CrossDimensionalLaserSavedData savedData = CrossDimensionalLaserSavedData.get(level);
+                    if (savedData != null) {
+                        var partnerOpt = direction == CrossDimensionalLaserDirection.SENDER
+                                ? savedData.getReceiver(linkKey)
+                                : savedData.getSender(linkKey);
+                        partnerOpt.ifPresent(partner -> {
+                            textList.add(
+                                    Component.translatable(
+                                            "ui.start_core.cross_dimensional_laser.linked_location_dim",
+                                            partner.dimension().location()));
+
+                            textList.add(
+                                    Component.translatable(
+                                            "ui.start_core.cross_dimensional_laser.linked_location_coords",
+                                            partner.pos().getX(),
+                                            partner.pos().getY(),
+                                            partner.pos().getZ()));                           
+                        });
+                    }
+                };
+
+
+            }
+            case Unlinked -> textList.add(
+                    Component.translatable("ui.start_core.cross_dimensional_laser.unlinked"));
         }
     }
 
@@ -226,7 +345,6 @@ public class StarTCrossDimensionalLaserMachine extends WorkableMultiblockMachine
                 new DraggableScrollableWidgetGroup(4, 4, 182, 117).setBackground(GuiTextures.DISPLAY)
                         .addWidget(new LabelWidget(4, 5, "Cross-Dimensional Laser Tunneling Array"))
                         .addWidget(new ComponentPanelWidget(4, 15, this::addLinkDisplayText)));
-
         group.setBackground(GuiTextures.BACKGROUND_INVERSE);
         return group;
     }
@@ -238,7 +356,7 @@ public class StarTCrossDimensionalLaserMachine extends WorkableMultiblockMachine
 
     @Override
     public ModularUI createUI(Player entityPlayer) {
-        ModularUI ui = new ModularUI(198, 208, this, entityPlayer).widget(new FancyMachineUIWidget(this, 198, 208));
-        return ui;
+        return new ModularUI(198, 208, this, entityPlayer)
+                .widget(new FancyMachineUIWidget(this, 198, 208));
     }
 }
