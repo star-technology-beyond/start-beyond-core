@@ -481,5 +481,13 @@ public class LangHandler {
         provider.add("start_core.cross_dimensional_laser_line.line3", "§bSingularity-Linking");
         provider.add("start_core.cross_dimensional_laser_line.line4", "§7To link a §esender §7and §ereceiver §7array, place two corresponding AE2 Quantum Entangled Singularities into the input busses of the arrays.");
         provider.add("start_core.cross_dimensional_laser_line.line5", "§7Energy will then be transmitted from the §esender§7 to the §ereceiver§7 array through the laser hatches.");
+        provider.add("ui.start_core.cross_dimensional_laser.type", "§6Cross-Dimensional Array Type:");
+        provider.add("ui.start_core.cross_dimensional_laser.sender", "§eSENDER");
+        provider.add("ui.start_core.cross_dimensional_laser.receiver", "§eRECEIVER");
+        provider.add("ui.start_core.cross_dimensional_laser.link_status", "§bSingularity-Link Status:");
+        provider.add("ui.start_core.cross_dimensional_laser.linked", "§aLinked");
+        provider.add("ui.start_core.cross_dimensional_laser.unlinked", "§cUnlinked");
+        provider.add("ui.start_core.cross_dimensional_laser.linked_to_wrong_type", "§cLinked to wrong type");
+        provider.add("ui.start_core.cross_dimensional_laser.linked_location", "§7Linked to %s");
     }
 }
