@@ -3,86 +3,104 @@
   "loader": "gtceu:machine",
   "machine": "start_core:cross_dimensional_laser",
   "texture_overrides": {
-    "all": "kubejs:block/casings/end_multis/draco_ware_casing"
+    "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
+    "side": "gtceu:block/casings/hpca/computer_casing/side",
+    "top": "gtceu:block/casings/hpca/computer_casing/top"
   },
   "variants": {
     "is_formed=false,recipe_logic_status=idle": {
       "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
-          "all": "kubejs:block/casings/end_multis/draco_ware_casing",
-          "overlay_front": "start_core:block/overlay/abyssal_containment/overlay_front",
-          "overlay_front_emissive": "start_core:block/overlay/abyssal_containment/overlay_front_emissive"
+          "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
+          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front",
+          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_emissive",
+          "side": "gtceu:block/casings/hpca/computer_casing/side",
+          "top": "gtceu:block/casings/hpca/computer_casing/top"
         }
       }
     },
     "is_formed=false,recipe_logic_status=suspend": {
       "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
-          "all": "kubejs:block/casings/end_multis/draco_ware_casing",
-          "overlay_front": "start_core:block/overlay/abyssal_containment/overlay_front",
-          "overlay_front_emissive": "start_core:block/overlay/abyssal_containment/overlay_front_emissive"
+          "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
+          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front",
+          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_emissive",
+          "side": "gtceu:block/casings/hpca/computer_casing/side",
+          "top": "gtceu:block/casings/hpca/computer_casing/top"
         }
       }
     },
     "is_formed=false,recipe_logic_status=waiting": {
       "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
-          "all": "kubejs:block/casings/end_multis/draco_ware_casing",
-          "overlay_front": "start_core:block/overlay/abyssal_containment/overlay_front_active",
-          "overlay_front_emissive": "start_core:block/overlay/abyssal_containment/overlay_front_active_emissive"
+          "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
+          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_active_emissive",
+          "side": "gtceu:block/casings/hpca/computer_casing/side",
+          "top": "gtceu:block/casings/hpca/computer_casing/top"
         }
       }
     },
     "is_formed=false,recipe_logic_status=working": {
       "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
-          "all": "kubejs:block/casings/end_multis/draco_ware_casing",
-          "overlay_front": "start_core:block/overlay/abyssal_containment/overlay_front_active",
-          "overlay_front_emissive": "start_core:block/overlay/abyssal_containment/overlay_front_active_emissive"
+          "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
+          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_active_emissive",
+          "side": "gtceu:block/casings/hpca/computer_casing/side",
+          "top": "gtceu:block/casings/hpca/computer_casing/top"
         }
       }
     },
     "is_formed=true,recipe_logic_status=idle": {
       "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
-          "all": "kubejs:block/casings/end_multis/draco_ware_casing",
-          "overlay_front": "start_core:block/overlay/abyssal_containment/overlay_front",
-          "overlay_front_emissive": "start_core:block/overlay/abyssal_containment/overlay_front_emissive"
+          "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
+          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front",
+          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_emissive",
+          "side": "gtceu:block/casings/hpca/computer_casing/side",
+          "top": "gtceu:block/casings/hpca/computer_casing/top"
         }
       }
     },
     "is_formed=true,recipe_logic_status=suspend": {
       "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
-          "all": "kubejs:block/casings/end_multis/draco_ware_casing",
-          "overlay_front": "start_core:block/overlay/abyssal_containment/overlay_front",
-          "overlay_front_emissive": "start_core:block/overlay/abyssal_containment/overlay_front_emissive"
+          "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
+          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front",
+          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_emissive",
+          "side": "gtceu:block/casings/hpca/computer_casing/side",
+          "top": "gtceu:block/casings/hpca/computer_casing/top"
         }
       }
     },
     "is_formed=true,recipe_logic_status=waiting": {
       "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
-          "all": "kubejs:block/casings/end_multis/draco_ware_casing",
-          "overlay_front": "start_core:block/overlay/abyssal_containment/overlay_front_active",
-          "overlay_front_emissive": "start_core:block/overlay/abyssal_containment/overlay_front_active_emissive"
+          "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
+          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_active_emissive",
+          "side": "gtceu:block/casings/hpca/computer_casing/side",
+          "top": "gtceu:block/casings/hpca/computer_casing/top"
         }
       }
     },
     "is_formed=true,recipe_logic_status=working": {
       "model": {
-        "parent": "gtceu:block/machine/template/cube_all/sided",
+        "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
-          "all": "kubejs:block/casings/end_multis/draco_ware_casing",
-          "overlay_front": "start_core:block/overlay/abyssal_containment/overlay_front_active",
-          "overlay_front_emissive": "start_core:block/overlay/abyssal_containment/overlay_front_active_emissive"
+          "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
+          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_active_emissive",
+          "side": "gtceu:block/casings/hpca/computer_casing/side",
+          "top": "gtceu:block/casings/hpca/computer_casing/top"
         }
       }
     }

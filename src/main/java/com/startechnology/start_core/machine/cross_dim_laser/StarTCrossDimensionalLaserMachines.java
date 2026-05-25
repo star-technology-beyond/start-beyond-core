@@ -3,6 +3,7 @@ package com.startechnology.start_core.machine.cross_dim_laser;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -26,6 +27,7 @@ public class StarTCrossDimensionalLaserMachines {
         .multiblock("cross_dimensional_laser", StarTCrossDimensionalLaserMachine::new)
         .appearanceBlock(() -> GTBlocks.ADVANCED_COMPUTER_CASING.get())
         .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+        .rotationState(RotationState.ALL)
         .langValue("Cross-Dimensional Laser Tunneling Array [CDLTA]")
         .tooltips(
             Component.translatable("block.start_core.cross_dimensional_laser_line"),
@@ -43,19 +45,20 @@ public class StarTCrossDimensionalLaserMachines {
         .pattern(definition -> FactoryBlockPattern.start()
             .aisle("#AA#BBB#AA#", "AAA#BBB#AAA", "AAA#BBB#AAA", "#####C#####", "BBB#CCC#BBB", "BBBCCCCCBBB", "BBB#CCC#BBB", "#####C#####", "AAA#BBB#AAA", "AAA#BBB#AAA", "#AA#BBB#AA#") 
             .aisle("AAA#BBB#AAA", "ADDDDDDDDDA", "ADA#BDB#ADA", "#D##CDC##D#", "BDBCCDCCBDB", "BDDDDEDDDDB", "BDBCCDCCBDB", "#D##CDC##D#", "ADA#BDB#ADA", "ADDDDDDDADA", "AAA#DBD#AAA") 
-            .aisle("#AA#BBB#AA#", "AAA#BFB#AAA", "AAA#BBB#AAA", "#####C#####", "BBB#CCC#BBB", "BBBCC#CCBBB", "BBB#CCC#BBB", "#####C#####", "AAA#BDB#AAA", "AAA#DGD#AAA", "#AA#DBD#AA#") 
+            .aisle("#AA#BBB#AA#", "AAA#B@B#AAA", "AAA#BBB#AAA", "#####C#####", "BBB#CCC#BBB", "BBBCC#CCBBB", "BBB#CCC#BBB", "#####C#####", "AAA#BDB#AAA", "AAA#DGD#AAA", "#AA#DBD#AA#") 
             .where("#", Predicates.any())
             .where("A", Predicates.blocks(GTBlocks.HIGH_POWER_CASING.get()))
             .where("B", Predicates.blocks(GTBlocks.COMPUTER_CASING.get()))
             .where("C", Predicates.blocks(StarTMachineUtils.getKjsBlock("reinforced_fusion_glass")))
             .where("D", Predicates.blocks(GTBlocks.ADVANCED_COMPUTER_CASING.get()))
-            .where("E", Predicates.abilities(PartAbility.INPUT_LASER)
-                .or(Predicates.abilities(PartAbility.OUTPUT_LASER))
-                .setExactLimit(1))
+            .where("E", Predicates.abilities(
+                    PartAbility.INPUT_LASER,
+                    PartAbility.OUTPUT_LASER
+                ).setExactLimit(1))
             .where("@", Predicates.controller(Predicates.blocks(definition.get())))
             .where("G", Predicates.blocks(GTMachines.ITEM_IMPORT_BUS[GTValues.ULV].getBlock()))
             .build()
-        ).workableCasingModel(
+        ).sidedWorkableCasingModel(
             GTCEu.id("block/casings/hpca/computer_casing"),
             GTCEu.id("block/multiblock/hpca")
         )
