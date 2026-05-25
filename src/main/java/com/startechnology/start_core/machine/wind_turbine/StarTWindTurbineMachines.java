@@ -66,7 +66,7 @@ public class StarTWindTurbineMachines {
             .langValue("%s %s".formatted(GTValues.VNF[tier] + "§r", langValue))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
-            .appearanceBlock(GTBlocks.CASING_STEEL_SOLID)
+            .appearanceBlock(casing)
             .pattern(definition -> FactoryBlockPattern.start()
                 .aisle("CCC", "C@C", "CCC")
                 .where("C", Predicates.blocks(casing.get())

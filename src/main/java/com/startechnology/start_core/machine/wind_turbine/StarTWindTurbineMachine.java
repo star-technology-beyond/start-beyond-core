@@ -14,9 +14,7 @@ import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -57,9 +55,27 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
         return new StarTWindTurbineRecipeLogic(this);
     }
 
+    @Override
+    public void onStructureFormed() {
+        super.onStructureFormed();
+        StarTWindTurbineManager.addTurbine(this);
+    }
+
+    @Override
+    public void onStructureInvalid() {
+        StarTWindTurbineManager.removeTurbine(this);
+        super.onStructureInvalid();
+    }
+
+    @Override
+    public void onUnload() {
+        StarTWindTurbineManager.removeTurbine(this);
+        super.onUnload();
+    }
+
     public void doLogic() {
         weatherMultiplier = getWeatherMultiplier();
-        isCrowded = hasNearbyWindTurbine();
+        isCrowded = StarTWindTurbineManager.hasNearbyTurbine(this, getCrowdingRadius());
 
         usingLubricant = RecipeHelper.matchRecipe(this, lubricantRecipe).isSuccess()
             && RecipeHelper.handleRecipeIO(this, lubricantRecipe, IO.IN, recipeLogic.getChanceCaches()).isSuccess();
@@ -112,23 +128,13 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
         return 1.0;
     }
 
-    private boolean hasNearbyWindTurbine() {
+    private String getWeatherType() {
         var level = getLevel();
-        BlockPos center = getPos();
-        int radius = getCrowdingRadius();
 
-        for (BlockPos pos : BlockPos.betweenClosed(center.offset(-radius, -radius, -radius), center.offset(radius, radius, radius))) {
-            if (pos.equals(center)) continue;
+        if (level.isThundering()) return "Thunder";
+        if (level.isRaining()) return "Rain";
 
-            BlockEntity blockEntity = level.getBlockEntity(pos);
-
-            if (blockEntity instanceof IMachineBlockEntity machineBlockEntity
-                && machineBlockEntity.getMetaMachine() instanceof StarTWindTurbineMachine) {
-                return true;
-            }
-        }
-
-        return false;
+        return "Clear";
     }
 
     public boolean regressWhenWaiting() {
@@ -164,7 +170,10 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
         textList.add(Component.literal("Dynamo Tier: ")
             .append(Component.literal(GTValues.VNF[getTier()]).withStyle(ChatFormatting.GOLD)));
         textList.add(Component.literal("Weather Boost: ")
-            .append(Component.literal("%.0f%%".formatted(weatherMultiplier * 100)).withStyle(ChatFormatting.BLUE)));
+            .append(Component.literal("%.0f%%".formatted(weatherMultiplier * 100)).withStyle(ChatFormatting.BLUE))
+            .append(Component.literal(" ("))
+            .append(Component.literal(getWeatherType()).withStyle(ChatFormatting.GRAY))
+            .append(Component.literal(")")));
         textList.add(Component.literal("Nearby Airspace: ")
             .append(Component.literal(isCrowded ? "Crowded" : "Clear").withStyle(isCrowded ? ChatFormatting.RED : ChatFormatting.GREEN)));
     }
@@ -200,9 +209,11 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
             var machine = getMachine();
 
             if (!machine.isFormed || !isWorkingEnabled()) {
+                StarTWindTurbineManager.removeTurbine(machine);
                 machine.euT = 0;
                 machine.usingLubricant = false;
                 machine.usingSeedOil = false;
+                machine.isCrowded = false;
                 setStatus(Status.IDLE);
                 isActive = false;
                 return;
