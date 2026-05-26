@@ -29,7 +29,7 @@ import static com.startechnology.start_core.StarTCore.START_REGISTRATE;
 public class StarTKomaruFrameMachines {
     public static final MultiblockMachineDefinition KOMARU = START_REGISTRATE
         .multiblock("komaru", StarTKomaruFrameMachine::new)
-        .langValue("Kaleidoscopically Omnipotent Mystically Ascendant Rift Umbliclus [K.O.M.A.R.U]")
+        .langValue("Kaleidoscopically Omnipotent Mystically Ascendant Rift Umbilicus [KOMARU]")
         .tooltips(
             Component.translatable("block.start_core.komaru.tooltip1")
         )
