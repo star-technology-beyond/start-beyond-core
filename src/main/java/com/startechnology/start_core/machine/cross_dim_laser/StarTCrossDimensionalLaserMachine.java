@@ -177,7 +177,7 @@ public class StarTCrossDimensionalLaserMachine extends WorkableMultiblockMachine
             if (receiverLaser == null)
                 return;
 
-            // Limit by the reciever hatch amps
+            // Limit by the receiver hatch amps
             long toTransfer = Math.min(available, receiverLaser.getOutputVoltage() * receiverLaser.getOutputAmperage());
 
             // lasery laser laser :3
