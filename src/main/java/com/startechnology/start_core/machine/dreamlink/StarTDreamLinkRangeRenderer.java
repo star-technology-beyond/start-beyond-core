@@ -97,39 +97,46 @@ public class StarTDreamLinkRangeRenderer {
         }
     }
 
-    private static final RenderStateShard.TransparencyStateShard TRANSLUCENT_TRANSPARENCY =
-            new RenderStateShard.TransparencyStateShard(
-                    "translucent",
-                    () -> {
-                        RenderSystem.enableBlend();
-                        RenderSystem.defaultBlendFunc();
-                    },
-                    RenderSystem::disableBlend
-            );
+    private static RenderStateShard.TransparencyStateShard TRANSLUCENT_TRANSPARENCY = null;
+    private static RenderStateShard.WriteMaskStateShard CUSTOM_COLOR_DEPTH_WRITE = null;
+    private static RenderType TRANSLUCENT_FILL = null;
 
-    private static final RenderStateShard.WriteMaskStateShard CUSTOM_COLOR_DEPTH_WRITE =
-            new RenderStateShard.WriteMaskStateShard(true, true);
+    // We need to lazily load our render types else some times when loading the game
+    // there's a deadlock between multiple mod threads touching RenderStateShard at once.
+    private static void ensureRenderTypes() {
+        if (TRANSLUCENT_FILL != null) return;
 
+        TRANSLUCENT_TRANSPARENCY = new RenderStateShard.TransparencyStateShard(
+                "translucent",
+                () -> {
+                    RenderSystem.enableBlend();
+                    RenderSystem.defaultBlendFunc();
+                },
+                RenderSystem::disableBlend
+        );
+
+        CUSTOM_COLOR_DEPTH_WRITE = new RenderStateShard.WriteMaskStateShard(true, true);
+
+        TRANSLUCENT_FILL = RenderType.create(
+                "bounding_box_fill",
+                DefaultVertexFormat.POSITION_COLOR,
+                VertexFormat.Mode.QUADS,
+                256,
+                false,
+                true,
+                RenderType.CompositeState.builder()
+                        .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionColorShader))
+                        .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                        .setWriteMaskState(CUSTOM_COLOR_DEPTH_WRITE)
+                        .setCullState(new RenderStateShard.CullStateShard(false))
+                        .createCompositeState(true)
+        );
+    }
     
-        
-    private static final RenderType TRANSLUCENT_FILL = RenderType.create(
-            "bounding_box_fill",
-            DefaultVertexFormat.POSITION_COLOR,
-            VertexFormat.Mode.QUADS,
-            256,
-            false,
-            true,
-            RenderType.CompositeState.builder()
-                    .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionColorShader))
-                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                    .setWriteMaskState(CUSTOM_COLOR_DEPTH_WRITE)
-                    .setCullState(new RenderStateShard.CullStateShard(false))
-                    .createCompositeState(true)
-    );
-
     @SubscribeEvent
     public static void onRenderWorld(RenderLevelStageEvent event) {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) return;
+        ensureRenderTypes();
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || activeBoxes.isEmpty() || mc.level == null) return;
