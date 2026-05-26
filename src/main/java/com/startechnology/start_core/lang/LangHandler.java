@@ -370,7 +370,7 @@ public class LangHandler {
         provider.add("block.start_core.komaru.paginated1.2", "§7If one is to understand and stabilize these powers then reward, not disaster awaits. Harvesting what the Draconic Empires could never is a blessing and a curse just the same. §kkomaru cat§7 awaits what you decide next.");
 
         provider.add("block.start_core.komaru.paginated2.1", "§bModular Overclocking");
-        provider.add("block.start_core.komaru.paginated2.2", "§7Each §6K.O.M.A.R.U§7 has the ability to store 4 Advanced Modules and 20 Basic Modules. Each Basic Module is overclocked to 1/64th of the amperage input up to §f64§eA§7. Each Advanced Module is overclocked to 1/16th of the amperage input up to §f256§eA§7. To achieve this §6K.O.M.A.R.U§7 accepts §dLaser Hatches§7.");
+        provider.add("block.start_core.komaru.paginated2.2", "§7Each §6KOMARU§7 has the ability to store 4 Advanced Modules and 20 Basic Modules. Each Basic Module is overclocked to 1/64th of the amperage input up to §f64§eA§7. Each Advanced Module is overclocked to 1/16th of the amperage input up to §f256§eA§7. To achieve this §6KOMARU§7 accepts §dLaser Hatches§7.");
         provider.add("block.start_core.komaru.paginated2.3", "§d§lFaetic Scaling");
         provider.add("block.start_core.komaru.paginated2.4", "§7Compromised of the product of §dFaetic Scaling§7 and §9Modular Efficiency§7 where:");
         provider.add("block.start_core.komaru.paginated2.5", "    §dFaetic Scaling§7 = 1.025 ^ ([Number of Basic Modules] + 3 * [Number of Advanced Modules])");
@@ -386,7 +386,7 @@ public class LangHandler {
         provider.add("block.start_core.komaru.paginated3.8", "    §7If this is the first cycle the minimum of 10B will be assumed as the prior cycle consumption");
 
         provider.add("block.start_core.komaru.paginated4.1", "§4§lDire Consequences");
-        provider.add("block.start_core.komaru.paginated4.2", "§7The §6K.O.M.A.R.U§7 should not be unchecked as it scales the power it demands by the faematter it consumes.");
+        provider.add("block.start_core.komaru.paginated4.2", "§7The §6KOMARU§7 should not be unchecked as it scales the power it demands by the faematter it consumes.");
         provider.add("block.start_core.komaru.paginated4.3", "- §7If stabilized you will be awarded power §aefficiency§7.");
         provider.add("block.start_core.komaru.paginated4.4", "- §7If left unchecked you will face §4dire consequences§7.");
         provider.add("block.start_core.komaru.paginated4.5", "§ePower Consumption§7 = §fFaematter Consumption§7 / 11");
