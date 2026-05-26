@@ -67,6 +67,19 @@ public class StarTWindTurbineMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .appearanceBlock(casing)
+            .tooltips(
+                Component.translatable("block.start_core.wind_controller.line"),
+                Component.translatable("start_core.wind_controller.line0"),
+                Component.translatable("block.start_core.breaker_line"),
+                Component.translatable("start_core.wind_controller.line1"),
+                Component.translatable("start_core.wind_controller.line2"),
+                Component.translatable("block.start_core.breaker_line"),
+                Component.translatable("start_core.wind_controller.line3"),
+                Component.translatable("start_core.wind_controller.line4"),
+                Component.empty(),
+                Component.translatable("start_core.wind_controller.line5"),
+                Component.translatable("block.start_core.breaker_line")
+            )
             .pattern(definition -> FactoryBlockPattern.start()
                 .aisle("CCC", "C@C", "CCC")
                 .where("C", Predicates.blocks(casing.get())

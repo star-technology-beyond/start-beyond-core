@@ -495,5 +495,21 @@ public class LangHandler {
         provider.add("ui.start_core.cross_dimensional_laser.output_per_sec", "§7EU Sent: %s §7EU/t");
         provider.add("ui.start_core.cross_dimensional_laser.hatch.input_per_sec_hover", "EU transferred to this array in the last second expressed in per tick");
         provider.add("ui.start_core.cross_dimensional_laser.hatch.output_per_sec_hover", "EU transferred out of this array in the last second expressed in per tick");
+
+        provider.add("block.start_core.lv_wind_turbine", "§aLV§r Wind Controller");
+
+        provider.add("block.start_core.wind_controller.line", "§6§lWind Energy");
+        provider.add("start_core.wind_controller.line0", "§7A weather-driven generator that converts wind into EU.");
+        provider.add("start_core.wind_controller.line1", "§6Lubrication:");
+        provider.add("start_core.wind_controller.line2", "§7Consumes either §fSeed Oil§7 or §fLubricant§7 while running. §fLubricant§7 is preferred and gives §a+20%§7 output.");
+        provider.add("start_core.wind_controller.line3", "§bRotation Speed:");
+        provider.add("start_core.wind_controller.line4", "§7Weather multiplies production: clear §f1x§7, rain §f1.5x§7, thunder §f2x§7.");
+        provider.add("start_core.wind_controller.line5", "§7If another formed Wind Turbine is inside this turbine's airspace radius, output is reduced by §c50%§7.");
+        provider.add("config.jade.plugin_start_core.wind_turbine_info", "[Star Technology] Wind Turbine Info");
+        provider.add("wind.start_core.wind_controller.energy", "§eGenerating:§f %s EU/t");
+        provider.add("wind.start_core.wind_controller.lubricant_boost", "§6Lubricant Boost: §a+20%");
+        provider.add("wind.start_core.wind_controller.seed_oil", "§6Running on Seed Oil");
+        provider.add("wind.start_core.wind_controller.weather_boost", "§bWeather Boost: §f%sx");
+        provider.add("wind.start_core.wind_controller.crowding_penalty", "§cCrowding Penalty: -50%");
     }
 }

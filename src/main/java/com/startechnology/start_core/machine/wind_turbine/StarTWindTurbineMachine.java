@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+import lombok.Getter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
@@ -25,11 +26,20 @@ import java.util.List;
 public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
 
     public static final int FLUID_PER_CYCLE = 4;
+    @Getter
     private final int tier;
+    @Getter
     private int euT = 0;
+
+    @Getter
     private boolean usingLubricant = false;
+
+    @Getter
     private boolean usingSeedOil = false;
+
+    @Getter
     private boolean isCrowded = false;
+
     private double weatherMultiplier = 1.0;
 
     private final GTRecipe lubricantRecipe;
@@ -126,6 +136,10 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
         if (level.isRaining()) return 1.5;
 
         return 1.0;
+    }
+
+    public double getCurrentWeatherMultiplier() {
+        return weatherMultiplier;
     }
 
     private String getWeatherType() {
