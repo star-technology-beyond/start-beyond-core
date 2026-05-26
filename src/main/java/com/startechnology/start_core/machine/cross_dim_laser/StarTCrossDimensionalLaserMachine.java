@@ -158,7 +158,7 @@ public class StarTCrossDimensionalLaserMachine extends WorkableMultiblockMachine
             return;
 
         savedData.getReceiver(linkKey).ifPresent(receiverPos -> {
-            // Yoink the block entity of the reciever
+            // Yoink the block entity of the receiver
             ServerLevel receiverLevel = level.getServer().getLevel(receiverPos.dimension());
             if (receiverLevel == null)
                 return;
