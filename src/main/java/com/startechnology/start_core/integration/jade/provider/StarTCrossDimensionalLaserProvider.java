@@ -79,24 +79,24 @@ public class StarTCrossDimensionalLaserProvider extends CapabilityBlockProvider<
             tooltip.add(Component.translatable(link_status == LinkedStatus.Linked
                 ? "ui.start_core.cross_dimensional_laser.linked"
                 : "ui.start_core.cross_dimensional_laser.unlinked"));
-        }
+            
+            if (capData.contains("partner_pos") && link_status == LinkedStatus.Linked) {
+                CompoundTag partner_pos_tag = capData.getCompound("partner_pos");
+                GlobalPos partner = CrossDimensionalLaserSavedData.readGlobalPos(partner_pos_tag);
 
-        if (capData.contains("partner_pos")) {
-            CompoundTag partner_pos_tag = capData.getCompound("partner_pos");
-            GlobalPos partner = CrossDimensionalLaserSavedData.readGlobalPos(partner_pos_tag);
+                tooltip.add(
+                        Component.translatable(
+                                "ui.start_core.cross_dimensional_laser.linked_location_dim",
+                                partner.dimension().location()));
 
-            tooltip.add(
-                    Component.translatable(
-                            "ui.start_core.cross_dimensional_laser.linked_location_dim",
-                            partner.dimension().location()));
-
-            tooltip.add(
-                    Component.translatable(
-                            "ui.start_core.cross_dimensional_laser.linked_location_coords",
-                            partner.pos().getX(),
-                            partner.pos().getY(),
-                            partner.pos().getZ()));
-        
+                tooltip.add(
+                        Component.translatable(
+                                "ui.start_core.cross_dimensional_laser.linked_location_coords",
+                                partner.pos().getX(),
+                                partner.pos().getY(),
+                                partner.pos().getZ()));
+            
+            }
         }
     }
     
