@@ -473,5 +473,27 @@ public class LangHandler {
 
         provider.add("variadic.start_core.indicator.solar_machine", "Percentage to %s K");
         provider.add("variadic.start_core.description.solar_machine", "A clamped value between 0-15 of the (avg temp / %s K) * 15 (In Celsius, K - 273)");
+
+        provider.add("block.start_core.cross_dimensional_laser_line", "§f§lCross-Dimensional Energy");
+        provider.add("start_core.cross_dimensional_laser_line.line0", "§7A high-energy laser focusing array that tears a tunnel through dimensional boundaries to transmit a singular beam of pure light.");
+        provider.add("start_core.cross_dimensional_laser_line.line1", "§6Array Type");
+        provider.add("start_core.cross_dimensional_laser_line.line2", "§7An array with a §fLaser Target Hatch §7is a §esender§7. An array with a §fLaser Source Hatch §7is a §ereceiver§7.");
+        provider.add("start_core.cross_dimensional_laser_line.line3", "§bSingularity-Linking");
+        provider.add("start_core.cross_dimensional_laser_line.line4", "§7To link a §esender §7and §ereceiver §7array, place two corresponding AE2 Quantum Entangled Singularities into the input busses of the arrays.");
+        provider.add("start_core.cross_dimensional_laser_line.line5", "§7Energy will then be transmitted from the §esender§7 to the §ereceiver§7 array through the laser hatches.");
+        provider.add("ui.start_core.cross_dimensional_laser.type", "§6Cross-Dimensional Array Type:");
+        provider.add("ui.start_core.cross_dimensional_laser.sender", "§eSENDER");
+        provider.add("ui.start_core.cross_dimensional_laser.receiver", "§eRECEIVER");
+        provider.add("ui.start_core.cross_dimensional_laser.link_status", "§bSingularity-Link Status:");
+        provider.add("ui.start_core.cross_dimensional_laser.linked", "§aLinked");
+        provider.add("ui.start_core.cross_dimensional_laser.unlinked", "§cUnlinked");
+        provider.add("ui.start_core.cross_dimensional_laser.no_valid_item", "§7No Singularity Provided");
+        provider.add("ui.start_core.cross_dimensional_laser.linked_to_wrong_type", "§cLinked to wrong type");
+        provider.add("ui.start_core.cross_dimensional_laser.linked_location_dim", "§7Linked to %s");
+        provider.add("ui.start_core.cross_dimensional_laser.linked_location_coords", "§7At %s, %s, %s");
+        provider.add("ui.start_core.cross_dimensional_laser.input_per_sec", "§7EU Received: %s §7EU/t");
+        provider.add("ui.start_core.cross_dimensional_laser.output_per_sec", "§7EU Sent: %s §7EU/t");
+        provider.add("ui.start_core.cross_dimensional_laser.hatch.input_per_sec_hover", "EU transferred to this array in the last second expressed in per tick");
+        provider.add("ui.start_core.cross_dimensional_laser.hatch.output_per_sec_hover", "EU transferred out of this array in the last second expressed in per tick");
     }
 }

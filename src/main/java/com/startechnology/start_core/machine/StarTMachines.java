@@ -5,6 +5,7 @@ import com.startechnology.start_core.machine.abyssal_harvester.StarTAbyssalharve
 import com.startechnology.start_core.machine.bacteria.StarTBacteriaMachines;
 import com.startechnology.start_core.machine.converter.StarTConverterMachine;
 import com.startechnology.start_core.machine.crates.StarTCrates;
+import com.startechnology.start_core.machine.cross_dim_laser.StarTCrossDimensionalLaserMachines;
 import com.startechnology.start_core.machine.dreamlink.StarTDreamLinkHatches;
 import com.startechnology.start_core.machine.dreamlink.StarTDreamLinkTransmissionTowers;
 import com.startechnology.start_core.machine.drills.StarTDrillingRigs;
@@ -48,5 +49,6 @@ public class StarTMachines {
         StarTDrillingRigs.init();
         StarTKomaruFrameMachines.init();
         StarTModularCombustionMachines.init();
+        StarTCrossDimensionalLaserMachines.init();
     }
 }
