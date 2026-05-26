@@ -197,7 +197,7 @@ public class CrossDimensionalLaserSavedData extends SavedData {
         return data;
     }
 
-    private static CompoundTag writeGlobalPos(
+    public static CompoundTag writeGlobalPos(
             GlobalPos pos) {
 
         CompoundTag tag = new CompoundTag();
@@ -213,7 +213,7 @@ public class CrossDimensionalLaserSavedData extends SavedData {
         return tag;
     }
 
-    private static GlobalPos readGlobalPos(
+    public static GlobalPos readGlobalPos(
             CompoundTag tag) {
 
         BlockPos pos = NbtUtils.readBlockPos(tag.getCompound("pos"));

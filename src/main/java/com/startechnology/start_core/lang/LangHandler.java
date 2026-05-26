@@ -487,11 +487,12 @@ public class LangHandler {
         provider.add("ui.start_core.cross_dimensional_laser.link_status", "§bSingularity-Link Status:");
         provider.add("ui.start_core.cross_dimensional_laser.linked", "§aLinked");
         provider.add("ui.start_core.cross_dimensional_laser.unlinked", "§cUnlinked");
+        provider.add("ui.start_core.cross_dimensional_laser.no_valid_item", "§cNo quantum entangled singularity provided");
         provider.add("ui.start_core.cross_dimensional_laser.linked_to_wrong_type", "§cLinked to wrong type");
         provider.add("ui.start_core.cross_dimensional_laser.linked_location_dim", "§7Linked to %s");
         provider.add("ui.start_core.cross_dimensional_laser.linked_location_coords", "§7At %s, %s, %s");
-        provider.add("ui.start_core.cross_dimensional_laser.input_per_sec", "§7EU In: %s §7EU/t");
-        provider.add("ui.start_core.cross_dimensional_laser.output_per_sec", "§7EU Out: %s §7EU/t");
+        provider.add("ui.start_core.cross_dimensional_laser.input_per_sec", "§7EU Received: %s §7EU/t");
+        provider.add("ui.start_core.cross_dimensional_laser.output_per_sec", "§7EU Sent: %s §7EU/t");
         provider.add("ui.start_core.cross_dimensional_laser.hatch.input_per_sec_hover", "EU transferred to this array in the last second expressed in per tick");
         provider.add("ui.start_core.cross_dimensional_laser.hatch.output_per_sec_hover", "EU transferred out of this array in the last second expressed in per tick");
     }

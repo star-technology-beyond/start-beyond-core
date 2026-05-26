@@ -3,6 +3,8 @@ package com.startechnology.start_core.api.capability;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.startechnology.start_core.machine.abyssal_harvester.StarTAbyssalHarvesterMachine;
+import com.startechnology.start_core.machine.cross_dim_laser.StarTCrossDimensionalLaserMachine;
+import com.startechnology.start_core.machine.cross_dim_laser.StarTCrossDimensionalLaserMachines;
 import com.startechnology.start_core.machine.fusion.ReflectorFusionReactorMachine;
 import com.startechnology.start_core.machine.hellforge.StarTHellForgeMachine;
 import com.startechnology.start_core.machine.modular.StarTModularInterfaceHatchPartMachine;
@@ -78,6 +80,12 @@ public class StarTCapabilityHelper {
             }
         }
 
+        else if (capability == StarTCapability.CAPABILITY_CROSS_DIMENSIONAL_LASER_MACHINE) {
+            if (machine instanceof StarTCrossDimensionalLaserMachine crossDimensionalLaserMachine) {
+                return StarTCapability.CAPABILITY_CROSS_DIMENSIONAL_LASER_MACHINE.orEmpty(capability, LazyOptional.of(() -> crossDimensionalLaserMachine));
+            }
+        }
+
         return LazyOptional.empty();
     }
 
@@ -143,5 +151,10 @@ public class StarTCapabilityHelper {
     @Nullable
     public static StarTModularInterfaceHatchPartMachine getModularInterfaceHatchPartMachine(Level level, BlockPos pos, @Nullable Direction side) {
         return getBlockEntityCapability(StarTCapability.CAPABILITY_MODULAR_INTERFACE_HATCH_PART_MACHINE, level, pos, side);
+    }
+
+    @Nullable
+    public static StarTCrossDimensionalLaserMachine getCrossDimensionalLaserMachine(Level level, BlockPos pos, @Nullable Direction side) {
+        return getBlockEntityCapability(StarTCapability.CAPABILITY_CROSS_DIMENSIONAL_LASER_MACHINE, level, pos, side);
     }
 }

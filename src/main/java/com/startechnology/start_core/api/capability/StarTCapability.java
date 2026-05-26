@@ -1,6 +1,8 @@
 package com.startechnology.start_core.api.capability;
 
 import com.startechnology.start_core.machine.abyssal_harvester.StarTAbyssalHarvesterMachine;
+import com.startechnology.start_core.machine.cross_dim_laser.StarTCrossDimensionalLaserMachine;
+import com.startechnology.start_core.machine.cross_dim_laser.StarTCrossDimensionalLaserMachines;
 import com.startechnology.start_core.machine.fusion.ReflectorFusionReactorMachine;
 import com.startechnology.start_core.machine.hellforge.StarTHellForgeMachine;
 import com.startechnology.start_core.machine.modular.StarTModularInterfaceHatchPartMachine;
@@ -39,4 +41,6 @@ public class StarTCapability {
     public static final Capability<StarTSolarMachine>  CAPABILITY_SOLAR = CapabilityManager.get(new CapabilityToken<>() {});
 
     public static final Capability<VacuumChemicalReactionChamberMachine> VACUUM_CHEMICAL_REACTION_CHAMBER = CapabilityManager.get(new CapabilityToken<>() {});
+
+    public static final Capability<StarTCrossDimensionalLaserMachine> CAPABILITY_CROSS_DIMENSIONAL_LASER_MACHINE = CapabilityManager.get(new CapabilityToken<>() {});
 }

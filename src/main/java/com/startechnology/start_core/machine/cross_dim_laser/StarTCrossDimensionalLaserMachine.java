@@ -30,6 +30,7 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.startechnology.start_core.mixin.LaserHatchPartMachineAccessor;
 
 import appeng.blockentity.qnb.QuantumBridgeBlockEntity;
+import lombok.Getter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
@@ -58,12 +59,17 @@ public class StarTCrossDimensionalLaserMachine extends WorkableMultiblockMachine
 
     @Persisted
     @DescSynced
+    @Getter
     private CrossDimensionalLaserDirection direction;
 
     @Persisted
     private Long linkKey;
 
+    @Getter
+    private Optional<GlobalPos> partnerGlobalPos = Optional.empty();
+
     @DescSynced
+    @Getter
     private LinkedStatus linkStatus = LinkedStatus.Unlinked;
 
     private NotifiableLaserContainer laserContainer = null;
@@ -82,6 +88,9 @@ public class StarTCrossDimensionalLaserMachine extends WorkableMultiblockMachine
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
+        if (laserSubscription != null) laserSubscription.unsubscribe();
+        if (inputSubscription != null) inputSubscription.unsubscribe();
+        if (tryCrossDimTickSub != null) tryCrossDimTickSub.unsubscribe();
 
         readyToUpdate = false;
 
@@ -243,12 +252,21 @@ public class StarTCrossDimensionalLaserMachine extends WorkableMultiblockMachine
             return;
         }
 
-        boolean hasSender = savedData.getSender(linkKey).isPresent();
-        boolean hasReceiver = savedData.getReceiver(linkKey).isPresent();
+        Optional<GlobalPos> sender = savedData.getSender(linkKey);
+        Optional<GlobalPos> receiver = savedData.getReceiver(linkKey);
 
-        linkStatus = (hasSender && hasReceiver)
+        linkStatus = (sender.isPresent() && receiver.isPresent())
                 ? LinkedStatus.Linked
                 : LinkedStatus.Unlinked;
+
+        var partnerOpt = direction == CrossDimensionalLaserDirection.SENDER
+                ? savedData.getReceiver(linkKey)
+                : savedData.getSender(linkKey);
+
+        partnerGlobalPos = Optional.empty();
+        partnerOpt.ifPresent(partner -> {
+            partnerGlobalPos = Optional.of(partner);
+        });
     }
 
     protected void unRegisterPair() {
@@ -309,32 +327,54 @@ public class StarTCrossDimensionalLaserMachine extends WorkableMultiblockMachine
 
                 // Show linked coords if available
                 if (linkKey != null) {
-                    Level level = getLevel();
-                    CrossDimensionalLaserSavedData savedData = CrossDimensionalLaserSavedData.get(level);
-                    if (savedData != null) {
-                        var partnerOpt = direction == CrossDimensionalLaserDirection.SENDER
-                                ? savedData.getReceiver(linkKey)
-                                : savedData.getSender(linkKey);
-                        partnerOpt.ifPresent(partner -> {
-                            textList.add(
-                                    Component.translatable(
-                                            "ui.start_core.cross_dimensional_laser.linked_location_dim",
-                                            partner.dimension().location()));
+                    partnerGlobalPos.ifPresent(partner -> {
+                        textList.add(
+                                Component.translatable(
+                                        "ui.start_core.cross_dimensional_laser.linked_location_dim",
+                                        partner.dimension().location()));
 
-                            textList.add(
-                                    Component.translatable(
-                                            "ui.start_core.cross_dimensional_laser.linked_location_coords",
-                                            partner.pos().getX(),
-                                            partner.pos().getY(),
-                                            partner.pos().getZ()));                           
-                        });
-                    }
-                };
+                        textList.add(
+                                Component.translatable(
+                                        "ui.start_core.cross_dimensional_laser.linked_location_coords",
+                                        partner.pos().getX(),
+                                        partner.pos().getY(),
+                                        partner.pos().getZ()));
+                    });
+                }
+                ;
 
+                if (direction == CrossDimensionalLaserDirection.SENDER) {
+                    MutableComponent sentAmountComponent = Component
+                            .literal(FormattingUtil.formatNumbers(this.laserContainer.getOutputPerSec() / 20))
+                            .setStyle(Style.EMPTY.withColor(ChatFormatting.RED));
+                    textList.add(Component
+                            .translatable("ui.start_core.cross_dimensional_laser.output_per_sec", sentAmountComponent)
+                            .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                    Component.translatable(
+                                            "ui.start_core.cross_dimensional_laser.hatch.output_per_sec_hover")))));
+                } else {
+                    MutableComponent recvAmountComponent = Component
+                            .literal(FormattingUtil.formatNumbers(this.laserContainer.getInputPerSec() / 20))
+                            .setStyle(Style.EMPTY.withColor(ChatFormatting.GREEN));
+                    textList.add(Component
+                            .translatable("ui.start_core.cross_dimensional_laser.input_per_sec", recvAmountComponent)
+                            .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                    Component.translatable(
+                                            "ui.start_core.cross_dimensional_laser.hatch.input_per_sec_hover")))));
+                }
+            }
+            case Unlinked -> {
+                textList.add(
+                        Component.translatable("ui.start_core.cross_dimensional_laser.unlinked"));
+
+                // Display helpful messsage that theres no valid singularity yet.
+                if (inputInventory != null &&
+                    !QuantumBridgeBlockEntity.isValidEntangledSingularity(inputInventory.getStackInSlot(0))) {
+                    textList.add(
+                        Component.translatable("ui.start_core.cross_dimensional_laser.no_valid_item"));
+                }
 
             }
-            case Unlinked -> textList.add(
-                    Component.translatable("ui.start_core.cross_dimensional_laser.unlinked"));
         }
     }
 
