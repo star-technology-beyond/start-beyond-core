@@ -120,7 +120,14 @@ repositories {
             includeGroup "appeng"
         }
     }
+    maven {
+        url = uri("https://maven.pkg.github.com/Star-Technology-Beyond/GTM-StarT-Beyond")
 
+        credentials {
+            username = findProperty("gpr.user")
+            password = findProperty("gpr.key")
+        }
+    }
     maven {
         url "https://maven.ftb.dev/releases"
     }
