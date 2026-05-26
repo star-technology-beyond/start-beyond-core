@@ -60,7 +60,7 @@ public class StarTCrossDimensionalLaserMachines {
             .build()
         ).sidedWorkableCasingModel(
             GTCEu.id("block/casings/hpca/computer_casing"),
-            GTCEu.id("block/multiblock/hpca")
+            StarTCore.resourceLocation("block/overlay/cross_dimensional_laser")
         )
         .register();
 

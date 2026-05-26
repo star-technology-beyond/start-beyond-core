@@ -711,7 +711,7 @@
   "ui.start_core.cross_dimensional_laser.linked_location_coords": "§7At %s, %s, %s",
   "ui.start_core.cross_dimensional_laser.linked_location_dim": "§7Linked to %s",
   "ui.start_core.cross_dimensional_laser.linked_to_wrong_type": "§cLinked to wrong type",
-  "ui.start_core.cross_dimensional_laser.no_valid_item": "§cNo quantum entangled singularity provided",
+  "ui.start_core.cross_dimensional_laser.no_valid_item": "§7No Singularity Provided",
   "ui.start_core.cross_dimensional_laser.output_per_sec": "§7EU Sent: %s §7EU/t",
   "ui.start_core.cross_dimensional_laser.receiver": "§eRECEIVER",
   "ui.start_core.cross_dimensional_laser.sender": "§eSENDER",

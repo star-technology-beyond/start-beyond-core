@@ -13,8 +13,8 @@
         "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
           "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
-          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front",
-          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_emissive",
+          "overlay_front": "start_core:block/overlay/cross_dimensional_laser/overlay_front",
+          "overlay_front_emissive": "start_core:block/overlay/cross_dimensional_laser/overlay_front_emissive",
           "side": "gtceu:block/casings/hpca/computer_casing/side",
           "top": "gtceu:block/casings/hpca/computer_casing/top"
         }
@@ -25,8 +25,8 @@
         "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
           "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
-          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front",
-          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_emissive",
+          "overlay_front": "start_core:block/overlay/cross_dimensional_laser/overlay_front",
+          "overlay_front_emissive": "start_core:block/overlay/cross_dimensional_laser/overlay_front_emissive",
           "side": "gtceu:block/casings/hpca/computer_casing/side",
           "top": "gtceu:block/casings/hpca/computer_casing/top"
         }
@@ -37,8 +37,8 @@
         "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
           "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
-          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_active_emissive",
+          "overlay_front": "start_core:block/overlay/cross_dimensional_laser/overlay_front",
+          "overlay_front_emissive": "start_core:block/overlay/cross_dimensional_laser/overlay_front_emissive",
           "side": "gtceu:block/casings/hpca/computer_casing/side",
           "top": "gtceu:block/casings/hpca/computer_casing/top"
         }
@@ -49,8 +49,8 @@
         "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
           "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
-          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_active_emissive",
+          "overlay_front": "start_core:block/overlay/cross_dimensional_laser/overlay_front",
+          "overlay_front_emissive": "start_core:block/overlay/cross_dimensional_laser/overlay_front_emissive",
           "side": "gtceu:block/casings/hpca/computer_casing/side",
           "top": "gtceu:block/casings/hpca/computer_casing/top"
         }
@@ -61,8 +61,8 @@
         "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
           "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
-          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front",
-          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_emissive",
+          "overlay_front": "start_core:block/overlay/cross_dimensional_laser/overlay_front",
+          "overlay_front_emissive": "start_core:block/overlay/cross_dimensional_laser/overlay_front_emissive",
           "side": "gtceu:block/casings/hpca/computer_casing/side",
           "top": "gtceu:block/casings/hpca/computer_casing/top"
         }
@@ -73,8 +73,8 @@
         "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
           "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
-          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front",
-          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_emissive",
+          "overlay_front": "start_core:block/overlay/cross_dimensional_laser/overlay_front",
+          "overlay_front_emissive": "start_core:block/overlay/cross_dimensional_laser/overlay_front_emissive",
           "side": "gtceu:block/casings/hpca/computer_casing/side",
           "top": "gtceu:block/casings/hpca/computer_casing/top"
         }
@@ -85,8 +85,8 @@
         "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
           "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
-          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_active_emissive",
+          "overlay_front": "start_core:block/overlay/cross_dimensional_laser/overlay_front",
+          "overlay_front_emissive": "start_core:block/overlay/cross_dimensional_laser/overlay_front_emissive",
           "side": "gtceu:block/casings/hpca/computer_casing/side",
           "top": "gtceu:block/casings/hpca/computer_casing/top"
         }
@@ -97,8 +97,8 @@
         "parent": "gtceu:block/machine/template/sided/sided",
         "textures": {
           "bottom": "gtceu:block/casings/hpca/computer_casing/bottom",
-          "overlay_front": "gtceu:block/multiblock/hpca/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/multiblock/hpca/overlay_front_active_emissive",
+          "overlay_front": "start_core:block/overlay/cross_dimensional_laser/overlay_front",
+          "overlay_front_emissive": "start_core:block/overlay/cross_dimensional_laser/overlay_front_emissive",
           "side": "gtceu:block/casings/hpca/computer_casing/side",
           "top": "gtceu:block/casings/hpca/computer_casing/top"
         }

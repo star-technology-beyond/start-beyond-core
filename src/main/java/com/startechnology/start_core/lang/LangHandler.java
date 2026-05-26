@@ -487,7 +487,7 @@ public class LangHandler {
         provider.add("ui.start_core.cross_dimensional_laser.link_status", "§bSingularity-Link Status:");
         provider.add("ui.start_core.cross_dimensional_laser.linked", "§aLinked");
         provider.add("ui.start_core.cross_dimensional_laser.unlinked", "§cUnlinked");
-        provider.add("ui.start_core.cross_dimensional_laser.no_valid_item", "§cNo quantum entangled singularity provided");
+        provider.add("ui.start_core.cross_dimensional_laser.no_valid_item", "§7No Singularity Provided");
         provider.add("ui.start_core.cross_dimensional_laser.linked_to_wrong_type", "§cLinked to wrong type");
         provider.add("ui.start_core.cross_dimensional_laser.linked_location_dim", "§7Linked to %s");
         provider.add("ui.start_core.cross_dimensional_laser.linked_location_coords", "§7At %s, %s, %s");
