@@ -58,7 +58,6 @@ public class StarTWindTurbineManager {
         if (machine.isRemote()) return false;
 
         BlockPos center = machine.getPos();
-        int radiusSquared = radius * radius;
         ResourceKey<Level> dimension = machine.getLevel().dimension();
 
         MANAGER.turbineTrees.putIfAbsent(dimension, RTree.create());
@@ -75,11 +74,11 @@ public class StarTWindTurbineManager {
                 if (other == machine || !MANAGER.isValidEntry(other)) return false;
 
                 BlockPos otherPos = other.getPos();
-                long dx = center.getX() - otherPos.getX();
-                long dy = center.getY() - otherPos.getY();
-                long dz = center.getZ() - otherPos.getZ();
+                long dx = Math.abs((long) center.getX() - otherPos.getX());
+                long dy = Math.abs((long) center.getY() - otherPos.getY());
+                long dz = Math.abs((long) center.getZ() - otherPos.getZ());
 
-                return dx * dx + dy * dy + dz * dz <= radiusSquared;
+                return dx <= radius && dy <= radius && dz <= radius;
             })
             .toBlocking()
             .firstOrDefault(null);

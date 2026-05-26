@@ -495,9 +495,6 @@ public class LangHandler {
         provider.add("ui.start_core.cross_dimensional_laser.output_per_sec", "§7EU Sent: %s §7EU/t");
         provider.add("ui.start_core.cross_dimensional_laser.hatch.input_per_sec_hover", "EU transferred to this array in the last second expressed in per tick");
         provider.add("ui.start_core.cross_dimensional_laser.hatch.output_per_sec_hover", "EU transferred out of this array in the last second expressed in per tick");
-
-        provider.add("block.start_core.lv_wind_turbine", "§aLV§r Wind Controller");
-
         provider.add("block.start_core.wind_controller.line", "§6§lWind Energy");
         provider.add("start_core.wind_controller.line0", "§7A weather-driven generator that converts wind into EU.");
         provider.add("start_core.wind_controller.line1", "§6Lubrication:");
