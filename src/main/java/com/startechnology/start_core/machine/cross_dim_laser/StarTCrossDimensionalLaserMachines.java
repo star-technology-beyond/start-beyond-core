@@ -27,7 +27,7 @@ public class StarTCrossDimensionalLaserMachines {
         .multiblock("cross_dimensional_laser", StarTCrossDimensionalLaserMachine::new)
         .appearanceBlock(() -> GTBlocks.ADVANCED_COMPUTER_CASING.get())
         .recipeType(GTRecipeTypes.DUMMY_RECIPES)
-        .rotationState(RotationState.ALL)
+        .rotationState(RotationState.NON_Y_AXIS)
         .langValue("Cross-Dimensional Laser Tunneling Array [CDLTA]")
         .tooltips(
             Component.translatable("block.start_core.cross_dimensional_laser_line"),
@@ -43,23 +43,42 @@ public class StarTCrossDimensionalLaserMachines {
             Component.translatable("block.start_core.breaker_line")
         )
         .pattern(definition -> FactoryBlockPattern.start()
-            .aisle("#AA#BBB#AA#", "AAA#BBB#AAA", "AAA#BBB#AAA", "#####C#####", "BBB#CCC#BBB", "BBBCCCCCBBB", "BBB#CCC#BBB", "#####C#####", "AAA#BBB#AAA", "AAA#BBB#AAA", "#AA#BBB#AA#") 
-            .aisle("AAA#BBB#AAA", "ADDDDDDDDDA", "ADA#BDB#ADA", "#D##CDC##D#", "BDBCCDCCBDB", "BDDDDEDDDDB", "BDBCCDCCBDB", "#D##CDC##D#", "ADA#BDB#ADA", "ADDDDDDDADA", "AAA#DBD#AAA") 
-            .aisle("#AA#BBB#AA#", "AAA#B@B#AAA", "AAA#BBB#AAA", "#####C#####", "BBB#CCC#BBB", "BBBCC#CCBBB", "BBB#CCC#BBB", "#####C#####", "AAA#BDB#AAA", "AAA#DGD#AAA", "#AA#DBD#AA#") 
+            .aisle("######ABA######", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############") 
+            .aisle("#####AAAAA#####", "######CCC######", "######DID######", "#######D#######", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############") 
+            .aisle("######AAA######", "######CCC######", "######CCC######", "######DDD######", "#######B#######", "#######B#######", "#######B#######", "######EFE######", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############") 
+            .aisle("#######A#######", "#######G#######", "######HCH######", "#######H#######", "###############", "###############", "###############", "#####E####E####", "#######B#######", "#######B#######", "#######B#######", "######EFE######", "###############", "###############", "###############", "###############") 
+            .aisle("###############", "#######G#######", "######HCH######", "#######H#######", "###############", "###############", "###############", "###########E###", "###############", "###############", "###############", "###############", "####E##B##E####", "#######B#######", "#######B#######", "######EEE######") 
+            .aisle("#A###########A#", "######HGH######", "#####HHCHH#####", "######HHH######", "#######H#######", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############") 
+            .aisle("AAA###AAA###AAA", "#CC##HDDDH##CC#", "#DCHHHDCDHHHDD#", "##D##HDDDH##D##", "#######D#######", "#######G#######", "#######D#######", "##E####G####E##", "#######D#######", "###############", "###############", "###E#######E###", "###############", "###############", "###############", "####E#####E####") 
+            .aisle("BAAA##AAA##AAAB", "#CCGGGDDDGGGCC#", "#ICCCCCCCCCCCI#", "#DDHHHDCDHHHDD#", "##B##HDKDH##B##", "##B###GKG###B##", "##B###DKD###B##", "##F###GKG###F##", "###B##DKD##B###", "###B###K###B###", "###B#######B###", "###F###F###F###", "####B#####B####", "####B##F##B####", "####B#####B####", "####E##F##E####") 
+            .aisle("AAA###AAA###AAA", "#CC##HDDDH##CC#", "#DCHHHDCDHHHCD#", "##D##HDDDH##D##", "#######D#######", "#######G#######", "#######D#######", "##E####G####E##", "#######D#######", "###############", "###############", "###E#######E###", "###############", "###############", "###############", "####E#####E####") 
+            .aisle("#A###########A#", "######HGH######", "#####HHCHH#####", "######HHH######", "#######H#######", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############") 
+            .aisle("###############", "#######G#######", "######HCH######", "#######H#######", "###############", "###############", "###############", "###E#######E###", "###############", "###############", "###############", "###############", "####E##B##E####", "#######B#######", "#######B#######", "######EEE######") 
+            .aisle("#######A#######", "#######G#######", "######HCH######", "#######H#######", "###############", "###############", "###############", "####E#####E####", "#######B#######", "#######B#######", "#######B#######", "######EFE######", "###############", "###############", "###############", "###############") 
+            .aisle("######AAA######", "######CCC######", "######CCC######", "######DDD######", "#######B#######", "#######B#######", "#######B#######", "######EFE######", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############") 
+            .aisle("#####AAAAA#####", "######CCC######", "######D@D######", "#######D#######", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############") 
+            .aisle("######ABA######", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############", "###############") 
             .where("#", Predicates.any())
-            .where("A", Predicates.blocks(GTBlocks.HIGH_POWER_CASING.get()))
-            .where("B", Predicates.blocks(GTBlocks.COMPUTER_CASING.get()))
-            .where("C", Predicates.blocks(StarTMachineUtils.getKjsBlock("reinforced_fusion_glass")))
-            .where("D", Predicates.blocks(GTBlocks.ADVANCED_COMPUTER_CASING.get()))
-            .where("E", Predicates.abilities(
+            .where("A", Predicates.blocks(GTBlocks.CASING_HSSE_STURDY.get()))
+            .where("I", Predicates.blocks(StarTMachineUtils.getKjsBlock("prismalium_casing"))
+                .or(Predicates.blocks(GTMachines.ITEM_IMPORT_BUS[GTValues.ULV].getBlock()).setExactLimit(1))
+                .or(Predicates.abilities(
                     PartAbility.INPUT_LASER,
                     PartAbility.OUTPUT_LASER
                 ).setExactLimit(1))
+            )
+            .where("B", Predicates.blocks(StarTMachineUtils.getKjsBlock("prismalium_casing")))
+            .where("C", Predicates.blocks(GTBlocks.ADVANCED_COMPUTER_CASING.get()))
+            .where("D", Predicates.blocks(GTBlocks.HIGH_POWER_CASING.get()))
+            .where("E", Predicates.blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
+            .where("F", Predicates.blocks(GTBlocks.FUSION_COIL.get()))
+            .where("G", Predicates.blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTCEuAPI.materialManager.getMaterial("europium"))))
+            .where("H", Predicates.blocks(StarTMachineUtils.getKjsBlock("reinforced_fusion_glass")))
+            .where("K", Predicates.blocks(StarTMachineUtils.getKjsBlock("superalloy_casing")))
             .where("@", Predicates.controller(Predicates.blocks(definition.get())))
-            .where("G", Predicates.blocks(GTMachines.ITEM_IMPORT_BUS[GTValues.ULV].getBlock()))
             .build()
         ).sidedWorkableCasingModel(
-            GTCEu.id("block/casings/hpca/computer_casing"),
+            GTCEu.id("block/casings/hpca/advanced_computer_casing"),
             StarTCore.resourceLocation("block/overlay/cross_dimensional_laser")
         )
         .register();
