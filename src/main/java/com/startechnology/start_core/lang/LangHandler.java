@@ -499,5 +499,10 @@ public class LangHandler {
         provider.add("ui.start_core.cross_dimensional_laser.output_per_sec", "§7EU Sent: %s §7EU/t");
         provider.add("ui.start_core.cross_dimensional_laser.hatch.input_per_sec_hover", "EU transferred to this array in the last second expressed in per tick");
         provider.add("ui.start_core.cross_dimensional_laser.hatch.output_per_sec_hover", "EU transferred out of this array in the last second expressed in per tick");
+        provider.add("item.start_core.gregtech_multitool.mode", "Selected: %s");
+        provider.add("item.start_core.gregtech_multitool.hint", "Hold the multitool selector key to choose a tool mode.");
+        provider.add("key.categories.start_core", "StarT Core");
+        provider.add("key.start_core.multitool_selector", "Open Multitool Selector");
+        provider.add("key.start_core.multitool_selector.hint", "Scroll or click to select");
     }
 }

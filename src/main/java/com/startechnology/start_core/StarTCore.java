@@ -29,6 +29,7 @@ import com.startechnology.start_core.data.StarTDimensionMarkers;
 import com.startechnology.start_core.machine.StarTMachines;
 import com.startechnology.start_core.machine.abyssal_containment.StarTAbyssalContainmentMachine;
 import com.startechnology.start_core.materials.StarTMaterials;
+import com.startechnology.start_core.network.StarTNetwork;
 import com.startechnology.start_core.recipe.StarTRecipeCategories;
 import com.startechnology.start_core.recipe.StarTRecipeTypes;
 
@@ -84,6 +85,7 @@ public class StarTCore {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        StarTNetwork.init();
         StarTAbyssalContainmentMachine.init();
         CuriosApi.registerCurio(StarTItems.TOOL_DREAM_COPY_ITEM.asItem(), new LucinducerCurioItem());
     }

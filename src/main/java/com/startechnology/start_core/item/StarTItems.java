@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.stack.ItemMaterialInfo;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.IComponentItem;
+import com.gregtechceu.gtceu.api.item.IGTTool;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.api.item.component.ThermalFluidStats;
 import com.gregtechceu.gtceu.common.data.GTItems;
@@ -24,6 +25,7 @@ import com.gregtechceu.gtceu.common.item.ItemFluidContainer;
 import com.gregtechceu.gtceu.common.item.TooltipBehavior;
 import com.startechnology.start_core.item.components.CopyBehavior;
 import com.startechnology.start_core.item.components.StarTDreamCopyBehaviour;
+import com.startechnology.start_core.item.multitool.StarTMultitoolItem;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
@@ -72,6 +74,16 @@ public class StarTItems {
                 lines.add(Component.translatable("item.start_core.mechanical_memory_card.tooltip.supported", GTMachines.CONFIGURABLE_MAINTENANCE_HATCH.getBlock().getName()));
                 lines.add(Component.translatable("item.start_core.mechanical_memory_card.tooltip.supported", GTAEMachines.ME_PATTERN_BUFFER.getBlock().getName()));
             })))
+            .register();
+
+    public static final ItemEntry<StarTMultitoolItem> GREGTECH_MULTITOOL = START_REGISTRATE
+            .item("gregtech_multitool",
+                    properties -> new StarTMultitoolItem(GTMaterials.Neutronium.getToolTier(),
+                            GTMaterials.Neutronium, properties))
+            .lang("GregTech Multitool")
+            .properties(properties -> properties.stacksTo(1))
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .color(() -> IGTTool::tintColor)
             .register();
 
     public static ItemEntry<ComponentItem> FLUID_CELL_LARGE_ENRICHED_NAQUADAH = createFluidCell(GTMaterials.NaquadahEnriched, 768, 12, 16, true, true, false);
