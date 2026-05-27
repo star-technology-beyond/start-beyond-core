@@ -251,6 +251,9 @@ public class LangHandler {
 
         provider.add("item.start_core.lucinducer.tooltip1", "§7Copies and applies Dream-Link network information.");
         provider.add("item.start_core.lucinducer.tooltip2", "§7While held offhand, the stored network will be applied to any placed Dream-Link Hatch or Cover.");
+        provider.add("item.start_core.lucinducer.tooltip3", "§7When equipped as a Curio, it charges EU and FE-powered items in your inventory by using the copied Dream-Link network.");
+
+        provider.add("curios.identifier.lucinducer", "Lucinducer");
 
         provider.add("item.start_core.mechanical_memory_card.tooltip", "§7Allows you to copy miscellaneous machines information. Supported: ");
         provider.add("item.start_core.mechanical_memory_card.tooltip.supported", " - §b%s");
