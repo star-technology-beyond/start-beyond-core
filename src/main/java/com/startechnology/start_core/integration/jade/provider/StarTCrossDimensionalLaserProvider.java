@@ -28,7 +28,7 @@ import snownee.jade.api.config.IPluginConfig;
 public class StarTCrossDimensionalLaserProvider extends CapabilityBlockProvider<StarTCrossDimensionalLaserMachine> {
     
     public StarTCrossDimensionalLaserProvider() {
-        super(StarTCore.resourceLocation("abyssal_harvester_info"));
+        super(StarTCore.resourceLocation("cross_dimensional_laser"));
     }
 
     @Override
