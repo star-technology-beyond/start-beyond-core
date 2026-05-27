@@ -457,6 +457,7 @@
   "block.start_core.zpm_solar_cell": "§cZPM§r Solar Cell",
   "block.start_core.zpm_vacuum_pump": "§cZPM§r Vacuum Pump",
   "config.jade.plugin_start_core.abyssal_harvester_info": "[Star Technology] Abyssal Harvester Entropy",
+  "config.jade.plugin_start_core.cross_dimensional_laser": "[Star Technology] Cross Dimensional Laser Info",
   "config.jade.plugin_start_core.dream_link_network_info": "[Star Technology] Dream-Link Network Info",
   "config.jade.plugin_start_core.fusion_reactor_info": "[Star Technology] Fusion Reactor Info",
   "config.jade.plugin_start_core.hellforge_heat_info": "[Star Technology] Hell Forge Crucible Temp",
