@@ -1,7 +1,7 @@
-name: Build StarT-Beyond-Core
-
+name: Build and Publish StarT-Beyond-Core
 on:
   push:
+    branches: [ main ]
   pull_request:
   workflow_dispatch:
 
@@ -11,8 +11,8 @@ jobs:
 
     permissions:
       contents: read
-      packages: read
-
+      packages: write
+      
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -40,3 +40,10 @@ jobs:
         with:
           name: start-beyond-core
           path: build/libs/
+
+      - name: Publish to GitHub Packages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: ./gradlew publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}

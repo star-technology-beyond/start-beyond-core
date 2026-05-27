@@ -28,7 +28,7 @@ public class StarTCrossDimensionalLaserMachines {
         .appearanceBlock(() -> GTBlocks.ADVANCED_COMPUTER_CASING.get())
         .recipeType(GTRecipeTypes.DUMMY_RECIPES)
         .rotationState(RotationState.NON_Y_AXIS)
-        .langValue("Cross-Dimensional Laser Tunneling Array [CDLTA]")
+        .langValue("Cross-Dimensional Laser Tunnelling Array [CDLTA]")
         .tooltips(
             Component.translatable("block.start_core.cross_dimensional_laser_line"),
             Component.translatable("start_core.cross_dimensional_laser_line.line0"),
