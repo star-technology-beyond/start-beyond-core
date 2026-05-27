@@ -359,6 +359,7 @@ public class LangHandler {
         provider.add("modular.start_core.supported_list_description", "These are the available multiblock types which can be linked with this terminal to enable their functionality.");
         provider.add("config.jade.plugin_start_core.modular_interface_hatch_part_machine", "[Star Technology] Modular Interface Information");
         provider.add("config.jade.plugin_start_core.fusion_reactor_info", "[Star Technology] Fusion Reactor Info");
+        provider.add("config.jade.plugin_start_core.cross_dimensional_laser", "[Star Technology] Cross Dimensional Laser Info");
 
         provider.add("variadic.start_core.indicator.default", "Click here to select (if any)");
         provider.add("variadic.start_core.description.default", "When part of a formed multiblock which has interfaced with this hatch, clicking here will produce a dropdown to select a desired redstone indicator of the multiblock's function");
