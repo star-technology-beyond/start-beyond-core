@@ -383,7 +383,7 @@ public class StarTCrossDimensionalLaserMachine extends WorkableMultiblockMachine
         WidgetGroup group = new WidgetGroup(0, 0, 182 + 8, 117 + 8);
         group.addWidget(
                 new DraggableScrollableWidgetGroup(4, 4, 182, 117).setBackground(GuiTextures.DISPLAY)
-                        .addWidget(new LabelWidget(4, 5, "Cross-Dimensional Laser Tunneling Array"))
+                        .addWidget(new LabelWidget(4, 5, "Cross-Dimensional Laser Tunnelling Array"))
                         .addWidget(new ComponentPanelWidget(4, 15, this::addLinkDisplayText)));
         group.setBackground(GuiTextures.BACKGROUND_INVERSE);
         return group;
