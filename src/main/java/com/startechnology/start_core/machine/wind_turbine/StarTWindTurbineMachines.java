@@ -94,7 +94,7 @@ public class StarTWindTurbineMachines {
                 .where("H", StarTWindTurbinePredicates.windTurbineBlade(
                     GTBlocks.TREATED_WOOD_FENCE.get()))
                 .where("M", StarTWindTurbinePredicates.windTurbineBlade(
-                    GCYMBlocks.CASING_INDUSTRIAL_STEAM.get()))
+                    StarTMachineUtils.getKjsBlock("high_steam_machine_casing")))
                 .build()
             )
             .workableCasingModel(

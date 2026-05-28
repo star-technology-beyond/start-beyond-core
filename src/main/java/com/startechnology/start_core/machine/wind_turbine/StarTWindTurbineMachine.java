@@ -14,6 +14,8 @@ import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.simibubi.create.content.contraptions.bearing.BearingBlock;
 
+import java.util.ArrayList;
+
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.ChatFormatting;
@@ -337,6 +339,8 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
 
     // try find the bearing based on the traceability predicate
     // like how we do komaru basic and advanced modules
+    //
+    // we also pass the actual blade position to it
     private void findAndCacheBearing() {
         cachedBearing = null;
         if (!isFormed() || getLevel() == null)
@@ -345,11 +349,15 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
         BlockPos bearingPos = getMultiblockState().getMatchContext()
                 .getOrDefault(StarTWindTurbinePredicates.BEARING_KEY, null);
 
+        List<BlockPos> bladePositions = getMultiblockState().getMatchContext()
+                .getOrDefault(StarTWindTurbinePredicates.BLADE_POSITIONS_KEY, new ArrayList<>());
+
         if (bearingPos == null)
             return;
 
         if (getLevel().getBlockEntity(bearingPos) instanceof StarTWindTurbineBearingBlockEntity bearing) {
             cachedBearing = bearing;
+            cachedBearing.setBladePositions(bladePositions);
         }
     }
 

@@ -45,13 +45,5 @@ public class StarTWindTurbineBlocks {
             .register();
 
     public static void init() {
-        StarTWindTurbineBearingBlockEntity.registerBladeBlock(
-            () -> StarTMachineUtils.getGTCEuBlock("bronze_frame"));
-        StarTWindTurbineBearingBlockEntity.registerBladeBlock(
-            () -> GTBlocks.TREATED_WOOD_FENCE_GATE.get());
-        StarTWindTurbineBearingBlockEntity.registerBladeBlock(
-            () -> GTBlocks.TREATED_WOOD_FENCE.get());
-        StarTWindTurbineBearingBlockEntity.registerBladeBlock(
-            () -> GCYMBlocks.CASING_INDUSTRIAL_STEAM.get());
     }
 }

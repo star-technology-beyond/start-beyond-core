@@ -33,9 +33,9 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
     @Getter
     private boolean isAssembling = false;
 
-    // List of allowed blocks to be grabbed as part of the
-    // actual turbine blade
-    private static final List<Supplier<Block>> TURBINE_BLADE_BLOCKS = new ArrayList<>();
+    // List of blade block positions for this wind turbine, we
+    // get it from the machine which is from GT :)
+    private List<BlockPos> cachedBladePositions = new ArrayList<>();
 
 
     public StarTWindTurbineBearingBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -81,17 +81,6 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
         return true;
     }
 
-    public static void registerBladeBlock(Supplier<Block> block) {
-        TURBINE_BLADE_BLOCKS.add(block);
-    }
-
-    private static boolean isBladesBlock(Block block) {
-        for (Supplier<Block> supplier : TURBINE_BLADE_BLOCKS) {
-            if (supplier.get() == block) return true;
-        }
-        return false;
-    }
-
     @Override
     public void tick() {
         // because we are not a windmill, we have to manually
@@ -105,41 +94,18 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
         }
     }
 
+    public void setBladePositions(List<BlockPos> positions) {
+        this.cachedBladePositions = positions;
+    }
+
     @Override
     public void assemble() {
         if (!(level.getBlockState(worldPosition).getBlock() instanceof BearingBlock))
             return;
 
+        if (cachedBladePositions.isEmpty()) return;
+
         Direction direction = getBlockState().getValue(BearingBlock.FACING);
-
-        // grab all the turbine blade blocks we can visit
-        Set<BlockPos> visited = new HashSet<>();
-        Queue<BlockPos> queue = new ArrayDeque<>();
-        BlockPos start = worldPosition.relative(direction);
-        queue.add(start);
-        visited.add(start);
-
-        List<BlockPos> bladePositions = new ArrayList<>();
-
-        while (!queue.isEmpty()) {
-            BlockPos current = queue.poll();
-            BlockState state = level.getBlockState(current);
-            
-            if (!isBladesBlock(state.getBlock())) continue;
-            
-            bladePositions.add(current);
-
-            for (Direction d : Direction.values()) {
-                BlockPos neighbor = current.relative(d);
-                if (!visited.contains(neighbor)) {
-                    visited.add(neighbor);
-                    queue.add(neighbor);
-                }
-            }
-        }
-
-        if (bladePositions.isEmpty()) return;
-
         BearingContraption contraption = new BearingContraption(false, direction);
         
         // set the anchor manually to the block
@@ -147,11 +113,11 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
         contraption.bounds = new AABB(BlockPos.ZERO);
 
         // add all the blocks in the turbine blades to the contraption
-        for (BlockPos pos : bladePositions) {
+        for (BlockPos pos : cachedBladePositions) {
             contraption.addBlock(level, pos, ((CreateContraptionAccessor)contraption).start_core$capture(level, pos));
         }
 
-        // make the contraption from the blocks and begin updating it
+         // make the contraption from the blocks and begin updating it
         contraption.removeBlocksFromWorld(level, BlockPos.ZERO);
         movedContraption = ControlledContraptionEntity.create(level, this, contraption);
         BlockPos anchor = worldPosition.relative(direction);
