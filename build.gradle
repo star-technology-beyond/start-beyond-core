@@ -133,6 +133,13 @@ repositories {
             includeGroup "appeng"
         }
     }
+    maven { // GuideME
+        name = 'sonatype Central'
+        url = 'https://central.sonatype.com/repository/maven-snapshots/'
+        content {
+            includeModule('org.appliedenergistics', 'guideme')
+        }
+    }
 
     maven {
         url "https://maven.ftb.dev/releases"
@@ -176,6 +183,7 @@ dependencies {
     modImplementation("dev.latvian.mods:kubejs-forge:$project.kubejs_version")
     modImplementation("org.appliedenergistics:guideme:20.1.14")
     modImplementation("appeng:appliedenergistics2-forge:15.4.10")
+    modImplementation("org.appliedenergistics:guideme:20.1.14")
     modImplementation("curse.maven:merequester-688367:5689932")
     modImplementation("curse.maven:jade-324717:6106101")
     modImplementation("curse.maven:embeddium-908741:5681725")

@@ -44,6 +44,7 @@ public final class KomaruRendererManager {
 
     public static void onRenderLevelStageEvent(RenderLevelStageEvent event) {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+            //noinspection StatementWithEmptyBody
             if (Minecraft.useShaderTransparency()) {
                 // TODO: readd
                 // updateKomaruFancyPostEffect();
@@ -62,7 +63,7 @@ public final class KomaruRendererManager {
         GlStateManager._glBindFramebuffer(GlConst.GL_READ_FRAMEBUFFER, rtMain.frameBufferId);
         GlStateManager._glBindFramebuffer(GlConst.GL_DRAW_FRAMEBUFFER, rtBase.frameBufferId);
         GlStateManager._glBlitFrameBuffer(0, 0, rtMain.width, rtMain.height, 0, 0, rtBase.width, rtBase.height, GlConst.GL_DEPTH_BUFFER_BIT | GlConst.GL_COLOR_BUFFER_BIT, GlConst.GL_NEAREST);
-        GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, 0);
+        GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, rtMain.frameBufferId);
     }
 
     private static PostEffect makeKomaruPostEffect() {
@@ -74,11 +75,13 @@ public final class KomaruRendererManager {
             @Override
             public void begin(float partialTick) {
                 super.begin(partialTick);
+                assert COLLECTED_RENDERS != null;
                 COLLECTED_RENDERS.clear();
             }
 
             @Override
             public void end(float partialTick) {
+                assert COLLECTED_RENDERS != null;
                 if (COLLECTED_RENDERS.isEmpty()) return;
 
                 if (!CUBE_MAP_TEXTURE.loaded()) {
@@ -90,7 +93,6 @@ public final class KomaruRendererManager {
                 fillCommonEffectUniforms(effect, partialTick);
 
                 for (var machine : COLLECTED_RENDERS) {
-                    // TODO: actually save the resulting buffer between renders so we don't clear the stuff
                     var beamOrigin = getBeamOrigin(machine);
 
                     effect.safeGetUniform("AnimationTicks").set(machine.getRendererAnimationTicks());
@@ -184,11 +186,13 @@ public final class KomaruRendererManager {
             @Override
             public void begin(float partialTick) {
                 super.begin(partialTick);
+                assert COLLECTED_RENDERS != null;
                 COLLECTED_RENDERS.clear();
             }
 
             @Override
             public void end(float partialTick) {
+                assert COLLECTED_RENDERS != null;
                 if (COLLECTED_RENDERS.isEmpty()) return;
 
                 if (!CUBE_MAP_TEXTURE.loaded()) {
