@@ -369,13 +369,16 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
         BlockPos bearingPos = cachedBearing.getBlockPos();
         BlockState bearingState = getLevel().getBlockState(bearingPos);
         
-        Direction frontFace = getFrontFacing(); 
+        Direction targetFace = switch (tier) {
+            case GTValues.MV, GTValues.HV -> Direction.UP;
+            default -> getFrontFacing();
+        };
         
         if (bearingState.hasProperty(BearingBlock.FACING) && 
-            bearingState.getValue(BearingBlock.FACING) != frontFace) {
+            bearingState.getValue(BearingBlock.FACING) != targetFace) {
             getLevel().setBlock(
                 bearingPos,
-                bearingState.setValue(BearingBlock.FACING, frontFace),
+                bearingState.setValue(BearingBlock.FACING, targetFace),
                 3
             );
             findAndCacheBearing();
