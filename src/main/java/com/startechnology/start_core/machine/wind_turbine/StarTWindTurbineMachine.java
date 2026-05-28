@@ -93,11 +93,11 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
 
     @Override
     public void onStructureInvalid() {
-        if (contraptionAssembled) {
+        if (contraptionAssembled && cachedBearing != null && cachedBearing.isAssembling()) {
             return;
         }
         
-        contraptionAssembled = false;
+        this.contraptionAssembled = false;
         stopBearing();
         cachedBearing = null;
         StarTWindTurbineManager.removeTurbine(this);
@@ -271,6 +271,10 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
                 setStatus(Status.IDLE);
                 isActive = false;
                 return;
+            }
+
+            if (machine.cachedBearing != null && !machine.cachedBearing.isRunning() && machine.contraptionAssembled) {
+                machine.setContraptionAssembled(false);
             }
 
             if (progress == 0) {

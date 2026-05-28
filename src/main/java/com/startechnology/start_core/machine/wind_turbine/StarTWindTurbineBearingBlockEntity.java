@@ -17,6 +17,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.startechnology.start_core.mixin.CreateContraptionAccessor;
 
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -28,6 +29,9 @@ import net.minecraft.world.level.block.state.BlockState;
 public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEntity {
 
     private float targetSpeed = 0f;
+
+    @Getter
+    private boolean isAssembling = false;
 
     // List of allowed blocks to be grabbed as part of the
     // actual turbine blade
@@ -55,6 +59,7 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
     public void startAssembly() {
         if (!running) {
             /* go forth, my create ! assemble ! */ 
+            isAssembling = true;
             assembleNextTick = true;
         }
     }
@@ -63,6 +68,7 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
         if (running) {
             disassemble();
         }
+        isAssembling = false;
         targetSpeed = 0f;
         assembleNextTick = false;
     }
@@ -153,9 +159,21 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
         angle = 0;
         sendData();
         updateGeneratedRotation();
+        isAssembling = false;
     }
 
 
+    @Override
+    public void disassemble() {
+        // IMPORTANT: 
+        // move contraption to angle 0 before placing blocks back
+        //
+        // ELSE DA MULTIBLOCK CAN DISASSEMBLE IN A WEIRD PLACE AND 
+        // EVERYONE WILL BE SAD :( !!!
+        angle = 0;
+        applyRotation(); 
+        super.disassemble();
+    }
 
     @Override
     protected boolean isWindmill() {
