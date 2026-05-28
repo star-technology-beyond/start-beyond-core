@@ -12,14 +12,23 @@ import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+import com.simibubi.create.content.contraptions.bearing.BearingBlock;
+
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.Set;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -40,6 +49,15 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
     @Getter
     private boolean isCrowded = false;
 
+    // Store bearing that we use for the spinny of doom
+    private StarTWindTurbineBearingBlockEntity cachedBearing = null;
+
+    // We dont want to deform the multiblock if its just the contraption
+    // being assembled
+    @Getter
+    @Setter
+    private boolean contraptionAssembled = false;
+
     private double weatherMultiplier = 1.0;
 
     private final GTRecipe lubricantRecipe;
@@ -51,12 +69,12 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
         this.tier = tier;
 
         this.lubricantRecipe = GTRecipeBuilder.ofRaw()
-            .inputFluids(GTMaterials.Lubricant.getFluid(FLUID_PER_CYCLE))
-            .buildRawRecipe();
+                .inputFluids(GTMaterials.Lubricant.getFluid(FLUID_PER_CYCLE))
+                .buildRawRecipe();
 
         this.seedOilRecipe = GTRecipeBuilder.ofRaw()
-            .inputFluids(GTMaterials.SeedOil.getFluid(FLUID_PER_CYCLE))
-            .buildRawRecipe();
+                .inputFluids(GTMaterials.SeedOil.getFluid(FLUID_PER_CYCLE))
+                .buildRawRecipe();
 
     }
 
@@ -69,16 +87,27 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
     public void onStructureFormed() {
         super.onStructureFormed();
         StarTWindTurbineManager.addTurbine(this);
+        findAndCacheBearing();
+        forceBearingDirection();
     }
 
     @Override
     public void onStructureInvalid() {
+        if (contraptionAssembled) {
+            return;
+        }
+        
+        contraptionAssembled = false;
+        stopBearing();
+        cachedBearing = null;
         StarTWindTurbineManager.removeTurbine(this);
         super.onStructureInvalid();
     }
 
     @Override
     public void onUnload() {
+        stopBearing();
+        cachedBearing = null;
         StarTWindTurbineManager.removeTurbine(this);
         super.onUnload();
     }
@@ -88,12 +117,13 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
         isCrowded = StarTWindTurbineManager.hasNearbyTurbine(this, getCrowdingRadius());
 
         usingLubricant = RecipeHelper.matchRecipe(this, lubricantRecipe).isSuccess()
-            && RecipeHelper.handleRecipeIO(this, lubricantRecipe, IO.IN, recipeLogic.getChanceCaches()).isSuccess();
+                && RecipeHelper.handleRecipeIO(this, lubricantRecipe, IO.IN, recipeLogic.getChanceCaches()).isSuccess();
         usingSeedOil = false;
-        
+
         if (!usingLubricant) {
             usingSeedOil = RecipeHelper.matchRecipe(this, seedOilRecipe).isSuccess()
-                && RecipeHelper.handleRecipeIO(this, seedOilRecipe, IO.IN, recipeLogic.getChanceCaches()).isSuccess();
+                    && RecipeHelper.handleRecipeIO(this, seedOilRecipe, IO.IN, recipeLogic.getChanceCaches())
+                            .isSuccess();
 
             if (!usingSeedOil) {
                 euT = 0;
@@ -132,8 +162,10 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
     private double getWeatherMultiplier() {
         var level = getLevel();
 
-        if (level.isThundering()) return 2.0;
-        if (level.isRaining()) return 1.5;
+        if (level.isThundering())
+            return 2.0;
+        if (level.isRaining())
+            return 1.5;
 
         return 1.0;
     }
@@ -145,8 +177,10 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
     private String getWeatherType() {
         var level = getLevel();
 
-        if (level.isThundering()) return "Thunder";
-        if (level.isRaining()) return "Rain";
+        if (level.isThundering())
+            return "Thunder";
+        if (level.isRaining())
+            return "Rain";
 
         return "Clear";
     }
@@ -168,30 +202,32 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
     public void addDisplayText(List<Component> textList) {
         super.addDisplayText(textList);
 
-        if (!isFormed()) return;
+        if (!isFormed())
+            return;
 
         if (isActive()) {
             textList.add(Component.literal("Generating: ")
-                .append(Component.literal("%s EU/t".formatted(FormattingUtil.formatNumbers(euT)))
-                    .withStyle(ChatFormatting.GREEN)));
+                    .append(Component.literal("%s EU/t".formatted(FormattingUtil.formatNumbers(euT)))
+                            .withStyle(ChatFormatting.GREEN)));
         } else {
             textList.add(Component.literal("Waiting for Lubricant or Seed Oil").withStyle(ChatFormatting.YELLOW));
         }
 
         String fluidName = usingLubricant ? "Lubricant" : usingSeedOil ? "Seed Oil" : "None";
         textList.add(Component.literal("Fluid: ")
-            .append(Component.literal(fluidName).withStyle(usingLubricant || usingSeedOil ? ChatFormatting.AQUA : ChatFormatting.GRAY)));
+                .append(Component.literal(fluidName)
+                        .withStyle(usingLubricant || usingSeedOil ? ChatFormatting.AQUA : ChatFormatting.GRAY)));
         textList.add(Component.literal("Dynamo Tier: ")
-            .append(Component.literal(GTValues.VNF[getTier()]).withStyle(ChatFormatting.GOLD)));
+                .append(Component.literal(GTValues.VNF[getTier()]).withStyle(ChatFormatting.GOLD)));
         textList.add(Component.literal("Weather Boost: ")
-            .append(Component.literal("%.0f%%".formatted(weatherMultiplier * 100)).withStyle(ChatFormatting.BLUE))
-            .append(Component.literal(" ("))
-            .append(Component.literal(getWeatherType()).withStyle(ChatFormatting.GRAY))
-            .append(Component.literal(")")));
+                .append(Component.literal("%.0f%%".formatted(weatherMultiplier * 100)).withStyle(ChatFormatting.BLUE))
+                .append(Component.literal(" ("))
+                .append(Component.literal(getWeatherType()).withStyle(ChatFormatting.GRAY))
+                .append(Component.literal(")")));
         textList.add(Component.literal("Nearby Airspace: ")
-            .append(Component.literal(isCrowded ? "Crowded" : "Clear").withStyle(isCrowded ? ChatFormatting.RED : ChatFormatting.GREEN)));
+                .append(Component.literal(isCrowded ? "Crowded" : "Clear")
+                        .withStyle(isCrowded ? ChatFormatting.RED : ChatFormatting.GREEN)));
     }
-
 
     public static class StarTWindTurbineRecipeLogic extends RecipeLogic {
         private static final int UPDATE_INTERVAL = 75;
@@ -209,7 +245,8 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
         private void produceEnergy() {
             EnergyContainerList energyContainer = getMachine().energyContainer;
 
-            if (energyContainer == null || getMachine().euT <= 0) return;
+            if (energyContainer == null || getMachine().euT <= 0)
+                return;
 
             long resultEnergy = energyContainer.getEnergyStored() + getMachine().euT;
 
@@ -228,6 +265,9 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
                 machine.usingLubricant = false;
                 machine.usingSeedOil = false;
                 machine.isCrowded = false;
+                if (machine.cachedBearing != null) {
+                    machine.cachedBearing.stopAssembly();
+                }
                 setStatus(Status.IDLE);
                 isActive = false;
                 return;
@@ -235,6 +275,17 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
 
             if (progress == 0) {
                 machine.doLogic();
+                
+                if (machine.euT > 0 && machine.cachedBearing != null) {
+                    machine.setContraptionAssembled(true);
+                    machine.updateBearingSpeed();
+                    if (!machine.cachedBearing.isRunning()) {
+                        machine.cachedBearing.startAssembly();
+                    }
+                } else if (machine.euT <= 0 && machine.cachedBearing != null) {
+                    machine.setContraptionAssembled(false);
+                    machine.cachedBearing.stopAssembly();
+                }
             }
 
             isActive = machine.euT > 0;
@@ -252,4 +303,70 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
 
     }
 
+    // set target RPM to scale based on eu/t and tier.
+    public float getTargetRPM() {
+        if (euT <= 0)
+            return 0f;
+        float baseRPM = switch (tier) {
+            case GTValues.LV -> 8f;
+            case GTValues.MV -> 14f;
+            case GTValues.HV -> 20f;
+            default -> 8f;
+        };
+        return (float) (baseRPM * Math.sqrt((double) euT / getBaseEuT()));
+    }
+
+    // try find the bearing based on the traceability predicate
+    // like how we do komaru basic and advanced modules
+    private void findAndCacheBearing() {
+        cachedBearing = null;
+        if (!isFormed() || getLevel() == null)
+            return;
+
+        BlockPos bearingPos = getMultiblockState().getMatchContext()
+                .getOrDefault(StarTWindTurbinePredicates.BEARING_KEY, null);
+
+        if (bearingPos == null)
+            return;
+
+        if (getLevel().getBlockEntity(bearingPos) instanceof StarTWindTurbineBearingBlockEntity bearing) {
+            cachedBearing = bearing;
+        }
+    }
+
+    // bearing should face in the direction we want it to >:)
+    // else bad things will happen.
+    private void forceBearingDirection() {
+        if (cachedBearing == null || getLevel() == null) return;
+        
+        BlockPos bearingPos = cachedBearing.getBlockPos();
+        BlockState bearingState = getLevel().getBlockState(bearingPos);
+        
+        Direction frontFace = getFrontFacing(); 
+        
+        if (bearingState.hasProperty(BearingBlock.FACING) && 
+            bearingState.getValue(BearingBlock.FACING) != frontFace) {
+            getLevel().setBlock(
+                bearingPos,
+                bearingState.setValue(BearingBlock.FACING, frontFace),
+                3
+            );
+            findAndCacheBearing();
+        }
+    }
+
+    // updates the rpm spinny speed of the bearing
+    // to the target rpm of the machine
+    public void updateBearingSpeed() {
+        if (cachedBearing == null)
+            return;
+        cachedBearing.setTargetSpeed(getTargetRPM());
+    }
+
+    // stops the bearing
+    private void stopBearing() {
+        if (cachedBearing == null)
+            return;
+        cachedBearing.stopAssembly();
+    }
 }

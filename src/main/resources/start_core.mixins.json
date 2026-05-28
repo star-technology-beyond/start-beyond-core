@@ -18,6 +18,7 @@
     "ParallelHatchPartMachineAccessor",
     "ParallelHatchPartMachineMixin",
     "ResearchManagerDataItemMixin",
+    "CreateContraptionAccessor",
     "WireRecipeHandlerMixin",
     "WorkableElectricMultiblockMachineAccessor",
     "WorkableElectricMultiblockMachineMixin",

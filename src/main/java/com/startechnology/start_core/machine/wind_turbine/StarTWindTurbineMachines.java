@@ -6,6 +6,7 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.common.data.GCYMBlocks;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
@@ -76,18 +77,24 @@ public class StarTWindTurbineMachines {
             )
             .pattern(definition -> FactoryBlockPattern.start()
                 .aisle("##ABA##", "###C###", "#######", "#######", "#######", "#######", "###D###", "#######", "#######", "#######")
-                .aisle("##AEA##", "##CAC##", "###A###", "###A###", "###A###", "###A###", "###D###", "#######", "#######", "#######")
-                .aisle("##AAA##", "###@###", "#######", "###FGH#", "HGGFGH#", "HGGFGH#", "FFFAFFF", "#HGFGGH", "#HGFGGH", "#HGF###")
+                .aisle("##AEA##", "##CAC##", "###A###", "###A###", "###A###", "###A###", "###W###", "#######", "#######", "#######")
+                .aisle("##AAA##", "###@###", "#######", "###FGH#", "HGGFGH#", "HGGFGH#", "FFFMFFF", "#HGFGGH", "#HGFGGH", "#HGF###")
                 .where("#", Predicates.any())
                 .where("A", Predicates.blocks(StarTMachineUtils.getKjsBlock("high_steam_machine_casing")))
                 .where("B", Predicates.blocks(GTMachines.ENERGY_OUTPUT_HATCH[tier].getBlock()))
                 .where("C", Predicates.blocks(GTBlocks.STEEL_BRICKS_HULL.get()))
                 .where("D", Predicates.blocks(GTBlocks.BRONZE_HULL.get()))
+                .where("W", StarTWindTurbinePredicates.windTurbineBearing())
                 .where("E", Predicates.blocks(GTMachines.FLUID_IMPORT_HATCH[tier].getBlock()))
                 .where("@", Predicates.controller(Predicates.blocks(definition.get())))
-                .where("F", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("bronze_frame")))
-                .where("G", Predicates.blocks(GTBlocks.TREATED_WOOD_FENCE_GATE.get()))
-                .where("H", Predicates.blocks(GTBlocks.TREATED_WOOD_FENCE.get()))
+                .where("F", StarTWindTurbinePredicates.windTurbineBlade(
+                    StarTMachineUtils.getGTCEuBlock("bronze_frame")))
+                .where("G", StarTWindTurbinePredicates.windTurbineBlade(
+                    GTBlocks.TREATED_WOOD_FENCE_GATE.get()))
+                .where("H", StarTWindTurbinePredicates.windTurbineBlade(
+                    GTBlocks.TREATED_WOOD_FENCE.get()))
+                .where("M", StarTWindTurbinePredicates.windTurbineBlade(
+                    GCYMBlocks.CASING_INDUSTRIAL_STEAM.get()))
                 .build()
             )
             .workableCasingModel(

@@ -1,6 +1,14 @@
 package com.startechnology.start_core.machine.wind_turbine;
 
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllContraptionTypes;
+import com.simibubi.create.api.contraption.ContraptionType;
+import com.simibubi.create.api.registry.CreateBuiltInRegistries;
+import com.simibubi.create.content.contraptions.bearing.BearingRenderer;
+import com.startechnology.start_core.machine.StarTMachineUtils;
+
+import net.minecraft.core.Registry;
+
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
@@ -8,20 +16,15 @@ import net.minecraft.resources.ResourceLocation;
 
 import static com.startechnology.start_core.StarTCore.START_REGISTRATE;
 
-public class StarTWindTurbineBlocks {
+import com.gregtechceu.gtceu.common.data.GCYMBlocks;
+import com.gregtechceu.gtceu.common.data.GTBlocks;
 
+public class StarTWindTurbineBlocks {
     public static final BlockEntry<StarTWindTurbineBearingBlock> WIND_TURBINE_BEARING =
         START_REGISTRATE
             .block("wind_turbine_bearing", StarTWindTurbineBearingBlock::new)
             .initialProperties(() -> AllBlocks.WINDMILL_BEARING.get())
-            .blockstate((ctx, prov) ->
-                prov.directionalBlock(ctx.getEntry(),
-                    prov.models().withExistingParent(
-                        ctx.getName(),
-                        new ResourceLocation("create", "block/windmill_bearing")
-                    )
-                )
-            )
+            .blockstate((ctx, prov) -> {})
             .item()
             .model((ctx, prov) ->
                 prov.withExistingParent(
@@ -36,9 +39,19 @@ public class StarTWindTurbineBlocks {
         START_REGISTRATE
             .blockEntity("wind_turbine_bearing", StarTWindTurbineBearingBlockEntity::new)
             .validBlocks(WIND_TURBINE_BEARING)
+
+            // THIS DOESNT WORK g rrrr
+            .renderer(() -> BearingRenderer::new)
             .register();
 
     public static void init() {
-        System.out.println("hii registering the wind turbine bearings");
+        StarTWindTurbineBearingBlockEntity.registerBladeBlock(
+            () -> StarTMachineUtils.getGTCEuBlock("bronze_frame"));
+        StarTWindTurbineBearingBlockEntity.registerBladeBlock(
+            () -> GTBlocks.TREATED_WOOD_FENCE_GATE.get());
+        StarTWindTurbineBearingBlockEntity.registerBladeBlock(
+            () -> GTBlocks.TREATED_WOOD_FENCE.get());
+        StarTWindTurbineBearingBlockEntity.registerBladeBlock(
+            () -> GCYMBlocks.CASING_INDUSTRIAL_STEAM.get());
     }
 }
