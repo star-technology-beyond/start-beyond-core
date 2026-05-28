@@ -104,9 +104,23 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
         super.onStructureInvalid();
     }
 
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if (isFormed()) {
+            findAndCacheBearing();
+            forceBearingDirection();
+        }
+    }
+
     @Override
     public void onUnload() {
-        stopBearing();
+        if (cachedBearing != null && getLevel() != null && !getLevel().isClientSide()) {
+            if (getLevel().isLoaded(getPos())) {
+                cachedBearing.stopAssembly();
+            }
+        }
         cachedBearing = null;
         StarTWindTurbineManager.removeTurbine(this);
         super.onUnload();
@@ -317,7 +331,8 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
             case GTValues.HV -> 20f;
             default -> 8f;
         };
-        return (float) (baseRPM * Math.sqrt((double) euT / getBaseEuT()));
+
+        return (float) (baseRPM * (double) euT / getBaseEuT());
     }
 
     // try find the bearing based on the traceability predicate

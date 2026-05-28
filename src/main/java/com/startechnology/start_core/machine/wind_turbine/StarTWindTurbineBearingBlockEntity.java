@@ -43,7 +43,10 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
     }
 
     public void setTargetSpeed(float rpm) {
-        this.targetSpeed = rpm;
+        if (this.targetSpeed != rpm) {
+            this.targetSpeed = rpm;
+            updateGeneratedRotation();
+        }
     }
 
     public float getTargetSpeed() {
