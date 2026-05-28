@@ -1,10 +1,5 @@
 package com.startechnology.start_core.machine.threading;
 
-import static com.startechnology.start_core.StarTCore.START_REGISTRATE;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
@@ -16,7 +11,6 @@ import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
-
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.ChatFormatting;
@@ -30,6 +24,12 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.gregtechceu.gtceu.api.GTValues.*;
+import static com.startechnology.start_core.StarTCore.START_REGISTRATE;
 
 public class StarTThreadingStatBlocks {
 
@@ -79,6 +79,7 @@ public static List<BlockEntry<StarTThreadingStatBlock>> statBlocks = new ArrayLi
         
         BlockEntry<StarTThreadingStatBlock> block = START_REGISTRATE
             .block(name, (props) -> new StarTThreadingStatBlock(props, stats))
+            .lang(String.format("%s %s Thread Helix", VNF[stats.tier] + "§r", stats.type))
             .initialProperties(() -> Blocks.IRON_BLOCK)
             .addLayer(() -> RenderType::cutoutMipped)
             .blockstate(createActiveModel(name))
@@ -122,40 +123,40 @@ public static List<BlockEntry<StarTThreadingStatBlock>> statBlocks = new ArrayLi
     }
             
     public static final BlockEntry<StarTThreadingStatBlock> SUPREME_HELIX_0 = createThreadingStatBlock(
-            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uev_supreme_thread_helix", 20, 0, 0, 0, 0));
+            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uev_supreme_thread_helix", UEV, "Supreme", 20, 0, 0, 0, 0));
 
     public static final BlockEntry<StarTThreadingStatBlock> SUPREME_HELIX_1 = createThreadingStatBlock(
-            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uxv_supreme_thread_helix", 40, 0, 0, 0, 0));
+            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uxv_supreme_thread_helix", UXV, "Supreme", 40, 0, 0, 0, 0));
 
     public static final BlockEntry<StarTThreadingStatBlock> SUPREME_HELIX_2 = createThreadingStatBlock(
-            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("max_supreme_thread_helix", 60, 0, 0, 0, 0));
+            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("max_supreme_thread_helix", MAX, "Supreme", 60, 0, 0, 0, 0));
 
     public static final BlockEntry<StarTThreadingStatBlock> OVERDRIVE_HELIX_0 = createThreadingStatBlock(
-            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uhv_overdrive_thread_helix", 3, 12, 4, 0, 0)); //Sum 20
+            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uhv_overdrive_thread_helix", UHV, "Overdrive", 4, 12, 4, 0, 0)); //Sum 20
 
     public static final BlockEntry<StarTThreadingStatBlock> OVERDRIVE_HELIX_1 = createThreadingStatBlock(
-            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uiv_overdrive_thread_helix", 6, 18, 6, 0, 0)); //Sum 30
+            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uiv_overdrive_thread_helix", UIV, "Overdrive", 6, 18, 6, 0, 0)); //Sum 30
 
     public static final BlockEntry<StarTThreadingStatBlock> OVERDRIVE_HELIX_2 = createThreadingStatBlock(
-            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("opv_overdrive_thread_helix", 9, 33, 8, 0, 0)); //Sum 50
+            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("opv_overdrive_thread_helix", OpV, "Overdrive", 9, 33, 8, 0, 0)); //Sum 50
 
     public static final BlockEntry<StarTThreadingStatBlock> COPROCESSOR_HELIX_0 = createThreadingStatBlock(
-            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uhv_coprocessor_thread_helix", 3, 5, 2, 10, 0)); //Sum 20
+            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uhv_coprocessor_thread_helix", UHV, "Co-Processor", 3, 5, 2, 10, 0)); //Sum 20
 
     public static final BlockEntry<StarTThreadingStatBlock> COPROCESSOR_HELIX_1 = createThreadingStatBlock(
-            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uiv_coprocessor_thread_helix", 6, 5, 4, 15, 0)); //Sum 30
+            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uiv_coprocessor_thread_helix", UIV, "Co-Processor",  6, 5, 4, 15, 0)); //Sum 30
 
     public static final BlockEntry<StarTThreadingStatBlock> COPROCESSOR_HELIX_2 = createThreadingStatBlock(
-            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("opv_coprocessor_thread_helix", 9, 10, 6, 25, 0)); //Sum 50
+            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("opv_coprocessor_thread_helix", OpV, "Co-Processor", 9, 10, 6, 25, 0)); //Sum 50
 
     public static final BlockEntry<StarTThreadingStatBlock> WEAVER_HELIX_0 = createThreadingStatBlock(
-            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uhv_weaving_thread_helix", 3, 2, 5, 0, 10)); //Sum 20
+            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uhv_weaving_thread_helix", UHV, "Weaving", 3, 2, 5, 0, 10)); //Sum 20
 
     public static final BlockEntry<StarTThreadingStatBlock> WEAVER_HELIX_1 = createThreadingStatBlock(
-            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uiv_weaving_thread_helix", 6, 4, 5, 0, 15)); //Sum 30
+            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("uiv_weaving_thread_helix", UIV, "Weaving", 6, 4, 5, 0, 15)); //Sum 30
 
     public static final BlockEntry<StarTThreadingStatBlock> WEAVER_HELIX_2 = createThreadingStatBlock(
-            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("opv_weaving_thread_helix", 9, 6, 10, 0, 25)); //Sum 50
+            new StarTThreadingStatsPredicate.ThreadingStatsBlockTracker("opv_weaving_thread_helix", OpV, "Weaving", 9, 6, 10, 0, 25)); //Sum 50
 
     public static void init() {
     }
