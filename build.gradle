@@ -177,6 +177,7 @@ dependencies {
     modImplementation("curse.maven:embeddium-908741:5681725")
     modImplementation("net.createmod.ponder:Ponder-Forge-$project.minecraft_version:$project.ponder_version")
     modImplementation("curse.maven:create-328085:7178761")
+    modCompileOnly("dev.engine-room.flywheel:flywheel-forge-$project.minecraft_version:$project.flywheel_version")
 
     modRuntimeOnly("curse.maven:sgjourney-689083:6390662")
     modRuntimeOnly("curse.maven:thermal-extra-573674:6474572")

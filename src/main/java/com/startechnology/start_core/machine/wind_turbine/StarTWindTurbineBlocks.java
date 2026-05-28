@@ -39,9 +39,6 @@ public class StarTWindTurbineBlocks {
         START_REGISTRATE
             .blockEntity("wind_turbine_bearing", StarTWindTurbineBearingBlockEntity::new)
             .validBlocks(WIND_TURBINE_BEARING)
-
-            // THIS DOESNT WORK g rrrr
-            .renderer(() -> BearingRenderer::new)
             .register();
 
     public static void init() {
