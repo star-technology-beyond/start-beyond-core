@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "start_core:item/tools/spade",
+    "layer1": "start_core:item/tools/active_tool"
+  }
+}

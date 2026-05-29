@@ -4,6 +4,8 @@ import com.startechnology.start_core.lang.LangHandler;
 import com.tterrag.registrate.providers.ProviderType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
+
+import com.startechnology.start_core.item.StarTItemModelDatagenProvider;
 import com.startechnology.start_core.item.StarTItems;
 import com.startechnology.start_core.item.curios.LucinducerCurioItem;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -31,6 +33,7 @@ import com.startechnology.start_core.machine.abyssal_containment.StarTAbyssalCon
 import com.startechnology.start_core.materials.StarTMaterials;
 import com.startechnology.start_core.network.StarTNetwork;
 import com.startechnology.start_core.recipe.StarTRecipeCategories;
+import com.startechnology.start_core.recipe.StarTRecipeSerialisers;
 import com.startechnology.start_core.recipe.StarTRecipeTypes;
 
 import net.minecraft.resources.ResourceLocation;
@@ -64,6 +67,7 @@ public class StarTCore {
         StarTCreativeTab.init();
         START_REGISTRATE.creativeModeTab(() -> StarTCreativeTab.START_CORE);
         START_REGISTRATE.addDataGenerator(ProviderType.LANG, LangHandler::init);
+        START_REGISTRATE.addDataGenerator(ProviderType.ITEM_MODEL, StarTItemModelDatagenProvider::init);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
@@ -80,7 +84,8 @@ public class StarTCore {
         // If we want to use annotations to register event listeners,
         // we need to register our object like this!
         MinecraftForge.EVENT_BUS.register(this);
-
+        StarTRecipeSerialisers.init(modEventBus);
+        
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> StarTCoreClient::init);
     }
 

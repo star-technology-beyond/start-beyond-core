@@ -10,7 +10,6 @@ import com.gregtechceu.gtceu.api.item.tool.behavior.IToolBehavior;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -50,22 +49,34 @@ public class StarTMultitoolItem extends GTToolItem {
 
     @Override
     public Component getName(ItemStack stack) {
-        return getDescription().copy()
+        StarTMultitoolMode active = StarTMultitoolMode.getActive(stack);
+        Component base = getDescription().copy();
+        if (active == null) {
+            return base.copy()
+                    .append(Component.literal(" - ").withStyle(ChatFormatting.GRAY))
+                    .append(Component.translatable("item.start_core.gregtech_multitool.empty")
+                            .withStyle(ChatFormatting.RED));
+        }
+        return base.copy()
                 .append(Component.literal(" - ").withStyle(ChatFormatting.GRAY))
-                .append(StarTMultitoolMode.get(stack).displayName().copy().withStyle(ChatFormatting.AQUA));
+                .append(active.displayName().copy().withStyle(ChatFormatting.AQUA));
     }
 
     @Override
     public ItemStack getDefaultInstance() {
-        ItemStack stack = get();
-        StarTMultitoolMode.set(stack, StarTMultitoolMode.WRENCH);
-        return stack;
+        // nothing installed for a default multitool
+        // item/empty item
+        return get();
     }
 
     @Override
     public Set<GTToolType> getToolClasses(ItemStack stack) {
-        Set<GTToolType> classes = new HashSet<>(StarTMultitoolMode.get(stack).toolType().toolClasses);
-        classes.add(StarTMultitoolMode.get(stack).toolType());
+        Set<GTToolType> classes = new HashSet<>();
+        StarTMultitoolMode active = StarTMultitoolMode.getActive(stack);
+        if (active != null) {
+            classes.addAll(active.toolType().toolClasses);
+            classes.add(active.toolType());
+        }
         return classes;
     }
 
@@ -76,7 +87,7 @@ public class StarTMultitoolItem extends GTToolItem {
 
     @Override
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
-        for (IToolBehavior behavior : StarTMultitoolMode.get(stack).toolType().toolDefinition.getBehaviors()) {
+        for (IToolBehavior behavior : StarTMultitoolDefinition.INSTANCE.getBehaviors(stack)) {
             if (behavior.onItemUseFirst(stack, context) == InteractionResult.SUCCESS) {
                 return InteractionResult.SUCCESS;
             }
@@ -87,7 +98,7 @@ public class StarTMultitoolItem extends GTToolItem {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         ItemStack stack = context.getItemInHand();
-        for (IToolBehavior behavior : StarTMultitoolMode.get(stack).toolType().toolDefinition.getBehaviors()) {
+        for (IToolBehavior behavior : StarTMultitoolDefinition.INSTANCE.getBehaviors(stack)) {
             if (behavior.onItemUse(context) == InteractionResult.SUCCESS) {
                 return InteractionResult.SUCCESS;
             }
@@ -98,7 +109,7 @@ public class StarTMultitoolItem extends GTToolItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
         ItemStack stack = player.getItemInHand(usedHand);
-        for (IToolBehavior behavior : StarTMultitoolMode.get(stack).toolType().toolDefinition.getBehaviors()) {
+        for (IToolBehavior behavior : StarTMultitoolDefinition.INSTANCE.getBehaviors(stack)) {
             if (behavior.onItemRightClick(level, player, usedHand).getResult() == InteractionResult.SUCCESS) {
                 return InteractionResultHolder.success(stack);
             }
@@ -108,7 +119,7 @@ public class StarTMultitoolItem extends GTToolItem {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        StarTMultitoolMode.get(stack).toolType().toolDefinition.getBehaviors()
+        StarTMultitoolDefinition.INSTANCE.getBehaviors(stack)
                 .forEach(behavior -> behavior.hitEntity(stack, target, attacker));
         ToolHelper.damageItem(stack, attacker, getToolStats().getToolDamagePerAttack(stack));
         return true;
@@ -117,7 +128,7 @@ public class StarTMultitoolItem extends GTToolItem {
     @Override
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
         if (!level.isClientSide) {
-            StarTMultitoolMode.get(stack).toolType().toolDefinition.getBehaviors()
+            StarTMultitoolDefinition.INSTANCE.getBehaviors(stack)
                     .forEach(behavior -> behavior.onBlockDestroyed(stack, level, state, pos, miningEntity));
             if (state.getDestroySpeed(level, pos) != 0.0D) {
                 ToolHelper.damageItem(stack, miningEntity, getToolStats().getToolDamagePerBlockBreak(stack));
@@ -128,7 +139,7 @@ public class StarTMultitoolItem extends GTToolItem {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return StarTMultitoolMode.get(stack).toolType().toolDefinition.canApplyEnchantment(stack, enchantment);
+        return StarTMultitoolDefinition.INSTANCE.canApplyEnchantment(stack, enchantment);
     }
 
     @Override
@@ -144,19 +155,32 @@ public class StarTMultitoolItem extends GTToolItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents,
                                 TooltipFlag isAdvanced) {
-        tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.mode",
-                StarTMultitoolMode.get(stack).displayName()).withStyle(ChatFormatting.AQUA));
+        // WORK IN PROGRESS
+        // TODO: FIX EVERYTHING GRRR IHATE LANG
+        
+        StarTMultitoolMode active = StarTMultitoolMode.getActive(stack);
+        if (active != null) {
+            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.mode",
+                    active.displayName()).withStyle(ChatFormatting.AQUA));
+        } else {
+            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.empty")
+                    .withStyle(ChatFormatting.RED));
+        }
+
+        List<StarTMultitoolMode> installed = StarTMultitoolMode.getInstalled(stack);
+        if (!installed.isEmpty()) {
+            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.installed")
+                    .withStyle(ChatFormatting.GRAY));
+            for (StarTMultitoolMode mode : installed) {
+                tooltipComponents.add(Component.literal("  ")
+                        .append(mode.displayName().copy().withStyle(ChatFormatting.WHITE))
+                        .append(Component.literal(" (" + mode.material().getLocalizedName() + ")")
+                                .withStyle(ChatFormatting.DARK_GRAY)));
+            }
+        }
+
         tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.hint")
                 .withStyle(ChatFormatting.GRAY));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
-    }
-
-    public static void setMode(ItemStack stack, StarTMultitoolMode mode) {
-        StarTMultitoolMode.set(stack, mode);
-        CompoundTag toolTag = ToolHelper.getToolTag(stack);
-        toolTag.remove(ToolHelper.TOOL_SPEED_KEY);
-        toolTag.remove(ToolHelper.ATTACK_DAMAGE_KEY);
-        toolTag.remove(ToolHelper.ATTACK_SPEED_KEY);
-        toolTag.remove(ToolHelper.HARVEST_LEVEL_KEY);
     }
 }

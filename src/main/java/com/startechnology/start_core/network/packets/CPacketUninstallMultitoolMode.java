@@ -1,8 +1,10 @@
 package com.startechnology.start_core.network.packets;
 
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.item.tool.GTToolType;
+import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
 import com.lowdragmc.lowdraglib.networking.IHandlerContext;
 import com.lowdragmc.lowdraglib.networking.IPacket;
-import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.startechnology.start_core.item.multitool.StarTMultitoolItem;
 import com.startechnology.start_core.item.multitool.StarTMultitoolMode;
 import net.minecraft.network.FriendlyByteBuf;
@@ -10,17 +12,17 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-public class CPacketSetMultitoolMode implements IPacket {
+public class CPacketUninstallMultitoolMode implements IPacket {
 
     private String toolTypeName;
     private int handOrdinal;
 
-    public CPacketSetMultitoolMode(StarTMultitoolMode mode, InteractionHand hand) {
+    public CPacketUninstallMultitoolMode(StarTMultitoolMode mode, InteractionHand hand) {
         this.toolTypeName = mode.toolType().name;
         this.handOrdinal = hand.ordinal();
     }
 
-    public CPacketSetMultitoolMode() {
+    public CPacketUninstallMultitoolMode() {
     }
 
     @Override
@@ -43,22 +45,31 @@ public class CPacketSetMultitoolMode implements IPacket {
         if (handOrdinal < 0 || handOrdinal >= InteractionHand.values().length)
             return;
 
-        // get the ordinal of the hand to get the item
+        // Get the tool in the players hand that did this interaction
         InteractionHand hand = InteractionHand.values()[handOrdinal];
-        ItemStack stack = player.getItemInHand(hand);
-        if (!(stack.getItem() instanceof StarTMultitoolItem))
+        ItemStack multitool = player.getItemInHand(hand);
+        if (!(multitool.getItem() instanceof StarTMultitoolItem))
             return;
 
         // ensure that its a valid multitool mode that we can
-        // even swap to so the player doesnt cheat in neutronium evil
-        // obliterator 9000 in ueuvuvluv
+        // even eject to so the player doesnt eject out 9 billion neutronium
         GTToolType type = GTToolType.getTypes().get(toolTypeName);
         if (type == null)
             return;
-        if (!StarTMultitoolMode.isInstalled(stack, type))
+        if (!StarTMultitoolMode.isInstalled(multitool, type))
             return;
 
-        StarTMultitoolMode.setActive(stack, new StarTMultitoolMode(type,
-                StarTMultitoolMode.getMaterialForType(stack, type)));
+        Material material = StarTMultitoolMode.getMaterialForType(multitool, type);
+        if (material == null)
+            return;
+
+        StarTMultitoolMode.uninstall(multitool, type);
+
+        // eject from the player, which will either add to the inventory
+        // or if it cant, then drop the item out
+        ItemStack ejected = ToolHelper.get(type, material);
+        if (!player.getInventory().add(ejected)) {
+            player.drop(ejected, false);
+        }
     }
 }
