@@ -80,7 +80,7 @@ public class StarTItems {
             .item("gregtech_multitool",
                     properties -> new StarTMultitoolItem(GTMaterials.Neutronium.getToolTier(),
                             GTMaterials.Neutronium, properties))
-            .lang("GregTech Multitool")
+            .lang("Symbiotic Swiss Knife")
             .properties(properties -> properties.stacksTo(1))
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .color(() -> IGTTool::tintColor)

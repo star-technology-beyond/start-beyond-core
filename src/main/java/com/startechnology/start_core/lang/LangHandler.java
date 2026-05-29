@@ -501,11 +501,21 @@ public class LangHandler {
         provider.add("ui.start_core.cross_dimensional_laser.hatch.output_per_sec_hover", "EU transferred out of this array in the last second expressed in per tick");
         provider.add("item.start_core.gregtech_multitool.selected_mode", "Selected: %s");
         provider.add("item.start_core.gregtech_multitool.ejected_mode", "Ejected: %s");
-        provider.add("item.start_core.gregtech_multitool.hint", "Hold the multitool selector key to choose a tool mode.");
+        provider.add("item.start_core.gregtech_multitool.hint", "Hold the multitool selector key or scroll while holding to swap tool modes.");
         provider.add("key.categories.start_core", "StarT Core");
         provider.add("key.start_core.multitool_selector", "Open Multitool Selector");
         provider.add("key.start_core.multitool_selector.hint", "Scroll or Mouse to select");
         provider.add("key.start_core.multitool_selector.eject", "Click to eject tool");
         provider.add("item.start_core.gregtech_multitool.empty", "No Installed Tools");
+        provider.add("item.start_core.gregtech_multitool.line", "§c§lGregTech Multitool");
+        provider.add("item.start_core.gregtech_multitool.l1", "§dTool Installation:");
+        provider.add("item.start_core.gregtech_multitool.l2", "§7Install tools by combining this with other full durability tools in a crafting table.");
+        provider.add("item.start_core.gregtech_multitool.l3", "§7Tools can be ejected anytime from the symbiotic swiss knife by holding shift and clicking in the multitool selector.");
+        provider.add("item.start_core.gregtech_multitool.l4", "§7Only §fone§7 tool of a type may be installed in the symbiotic swiss knife at any time. There is a maximum of §b16§7 tools that can be installed at once.");
+        provider.add("item.start_core.gregtech_multitool.l5", "§aBattery Durability:");
+        provider.add("item.start_core.gregtech_multitool.l6", "§7Tools use the battery of the symbiotic swiss knife as durability rather than the tool itself.");
+        provider.add("item.start_core.gregtech_multitool.l7", "§eSymbiosis");
+        provider.add("item.start_core.gregtech_multitool.l8", "§7Tools can be manually swapped between by scrolling with the symbiotic swiss knife held or using the selector menu that can be opened with the multitool selector key.");
+        provider.add("item.start_core.gregtech_multitool.l9", "§7Middle clicking a block will attempt to select the best tool for the block's functions. If there are multiple options, the priority is the tool installation order with oldest first.");
     }
 }

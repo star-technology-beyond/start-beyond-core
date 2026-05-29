@@ -67,7 +67,7 @@ public class StarTMultitoolRadialScreen extends Screen {
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         // no modes no gui
-        if (installedModes.isEmpty() || installedModes.size() < 2)
+        if (installedModes.isEmpty())
             return;
 
         int centerX = width / 2;

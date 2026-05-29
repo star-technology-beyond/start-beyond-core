@@ -162,9 +162,26 @@ public class StarTMultitoolItem extends GTToolItem {
         if (active != null) {
             tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.mode",
                     active.displayName()).withStyle(ChatFormatting.AQUA));
+            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.hint")
+                    .withStyle(ChatFormatting.GRAY));
         } else {
-            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.empty")
-                    .withStyle(ChatFormatting.RED));
+            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.line"));
+            tooltipComponents.add(Component.translatable("block.start_core.breaker_line"));
+            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.l1"));
+            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.l2"));
+            tooltipComponents.add(Component.empty());
+            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.l3"));
+            tooltipComponents.add(Component.empty());
+            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.l4"));
+            tooltipComponents.add(Component.translatable("block.start_core.breaker_line"));
+            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.l5"));
+            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.l6"));
+            tooltipComponents.add(Component.translatable("block.start_core.breaker_line"));
+            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.l7"));
+            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.l8"));
+            tooltipComponents.add(Component.empty());
+            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.l9"));
+            tooltipComponents.add(Component.translatable("block.start_core.breaker_line"));
         }
 
         List<StarTMultitoolMode> installed = StarTMultitoolMode.getInstalled(stack);
@@ -179,8 +196,6 @@ public class StarTMultitoolItem extends GTToolItem {
             }
         }
 
-        tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.hint")
-                .withStyle(ChatFormatting.GRAY));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
     }
 }
