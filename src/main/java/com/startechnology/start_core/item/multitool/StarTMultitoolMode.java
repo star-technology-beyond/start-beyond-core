@@ -4,6 +4,8 @@ import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
+import com.gregtechceu.gtceu.common.data.GTMaterialItems;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -43,6 +45,25 @@ public class StarTMultitoolMode {
 
     public String id() {
         return toolType.name;
+    }
+
+    public static void syncBehaviorsTag(ItemStack multiStack, GTToolType type, Material material) {
+        var entry = GTMaterialItems.TOOL_ITEMS.get(material, type);
+        if (entry == null) return;
+        ItemStack reference = entry.get().get();
+        if (reference.isEmpty()) return;
+
+        // we ripoff the reference behaviours from the behaviours tag of this reference item
+        CompoundTag refBehaviors = reference.getTagElement(ToolHelper.BEHAVIOURS_TAG_KEY);
+        CompoundTag multiTag = multiStack.getOrCreateTag();
+
+        if (refBehaviors != null && !refBehaviors.isEmpty()) {
+            // copy over the behaviours to the multitool item stack
+            multiTag.put(ToolHelper.BEHAVIOURS_TAG_KEY, refBehaviors.copy());
+        } else {
+            // no behaviours for this tool, clear the one for the multitool
+            multiTag.remove(ToolHelper.BEHAVIOURS_TAG_KEY);
+        }
     }
 
     public static List<StarTMultitoolMode> getInstalled(ItemStack stack) {
@@ -99,6 +120,7 @@ public class StarTMultitoolMode {
         // if no active mode yet then set this as active
         if (!tag.contains(TAG_KEY, Tag.TAG_STRING)) {
             tag.putString(TAG_KEY, type.name);
+            syncBehaviorsTag(stack, type, material);
         }
     }
 
@@ -122,7 +144,16 @@ public class StarTMultitoolMode {
         String active = tag.getString(TAG_KEY);
         if (active.equals(type.name)) {
             if (!newList.isEmpty()) {
-                tag.putString(TAG_KEY, newList.getString(0));
+                // put the name of the next mode
+                String nextName = newList.getString(0);
+                tag.putString(TAG_KEY, nextName);
+
+                // get the type of the next mode and material for behaviour syncing
+                GTToolType nextType = GTToolType.getTypes().get(nextName);
+                Material nextMat = GTCEuAPI.materialManager.getMaterial(tag.getString(TAG_MATERIAL + nextName));
+                if (nextType != null && nextMat != null) {
+                    syncBehaviorsTag(stack, nextType, nextMat);
+                }
             } else {
                 tag.remove(TAG_KEY);
             }
@@ -170,6 +201,8 @@ public class StarTMultitoolMode {
         toolTag.remove(ToolHelper.ATTACK_DAMAGE_KEY);
         toolTag.remove(ToolHelper.ATTACK_SPEED_KEY);
         toolTag.remove(ToolHelper.HARVEST_LEVEL_KEY);
+
+        syncBehaviorsTag(stack, mode.toolType(), mode.material());
     }
 
     public static StarTMultitoolMode offset(ItemStack stack, int amount) {

@@ -6,6 +6,7 @@ import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.startechnology.start_core.item.multitool.StarTMultitoolItem;
 import com.startechnology.start_core.item.multitool.StarTMultitoolMode;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -38,27 +39,31 @@ public class CPacketSetMultitoolMode implements IPacket {
     @Override
     public void execute(IHandlerContext handler) {
         Player player = handler.getPlayer();
-        if (player == null)
-            return;
-        if (handOrdinal < 0 || handOrdinal >= InteractionHand.values().length)
+        if (player == null) 
             return;
 
-        // get the ordinal of the hand to get the item
+        if (handOrdinal < 0 || handOrdinal >= InteractionHand.values().length) 
+            return;
+
+        // get the item in the player hand that executed this
         InteractionHand hand = InteractionHand.values()[handOrdinal];
         ItemStack stack = player.getItemInHand(hand);
-        if (!(stack.getItem() instanceof StarTMultitoolItem))
-            return;
+        if (!(stack.getItem() instanceof StarTMultitoolItem)) return;
 
         // ensure that its a valid multitool mode that we can
         // even swap to so the player doesnt cheat in neutronium evil
         // obliterator 9000 in ueuvuvluv
         GTToolType type = GTToolType.getTypes().get(toolTypeName);
-        if (type == null)
-            return;
-        if (!StarTMultitoolMode.isInstalled(stack, type))
-            return;
+        if (type == null) return;
+        if (!StarTMultitoolMode.isInstalled(stack, type)) return;
 
         StarTMultitoolMode.setActive(stack, new StarTMultitoolMode(type,
                 StarTMultitoolMode.getMaterialForType(stack, type)));
+
+        // sync the updated item NBT back to the client so the client-side stack
+        // has the correct behaviors tag
+        if (player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.inventoryMenu.sendAllDataToRemote();
+        }
     }
 }
