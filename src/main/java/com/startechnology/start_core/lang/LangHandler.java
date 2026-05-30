@@ -517,5 +517,6 @@ public class LangHandler {
         provider.add("item.start_core.gregtech_multitool.l7", "§eSymbiosis");
         provider.add("item.start_core.gregtech_multitool.l8", "§7Tools can be manually swapped between by scrolling with the symbiotic swiss knife held or using the selector menu that can be opened with the multitool selector key.");
         provider.add("item.start_core.gregtech_multitool.l9", "§7Middle clicking a block will attempt to select the best tool for the block's functions. If there are multiple options, the priority is the tool installation order with oldest first.");
+        provider.add("item.start_core.gregtech_multitool.installed", "Installed Modes:");
     }
 }

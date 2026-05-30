@@ -79,7 +79,7 @@ public class StarTItems {
     public static final ItemEntry<StarTMultitoolItem> GREGTECH_MULTITOOL = START_REGISTRATE
             .item("gregtech_multitool",
                     properties -> new StarTMultitoolItem(GTMaterials.Neutronium.getToolTier(),
-                            GTMaterials.Neutronium, properties))
+                            GTMaterials.Neutronium, properties, GTValues.LuV))
             .lang("Symbiotic Swiss Knife")
             .properties(properties -> properties.stacksTo(1))
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())

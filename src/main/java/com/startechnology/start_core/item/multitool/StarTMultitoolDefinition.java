@@ -1,5 +1,7 @@
 package com.startechnology.start_core.item.multitool;
 
+import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
+import com.gregtechceu.gtceu.api.capability.IElectricItem;
 import com.gregtechceu.gtceu.api.item.tool.IGTToolDefinition;
 import com.gregtechceu.gtceu.api.item.tool.aoe.AoESymmetrical;
 import com.gregtechceu.gtceu.api.item.tool.behavior.IToolBehavior;
@@ -20,6 +22,12 @@ public class StarTMultitoolDefinition implements IGTToolDefinition {
     private IGTToolDefinition selected(ItemStack stack) {
         StarTMultitoolMode active = StarTMultitoolMode.getActive(stack);
         return active == null ? null : active.toolType().toolDefinition;
+    }
+
+    // returns true if the multitool has no charge remaining
+    private boolean isOutOfEnergy(ItemStack stack) {
+        IElectricItem cap = GTCapabilityHelper.getElectricItem(stack);
+        return cap != null && cap.getCharge() == 0;
     }
 
     @Override
@@ -51,25 +59,28 @@ public class StarTMultitoolDefinition implements IGTToolDefinition {
 
     @Override
     public boolean isSuitableForBlockBreak(ItemStack stack) {
+        if (isOutOfEnergy(stack)) return false;
         IGTToolDefinition def = selected(stack);
         return def != null && def.isSuitableForBlockBreak(stack);
     }
 
     @Override
     public boolean isSuitableForAttacking(ItemStack stack) {
+        if (isOutOfEnergy(stack)) return false;
         IGTToolDefinition def = selected(stack);
         return def != null && def.isSuitableForAttacking(stack);
     }
 
     @Override
     public boolean isSuitableForCrafting(ItemStack stack) {
+        if (isOutOfEnergy(stack)) return false;
         IGTToolDefinition def = selected(stack);
         return def != null && def.isSuitableForCrafting(stack);
     }
 
     @Override
     public int getBaseDurability(ItemStack stack) {
-        return 8192;
+        return 0;
     }
 
     @Override
@@ -81,35 +92,40 @@ public class StarTMultitoolDefinition implements IGTToolDefinition {
     @Override
     public int getBaseQuality(ItemStack stack) {
         IGTToolDefinition def = selected(stack);
-        return def == null ? 2 : Math.max(2, def.getBaseQuality(stack));
+        return def == null ? 0 : def.getBaseQuality(stack);
     }
 
     @Override
     public float getBaseDamage(ItemStack stack) {
+        if (isOutOfEnergy(stack)) return 0.0F;
         IGTToolDefinition def = selected(stack);
         return def == null ? 1.0F : def.getBaseDamage(stack);
     }
 
     @Override
     public float getBaseEfficiency(ItemStack stack) {
+        if (isOutOfEnergy(stack)) return 1.0F;
         IGTToolDefinition def = selected(stack);
         return def == null ? 1.0F : def.getBaseEfficiency(stack);
     }
 
     @Override
     public float getEfficiencyMultiplier(ItemStack stack) {
+        if (isOutOfEnergy(stack)) return 1.0F;
         IGTToolDefinition def = selected(stack);
         return def == null ? 1.0F : def.getEfficiencyMultiplier(stack);
     }
 
     @Override
     public float getAttackSpeed(ItemStack stack) {
+        if (isOutOfEnergy(stack)) return 0.0F;
         IGTToolDefinition def = selected(stack);
         return def == null ? 0.0F : def.getAttackSpeed(stack);
     }
 
     @Override
     public AoESymmetrical getAoEDefinition(ItemStack stack) {
+        if (isOutOfEnergy(stack)) return AoESymmetrical.ZERO;
         IGTToolDefinition def = selected(stack);
         return def == null ? AoESymmetrical.ZERO : def.getAoEDefinition(stack);
     }

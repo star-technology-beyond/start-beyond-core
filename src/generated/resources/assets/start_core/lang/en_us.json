@@ -495,6 +495,7 @@
   "item.start_core.gregtech_multitool.ejected_mode": "Ejected: %s",
   "item.start_core.gregtech_multitool.empty": "No Installed Tools",
   "item.start_core.gregtech_multitool.hint": "Hold the multitool selector key or scroll while holding to swap tool modes.",
+  "item.start_core.gregtech_multitool.installed": "Installed Modes:",
   "item.start_core.gregtech_multitool.l1": "§dTool Installation:",
   "item.start_core.gregtech_multitool.l2": "§7Install tools by combining this with other full durability tools in a crafting table.",
   "item.start_core.gregtech_multitool.l3": "§7Tools can be ejected anytime from the symbiotic swiss knife by holding shift and clicking in the multitool selector.",

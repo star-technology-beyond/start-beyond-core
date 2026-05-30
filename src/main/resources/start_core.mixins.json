@@ -11,6 +11,7 @@
     "GTRecipeJSMixin",
     "GTRecipeModifiersMixin",
     "LaserHatchPartMachineAccessor",
+    "StarTMultitoolDamageMixin",
     "MaintenanceHatchPartMachineMixin",
     "MaterialRecipeHandlerMixin",
     "MEPatternBufferPartMachineMixin",
