@@ -1,0 +1,8 @@
+{
+  "values": [
+    "start_core:multitool_iv_wirecutter",
+    "start_core:multitool_lv_wirecutter",
+    "start_core:multitool_hv_wirecutter",
+    "start_core:multitool_wire_cutter"
+  ]
+}

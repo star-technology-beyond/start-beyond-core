@@ -65,8 +65,12 @@ public class StarTMultitoolItem extends GTToolItem {
     // The electric tier of the multitool is its capacity like IV or not
     private final int electricTier;
 
-    public StarTMultitoolItem(MaterialToolTier tier, Material material, Properties properties, int electricTier) {
-        super(GTToolType.WRENCH, tier, material, StarTMultitoolDefinition.INSTANCE, properties);
+    // base key for display
+    private static final String DISPLAY_KEY = "item.start_core.gregtech_multitool";
+
+
+    public StarTMultitoolItem(GTToolType toolType, MaterialToolTier tier, Material material, Properties properties, int electricTier) {
+        super(toolType, tier, material, StarTMultitoolDefinition.INSTANCE, properties);
         this.electricTier = electricTier;
     }
 
@@ -82,6 +86,11 @@ public class StarTMultitoolItem extends GTToolItem {
 
     private long getMaxEnergy() {
         return GTValues.V[electricTier] * 3200L;
+    }
+
+    @Override
+    public boolean isRepairable(ItemStack stack) {
+        return false;
     }
 
     @Override
@@ -120,7 +129,7 @@ public class StarTMultitoolItem extends GTToolItem {
 
     
     // returns whether or not the tool is out of energy
-    private boolean isOutOfEnergy(ItemStack stack) {
+    public boolean isOutOfEnergy(ItemStack stack) {
         var cap = GTCapabilityHelper.getElectricItem(stack);
         return cap != null && cap.getCharge() == 0;
     }
@@ -134,12 +143,19 @@ public class StarTMultitoolItem extends GTToolItem {
         return 1;
     }
 
-    @Override
+@Override
     public ItemStack getCraftingRemainingItem(ItemStack stack) {
         if (!hasCraftingRemainingItem(stack)) return ItemStack.EMPTY;
-        ToolHelper.damageItem(stack, null, getToolStats().getToolDamagePerCraft(stack));
-        playCraftingSound(null, stack);
-        return stack.copy();
+        
+        // if we dont copy here, in xei then just looking at the recipe
+        // will drain durability lolololol
+        ItemStack copy = stack.copy();
+        
+        // drain EU from the copy
+        ToolHelper.damageItem(copy, null, getToolStats().getToolDamagePerCraft(copy));
+        playCraftingSound(null, copy);
+        
+        return copy;
     }
 
     private Material getActiveMaterial(ItemStack stack) {
@@ -225,21 +241,11 @@ public class StarTMultitoolItem extends GTToolItem {
         toolTag.putFloat(ToolHelper.ATTACK_SPEED_KEY, speed);
         return speed;
     }
-
-    @Override
-    public Component getDescription() {
-        return Component.translatable(getDescriptionId());
-    }
-
-    @Override
-    public String getDescriptionId() {
-        return "item.start_core.gregtech_multitool";
-    }
-
+    
     @Override
     public Component getName(ItemStack stack) {
         StarTMultitoolMode active = StarTMultitoolMode.getActive(stack);
-        Component base = getDescription().copy();
+        Component base = Component.translatable(DISPLAY_KEY);
         if (active == null) {
             return base.copy()
                     .append(Component.literal(" - ").withStyle(ChatFormatting.GRAY))
@@ -260,11 +266,6 @@ public class StarTMultitoolItem extends GTToolItem {
             classes.add(active.toolType());
         }
         return classes;
-    }
-
-    @Override
-    public GTToolType getToolType() {
-        return GTToolType.WRENCH;
     }
 
     @Override
@@ -411,6 +412,7 @@ public class StarTMultitoolItem extends GTToolItem {
 
     @Override
     public boolean canPerformAction(ItemStack stack, ToolAction action) {
+        if (isOutOfEnergy(stack)) return false;
         StarTMultitoolMode active = StarTMultitoolMode.getActive(stack);
         if (active != null && active.toolType().defaultAbilities.contains(action)) return true;
         return StarTMultitoolDefinition.INSTANCE.getBehaviors(stack).stream()
@@ -465,8 +467,6 @@ public class StarTMultitoolItem extends GTToolItem {
             tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.l2"));
             tooltipComponents.add(Component.empty());
             tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.l3"));
-            tooltipComponents.add(Component.empty());
-            tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.l4"));
             tooltipComponents.add(Component.translatable("block.start_core.breaker_line"));
             tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.l5"));
             tooltipComponents.add(Component.translatable("item.start_core.gregtech_multitool.l6"));

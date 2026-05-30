@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.startechnology.start_core.StarTCore;
 import com.startechnology.start_core.item.StarTItems;
 import com.startechnology.start_core.item.multitool.StarTMultitoolItem;
+import com.startechnology.start_core.item.multitool.StarTMultitoolItems;
 import com.startechnology.start_core.item.multitool.StarTMultitoolMode;
 import com.startechnology.start_core.network.StarTNetwork;
 import com.startechnology.start_core.network.packets.CPacketSetMultitoolMode;
@@ -42,28 +43,16 @@ public class StarTMultitoolClientEvents {
     }
 
     @SubscribeEvent
-    public static void onRegisterAdditional(ModelEvent.RegisterAdditional event) {
-        // we want to register all of our multitool models
-        StarTMultitoolRenderer.onRegisterAdditional(event);
-    }
-
-    @SubscribeEvent
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
         // this will tint the multitool if it has an active mode
         // with the active colour of the material
-        event.register((stack, tintIndex) -> {
-            StarTMultitoolMode active = StarTMultitoolMode.getActive(stack);
-            if (active == null)
-                return 0xFFFFFF;
-            return tintIndex == 0 ? active.material().getMaterialRGB() : 0xFFFFFF;
-        }, StarTItems.GREGTECH_MULTITOOL.get());
-    }
-
-    @SubscribeEvent
-    public static void onModifyBakingResult(ModelEvent.ModifyBakingResult event) {
-        // modify baking in order to dynamically show model
-        // based on active type
-        StarTMultitoolRenderer.onModifyBakingResult(event);
+        StarTMultitoolItems.MULTITOOLS.values().forEach(itemEntry -> {
+            event.register((stack, tintIndex) -> {
+                StarTMultitoolMode active = StarTMultitoolMode.getActive(stack);
+                if (active == null) return 0xFFFFFF;
+                return tintIndex == 0 ? active.material().getMaterialRGB() : 0xFFFFFF;
+            }, itemEntry.get());
+        });
     }
 
     @Mod.EventBusSubscriber(modid = StarTCore.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -117,9 +106,9 @@ public class StarTMultitoolClientEvents {
     }
 
     static void selectMode(ItemStack stack, InteractionHand hand, StarTMultitoolMode mode) {
-        StarTMultitoolMode.setActive(stack, mode);
         StarTNetwork.NETWORK.sendToServer(new CPacketSetMultitoolMode(mode, hand));
         Minecraft minecraft = Minecraft.getInstance();
+
         if (minecraft.player != null) {
             minecraft.player.displayClientMessage(
                     Component.translatable("item.start_core.gregtech_multitool.selected_mode",
@@ -129,8 +118,9 @@ public class StarTMultitoolClientEvents {
     }
 
     static void ejectMode(ItemStack stack, InteractionHand hand, StarTMultitoolMode mode) {
-         StarTNetwork.NETWORK.sendToServer(new CPacketUninstallMultitoolMode(mode, hand));
+        StarTNetwork.NETWORK.sendToServer(new CPacketUninstallMultitoolMode(mode, hand));
         Minecraft minecraft = Minecraft.getInstance();
+
         if (minecraft.player != null) {
             minecraft.player.displayClientMessage(
                     Component.translatable("item.start_core.gregtech_multitool.ejected_mode",

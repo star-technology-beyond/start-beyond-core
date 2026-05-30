@@ -3,7 +3,9 @@ package com.startechnology.start_core.network.packets;
 import com.lowdragmc.lowdraglib.networking.IHandlerContext;
 import com.lowdragmc.lowdraglib.networking.IPacket;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
+import com.startechnology.start_core.item.StarTItems;
 import com.startechnology.start_core.item.multitool.StarTMultitoolItem;
+import com.startechnology.start_core.item.multitool.StarTMultitoolItems;
 import com.startechnology.start_core.item.multitool.StarTMultitoolMode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,7 +47,7 @@ public class CPacketSetMultitoolMode implements IPacket {
         if (handOrdinal < 0 || handOrdinal >= InteractionHand.values().length) 
             return;
 
-        // get the item in the player hand that executed this
+         // get the item in the player hand that executed this
         InteractionHand hand = InteractionHand.values()[handOrdinal];
         ItemStack stack = player.getItemInHand(hand);
         if (!(stack.getItem() instanceof StarTMultitoolItem)) return;
@@ -57,11 +59,25 @@ public class CPacketSetMultitoolMode implements IPacket {
         if (type == null) return;
         if (!StarTMultitoolMode.isInstalled(stack, type)) return;
 
-        StarTMultitoolMode.setActive(stack, new StarTMultitoolMode(type,
-                StarTMultitoolMode.getMaterialForType(stack, type)));
+        // fetch the next item for swapping id over to
+        var nextItemEntry = StarTMultitoolItems.MULTITOOLS.get(type);
+        if (nextItemEntry == null) return;
 
-        // sync the updated item NBT back to the client so the client-side stack
-        // has the correct behaviors tag
+        // create new item and copy over nbt
+        ItemStack newStack = new ItemStack(nextItemEntry.get());
+        if (stack.hasTag()) {
+            newStack.setTag(stack.getTag().copy());
+        }
+
+        // update the active one in the nbt
+        StarTMultitoolMode.setActive(newStack, new StarTMultitoolMode(type,
+                StarTMultitoolMode.getMaterialForType(newStack, type)));
+
+        // give to player
+        player.setItemInHand(hand, newStack);
+
+        // sync the updated item data back to the client so the client-side stack
+        // has the correct behaviors tag and the actual updated item
         if (player instanceof ServerPlayer serverPlayer) {
             serverPlayer.inventoryMenu.sendAllDataToRemote();
         }

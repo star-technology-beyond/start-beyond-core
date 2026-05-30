@@ -1,0 +1,8 @@
+{
+  "values": [
+    "start_core:multitool_hv_screwdriver",
+    "start_core:multitool_screwdriver",
+    "start_core:multitool_lv_screwdriver",
+    "start_core:multitool_iv_screwdriver"
+  ]
+}

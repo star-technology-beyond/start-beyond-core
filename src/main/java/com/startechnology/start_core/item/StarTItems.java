@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.IComponentItem;
 import com.gregtechceu.gtceu.api.item.IGTTool;
+import com.gregtechceu.gtceu.api.item.component.ElectricStats;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.api.item.component.ThermalFluidStats;
 import com.gregtechceu.gtceu.common.data.GTItems;
@@ -23,18 +24,25 @@ import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
 import com.gregtechceu.gtceu.common.item.DataItemBehavior;
 import com.gregtechceu.gtceu.common.item.ItemFluidContainer;
 import com.gregtechceu.gtceu.common.item.TooltipBehavior;
+import com.gregtechceu.gtceu.data.recipe.generated.ToolRecipeHandler;
 import com.startechnology.start_core.item.components.CopyBehavior;
 import com.startechnology.start_core.item.components.StarTDreamCopyBehaviour;
 import com.startechnology.start_core.item.multitool.StarTMultitoolItem;
+import com.startechnology.start_core.item.multitool.StarTMultitoolItems;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 
+import it.unimi.dsi.fastutil.ints.Int2ReferenceArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ReferenceMap;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.fluids.FluidType;
 
 public class StarTItems {
+    public static final Int2ReferenceMap<ItemEntry<? extends Item>> EXTENDED_POWER_UNITS = new Int2ReferenceArrayMap<>();
+
     public static <T extends IComponentItem> NonNullConsumer<T> attach(IItemComponent components) {
         return item -> item.attachComponents(components);
     }
@@ -76,16 +84,6 @@ public class StarTItems {
             })))
             .register();
 
-    public static final ItemEntry<StarTMultitoolItem> GREGTECH_MULTITOOL = START_REGISTRATE
-            .item("gregtech_multitool",
-                    properties -> new StarTMultitoolItem(GTMaterials.Neutronium.getToolTier(),
-                            GTMaterials.Neutronium, properties, GTValues.LuV))
-            .lang("Symbiotic Swiss Knife")
-            .properties(properties -> properties.stacksTo(1))
-            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
-            .color(() -> IGTTool::tintColor)
-            .register();
-
     public static ItemEntry<ComponentItem> FLUID_CELL_LARGE_ENRICHED_NAQUADAH = createFluidCell(GTMaterials.NaquadahEnriched, 768, 12, 16, true, true, false);
     public static ItemEntry<ComponentItem> FLUID_CELL_LARGE_NEUTRONIUM = createFluidCell(GTMaterials.Neutronium, 1024, 16, 8, true, true, true);
 
@@ -109,7 +107,21 @@ public class StarTItems {
                 .register();
     }
 
+    public static final ItemEntry<ComponentItem> POWER_UNIT_LuV = START_REGISTRATE
+        .item("luv_power_unit", ComponentItem::create)
+        .lang("LuV Power Unit")
+        .properties(p -> p.stacksTo(8))
+        .model((ctx, prov) -> prov.generated(ctx, prov.modLoc("item/tools/active_tool")))
+        .onRegister(attach(ElectricStats.createElectricItem(102400000, GTValues.LuV)))
+        .register();
+
     public static void init() {
         StarTBacteriaItems.init();
+        StarTMultitoolItems.init();
+
+        // copy GT's existing power units
+        EXTENDED_POWER_UNITS.putAll(ToolRecipeHandler.powerUnitItems);
+        // add ours
+        EXTENDED_POWER_UNITS.put(GTValues.LuV, POWER_UNIT_LuV);
     }
 }

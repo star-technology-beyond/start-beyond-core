@@ -217,12 +217,6 @@ public class StarTMultitoolMode {
         return installed.get(Math.floorMod(idx + amount, installed.size()));
     }
 
-    // check if a GT tool stack is not damaged
-    public static boolean isFullyRepaired(ItemStack toolStack) {
-        CompoundTag toolTag = ToolHelper.getToolTag(toolStack);
-        return toolTag.getInt(ToolHelper.DURABILITY_KEY) == 0;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

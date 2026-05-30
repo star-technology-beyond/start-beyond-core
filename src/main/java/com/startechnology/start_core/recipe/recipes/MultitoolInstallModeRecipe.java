@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.gregtechceu.gtceu.api.item.IGTTool;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.startechnology.start_core.item.multitool.StarTMultitoolItem;
+import com.startechnology.start_core.item.multitool.StarTMultitoolItems;
 import com.startechnology.start_core.item.multitool.StarTMultitoolMode;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
@@ -27,8 +28,6 @@ public class MultitoolInstallModeRecipe extends CustomRecipe {
 
     @Override
     public boolean matches(CraftingContainer container, Level level) {
-        // try check if the recipe matches a multitool install mode recipe
-        // we get the multitool and tool.
         ItemStack multitool = ItemStack.EMPTY;
         ItemStack tool = ItemStack.EMPTY;
 
@@ -37,20 +36,20 @@ public class MultitoolInstallModeRecipe extends CustomRecipe {
             if (stack.isEmpty()) continue;
 
             if (stack.getItem() instanceof StarTMultitoolItem) {
-                 // two multitools
                 if (!multitool.isEmpty()) return false;
                 multitool = stack;
             } else if (stack.getItem() instanceof IGTTool) {
-                 // two tools
                 if (!tool.isEmpty()) return false;
                 tool = stack;
             } else {
-                // unknown item
                 return false;
             }
         }
 
         if (multitool.isEmpty() || tool.isEmpty()) return false;
+
+        // only accept fully undamaged tools
+        if (tool.getDamageValue() != 0) return false;
 
         // check the tool type isn't already installed
         GTToolType toolType = ((IGTTool) tool.getItem()).getToolType();
@@ -81,10 +80,25 @@ public class MultitoolInstallModeRecipe extends CustomRecipe {
         GTToolType toolType = gtTool.getToolType();
         var material = gtTool.getMaterial();
 
-        // copy the existing multitool NBT so prior modes are preserved
-        ItemStack result = multitool.copy();
-        result.setCount(1);
-        StarTMultitoolMode.install(result, toolType, material);
+        // install the mode into a copy of the multitool with the same nbt
+        ItemStack nbtSource = multitool.copy();
+        nbtSource.setCount(1);
+        StarTMultitoolMode.install(nbtSource, toolType, material);
+
+        // figure out what the active mode is now so we can
+        // return the correct physical item variant for it
+        StarTMultitoolMode active = StarTMultitoolMode.getActive(nbtSource);
+        if (active == null) return ItemStack.EMPTY;
+
+        var targetEntry = StarTMultitoolItems.MULTITOOLS.get(active.toolType());
+        if (targetEntry == null) return ItemStack.EMPTY;
+
+        // build the result as the correct item variant, carrying all the nbt
+        ItemStack result = new ItemStack(targetEntry.get());
+        if (nbtSource.hasTag()) {
+            result.setTag(nbtSource.getTag().copy());
+        }
+
         return result;
     }
 

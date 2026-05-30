@@ -1,0 +1,8 @@
+{
+  "values": [
+    "start_core:multitool_lv_wrench",
+    "start_core:multitool_iv_wrench",
+    "start_core:multitool_wrench",
+    "start_core:multitool_hv_wrench"
+  ]
+}

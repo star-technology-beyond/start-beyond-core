@@ -19,6 +19,7 @@
     "ParallelHatchPartMachineAccessor",
     "ParallelHatchPartMachineMixin",
     "PipeBlockMultitoolShapeMixin",
+    "ShapedRecipeMixin",
     "ResearchManagerDataItemMixin",
     "WireRecipeHandlerMixin",
     "WorkableElectricMultiblockMachineAccessor",

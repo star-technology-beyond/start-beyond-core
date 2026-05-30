@@ -11,16 +11,16 @@ public class StarTItemModelDatagenProvider {
     // and automatically tells us if we're missing textures
     private static void registerMultitoolModeModels(ItemModelProvider provider) {
         for (GTToolType type : GTToolType.getTypes().values()) {
-            provider.getBuilder("multitool_mode_" + type.name)
+            provider.getBuilder("multitool_" + type.name)
                 .parent(new ModelFile.UncheckedModelFile("item/handheld"))
                 .texture("layer0", "start_core:item/tools/" + type.name)
                 .texture("layer1", "start_core:item/tools/active_tool");
         }
         
         // empty multitool model
-        provider.getBuilder("multitool_mode_empty")
+        provider.getBuilder("multitool_empty")
             .parent(new ModelFile.UncheckedModelFile("item/handheld"))
-            .texture("layer0", "start_core:item/tools/inactive_tool");
+            .texture("layer0", "start_core:item/tools/multitool_empty");
     }
 
     public static void init(ItemModelProvider provider) {

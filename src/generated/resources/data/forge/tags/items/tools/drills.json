@@ -1,0 +1,9 @@
+{
+  "values": [
+    "start_core:multitool_iv_drill",
+    "start_core:multitool_ev_drill",
+    "start_core:multitool_hv_drill",
+    "start_core:multitool_lv_drill",
+    "start_core:multitool_mv_drill"
+  ]
+}

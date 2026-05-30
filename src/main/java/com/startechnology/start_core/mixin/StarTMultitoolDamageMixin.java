@@ -2,10 +2,18 @@ package com.startechnology.start_core.mixin;
 
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
+import com.gregtechceu.gtceu.api.data.chemical.material.properties.ToolProperty;
+import com.gregtechceu.gtceu.api.item.IGTTool;
+import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
+import com.gregtechceu.gtceu.common.data.GTMaterialItems;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.startechnology.start_core.StarTCore;
 import com.startechnology.start_core.item.multitool.StarTMultitoolItem;
+import com.startechnology.start_core.item.multitool.StarTMultitoolMode;
+
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -41,6 +49,13 @@ public class StarTMultitoolDamageMixin {
         // dont consume durability in creative
         if (user instanceof Player player && player.isCreative()) {
             return;
+        }
+
+        // check if current active is unbreakable
+        StarTMultitoolMode active = StarTMultitoolMode.getActive(stack);
+        if (active != null) {
+            ToolProperty toolProperty = active.material().getProperty(PropertyKey.TOOL);
+            if (toolProperty != null && toolProperty.isUnbreakable()) return;
         }
 
         // get the electric item from the multitool and deal damage to that.
