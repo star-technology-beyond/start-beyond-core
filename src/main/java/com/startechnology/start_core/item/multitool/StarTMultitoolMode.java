@@ -120,6 +120,13 @@ public class StarTMultitoolMode {
         // if no active mode yet then set this as active
         if (!tag.contains(TAG_KEY, Tag.TAG_STRING)) {
             tag.putString(TAG_KEY, type.name);
+
+            CompoundTag toolTag = ToolHelper.getToolTag(stack);
+            toolTag.remove(ToolHelper.TOOL_SPEED_KEY);
+            toolTag.remove(ToolHelper.ATTACK_DAMAGE_KEY);
+            toolTag.remove(ToolHelper.ATTACK_SPEED_KEY);
+            toolTag.remove(ToolHelper.HARVEST_LEVEL_KEY);
+
             syncBehaviorsTag(stack, type, material);
         }
     }
