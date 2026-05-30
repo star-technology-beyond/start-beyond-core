@@ -7,6 +7,7 @@ import com.startechnology.start_core.item.multitool.StarTMultitoolItem;
 import com.startechnology.start_core.item.multitool.StarTMultitoolItems;
 import com.startechnology.start_core.item.multitool.StarTMultitoolMode;
 import com.startechnology.start_core.network.StarTNetwork;
+import com.startechnology.start_core.network.packets.CPacketReleaseSingleBlockLock;
 import com.startechnology.start_core.network.packets.CPacketSetMultitoolMode;
 import com.startechnology.start_core.network.packets.CPacketUninstallMultitoolMode;
 
@@ -87,6 +88,25 @@ public class StarTMultitoolClientEvents {
             if (next != null)
                 selectMode(held.stack(), held.hand(), next);
             event.setCanceled(true);
+        }
+
+        @SubscribeEvent
+        public static void onMouseButton(InputEvent.MouseButton event) {
+            // single click mode should prevent for client
+            // breaking multiple blocks at once until release
+            if (event.getButton() != GLFW.GLFW_MOUSE_BUTTON_LEFT || 
+                event.getAction() != GLFW.GLFW_RELEASE) return;
+
+            Minecraft minecraft = Minecraft.getInstance();
+            if (minecraft.player == null) return;
+
+            HeldMultitool held = getHeldMultitool();
+            if (held == null) return;
+
+            // only bother sending if single block mode is actually on
+            if (StarTMultitoolMode.isSingleBlockMode(held.stack())) {
+                StarTNetwork.NETWORK.sendToServer(new CPacketReleaseSingleBlockLock(held.hand()));
+            }
         }
     }
 

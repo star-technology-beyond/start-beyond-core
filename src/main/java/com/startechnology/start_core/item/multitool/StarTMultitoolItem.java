@@ -61,15 +61,19 @@ import java.util.List;
 import java.util.Set;
 
 public class StarTMultitoolItem extends GTToolItem {
-    
+
     // The electric tier of the multitool is its capacity like IV or not
     private final int electricTier;
 
     // base key for display
     private static final String DISPLAY_KEY = "item.start_core.gregtech_multitool";
 
+    // keep track of whether a player has broken a block this swing
+    // for single block click mode
+    private static final Set<java.util.UUID> swingLocked = new java.util.HashSet<>();
 
-    public StarTMultitoolItem(GTToolType toolType, MaterialToolTier tier, Material material, Properties properties, int electricTier) {
+    public StarTMultitoolItem(GTToolType toolType, MaterialToolTier tier, Material material, Properties properties,
+            int electricTier) {
         super(toolType, tier, material, StarTMultitoolDefinition.INSTANCE, properties);
         this.electricTier = electricTier;
     }
@@ -127,7 +131,6 @@ public class StarTMultitoolItem extends GTToolItem {
         toolTag.remove(ToolHelper.HARVEST_LEVEL_KEY);
     }
 
-    
     // returns whether or not the tool is out of energy
     public boolean isOutOfEnergy(ItemStack stack) {
         var cap = GTCapabilityHelper.getElectricItem(stack);
@@ -143,18 +146,19 @@ public class StarTMultitoolItem extends GTToolItem {
         return 1;
     }
 
-@Override
+    @Override
     public ItemStack getCraftingRemainingItem(ItemStack stack) {
-        if (!hasCraftingRemainingItem(stack)) return ItemStack.EMPTY;
-        
+        if (!hasCraftingRemainingItem(stack))
+            return ItemStack.EMPTY;
+
         // if we dont copy here, in xei then just looking at the recipe
         // will drain durability lolololol
         ItemStack copy = stack.copy();
-        
+
         // drain EU from the copy
         ToolHelper.damageItem(copy, null, getToolStats().getToolDamagePerCraft(copy));
         playCraftingSound(null, copy);
-        
+
         return copy;
     }
 
@@ -170,7 +174,8 @@ public class StarTMultitoolItem extends GTToolItem {
 
     @Override
     public int getTotalHarvestLevel(ItemStack stack) {
-        if (isOutOfEnergy(stack)) return 0;
+        if (isOutOfEnergy(stack))
+            return 0;
 
         CompoundTag toolTag = ToolHelper.getToolTag(stack);
 
@@ -180,7 +185,8 @@ public class StarTMultitoolItem extends GTToolItem {
         }
 
         ToolProperty prop = getActiveToolProperty(stack);
-        if (prop == null) return 0; 
+        if (prop == null)
+            return 0;
 
         int level = prop.getHarvestLevel() + getToolStats().getBaseQuality(stack);
         toolTag.putInt(ToolHelper.HARVEST_LEVEL_KEY, level);
@@ -189,7 +195,8 @@ public class StarTMultitoolItem extends GTToolItem {
 
     @Override
     public float getTotalToolSpeed(ItemStack stack) {
-        if (isOutOfEnergy(stack)) return 1.0F;
+        if (isOutOfEnergy(stack))
+            return 1.0F;
 
         CompoundTag toolTag = ToolHelper.getToolTag(stack);
         if (toolTag.contains(ToolHelper.TOOL_SPEED_KEY)) {
@@ -197,7 +204,8 @@ public class StarTMultitoolItem extends GTToolItem {
         }
 
         ToolProperty prop = getActiveToolProperty(stack);
-        if (prop == null) return 1.0F;
+        if (prop == null)
+            return 1.0F;
 
         float speed = (getToolStats().getEfficiencyMultiplier(stack) * prop.getHarvestSpeed())
                 + getToolStats().getBaseEfficiency(stack);
@@ -208,7 +216,8 @@ public class StarTMultitoolItem extends GTToolItem {
 
     @Override
     public float getTotalAttackDamage(ItemStack stack) {
-        if (isOutOfEnergy(stack)) return 0.0F;
+        if (isOutOfEnergy(stack))
+            return 0.0F;
 
         CompoundTag toolTag = ToolHelper.getToolTag(stack);
         if (toolTag.contains(ToolHelper.ATTACK_DAMAGE_KEY)) {
@@ -216,7 +225,8 @@ public class StarTMultitoolItem extends GTToolItem {
         }
 
         ToolProperty prop = getActiveToolProperty(stack);
-        if (prop == null) return 0.0F;
+        if (prop == null)
+            return 0.0F;
 
         float baseDamage = getToolStats().getBaseDamage(stack);
         float damage = baseDamage == Float.MIN_VALUE ? 0F : prop.getAttackDamage() + baseDamage;
@@ -227,7 +237,8 @@ public class StarTMultitoolItem extends GTToolItem {
 
     @Override
     public float getTotalAttackSpeed(ItemStack stack) {
-        if (isOutOfEnergy(stack)) return 0.0F;
+        if (isOutOfEnergy(stack))
+            return 0.0F;
 
         CompoundTag toolTag = ToolHelper.getToolTag(stack);
         if (toolTag.contains(ToolHelper.ATTACK_SPEED_KEY)) {
@@ -235,13 +246,14 @@ public class StarTMultitoolItem extends GTToolItem {
         }
 
         ToolProperty prop = getActiveToolProperty(stack);
-        if (prop == null) return 0.0F;
+        if (prop == null)
+            return 0.0F;
 
         float speed = prop.getAttackSpeed() + getToolStats().getAttackSpeed(stack);
         toolTag.putFloat(ToolHelper.ATTACK_SPEED_KEY, speed);
         return speed;
     }
-    
+
     @Override
     public Component getName(ItemStack stack) {
         StarTMultitoolMode active = StarTMultitoolMode.getActive(stack);
@@ -326,10 +338,22 @@ public class StarTMultitoolItem extends GTToolItem {
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-        if (player.level().isClientSide) return false;
+        if (player.level().isClientSide)
+            return false;
 
         StarTMultitoolDefinition.INSTANCE.getBehaviors(stack)
                 .forEach(behavior -> behavior.onBlockStartBreak(stack, pos, player));
+
+        if (StarTMultitoolMode.isSingleBlockMode(stack)) {
+            // block breaking blocks while still holding lock for player
+            if (swingLocked.contains(player.getUUID())) {
+                return true;
+            }
+            
+            // else we allow this and lock
+            swingLocked.add(player.getUUID());
+            return false;
+        }
 
         if (!player.isShiftKeyDown()) {
             ServerPlayer serverPlayer = (ServerPlayer) player;
@@ -348,7 +372,8 @@ public class StarTMultitoolItem extends GTToolItem {
 
                 if (effective) {
                     if (ToolHelper.areaOfEffectBlockBreakRoutine(stack, serverPlayer, pos)) {
-                        if (playSoundOnBlockDestroy()) playSound(player);
+                        if (playSoundOnBlockDestroy())
+                            playSound(player);
                     } else {
                         if (result == -1) {
                             var tag = ToolHelper.getBehaviorsTag(stack);
@@ -357,7 +382,8 @@ public class StarTMultitoolItem extends GTToolItem {
                                     state.is(BlockTags.LOGS)) {
                                 TreeFellingHelper.fellTree(stack, player.level(), state, pos, player);
                             }
-                            if (playSoundOnBlockDestroy()) playSound(player);
+                            if (playSoundOnBlockDestroy())
+                                playSound(player);
                         } else {
                             return true;
                         }
@@ -368,14 +394,14 @@ public class StarTMultitoolItem extends GTToolItem {
         return false;
     }
 
-        @Override
+    @Override
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
         if (!level.isClientSide) {
             // mining stuff can trigger behaviours on block destroyed
             // make sure we run those here else tools wont work so well
             StarTMultitoolDefinition.INSTANCE.getBehaviors(stack)
                     .forEach(behavior -> behavior.onBlockDestroyed(stack, level, state, pos, miningEntity));
-            
+
             if (state.getDestroySpeed(level, pos) != 0.0D) {
                 ToolHelper.damageItem(stack, miningEntity, getToolStats().getToolDamagePerBlockBreak(stack));
             }
@@ -412,9 +438,11 @@ public class StarTMultitoolItem extends GTToolItem {
 
     @Override
     public boolean canPerformAction(ItemStack stack, ToolAction action) {
-        if (isOutOfEnergy(stack)) return false;
+        if (isOutOfEnergy(stack))
+            return false;
         StarTMultitoolMode active = StarTMultitoolMode.getActive(stack);
-        if (active != null && active.toolType().defaultAbilities.contains(action)) return true;
+        if (active != null && active.toolType().defaultAbilities.contains(action))
+            return true;
         return StarTMultitoolDefinition.INSTANCE.getBehaviors(stack).stream()
                 .anyMatch(behavior -> behavior.canPerformAction(stack, action));
     }
@@ -426,8 +454,10 @@ public class StarTMultitoolItem extends GTToolItem {
 
     @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        if (isOutOfEnergy(stack)) return false;
-        if (StarTMultitoolMode.getActive(stack) == null) return false;
+        if (isOutOfEnergy(stack))
+            return false;
+        if (StarTMultitoolMode.getActive(stack) == null)
+            return false;
 
         // correct tool for drops should use our own harvest level
         return ToolHelper.isToolEffective(state, getToolClasses(stack), getTotalHarvestLevel(stack));
@@ -435,14 +465,16 @@ public class StarTMultitoolItem extends GTToolItem {
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if (isOutOfEnergy(stack)) return 1.0F;
-        if (StarTMultitoolMode.getActive(stack) == null) return 1.0F;
+        if (isOutOfEnergy(stack))
+            return 1.0F;
+        if (StarTMultitoolMode.getActive(stack) == null)
+            return 1.0F;
 
         // if it's an effective tool for the block then reteurn the tool speed
         if (ToolHelper.isToolEffective(state, getToolClasses(stack), getTotalHarvestLevel(stack))) {
             return getTotalToolSpeed(stack);
         }
-        
+
         return 1.0F;
     }
 
@@ -451,9 +483,9 @@ public class StarTMultitoolItem extends GTToolItem {
         return !ItemStack.isSameItem(oldStack, newStack);
     }
 
-        @Override
+    @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents,
-                                TooltipFlag isAdvanced) {
+            TooltipFlag isAdvanced) {
 
         StarTMultitoolMode active = StarTMultitoolMode.getActive(stack);
         if (active != null) {
@@ -490,17 +522,20 @@ public class StarTMultitoolItem extends GTToolItem {
         }
 
         CompoundTag tagCompound = stack.getTag();
-        if (tagCompound == null) return;
+        if (tagCompound == null)
+            return;
 
         // this is all taken from definition$appendHoverText
         // but we only wanna show some stuff and from the INSTANCE
         // so yea
 
         // show eu charge (same regardless of tool)
-        ElectricStats.addCurrentChargeTooltip(tooltipComponents, getCharge(stack), getMaxCharge(stack), getElectricTier(), false);
+        ElectricStats.addCurrentChargeTooltip(tooltipComponents, getCharge(stack), getMaxCharge(stack),
+                getElectricTier(), false);
 
         // dont show anything else if no active
-        if (active == null) return;
+        if (active == null)
+            return;
 
         IGTToolDefinition proxyStats = StarTMultitoolDefinition.INSTANCE;
 
@@ -520,8 +555,9 @@ public class StarTMultitoolItem extends GTToolItem {
             int harvestLevel = this.getTotalHarvestLevel(stack);
             String harvestName = "item.gtceu.tool.harvest_level." + harvestLevel;
             if (Language.getInstance().has(harvestName)) { // Requires Language import
-                tooltipComponents.add(Component.translatable("item.gtceu.tool.tooltip.harvest_level_extra", harvestLevel,
-                        Component.translatable(harvestName)));
+                tooltipComponents
+                        .add(Component.translatable("item.gtceu.tool.tooltip.harvest_level_extra", harvestLevel,
+                                Component.translatable(harvestName)));
             } else {
                 tooltipComponents.add(Component.translatable("item.gtceu.tool.tooltip.harvest_level", harvestLevel));
             }
@@ -545,8 +581,8 @@ public class StarTMultitoolItem extends GTToolItem {
 
         // put all the behaviour toolotips in
         int length = tooltipComponents.size();
-        StarTMultitoolDefinition.INSTANCE.getBehaviors(stack).forEach(behavior -> 
-                behavior.addInformation(stack, level, tooltipComponents, isAdvanced));
+        StarTMultitoolDefinition.INSTANCE.getBehaviors(stack)
+                .forEach(behavior -> behavior.addInformation(stack, level, tooltipComponents, isAdvanced));
 
         if (tooltipComponents.size() != length || addedMagneticOrAOELine) {
             tooltipComponents.add(CommonComponents.EMPTY);
@@ -558,7 +594,8 @@ public class StarTMultitoolItem extends GTToolItem {
             tooltipComponents.add(Component.translatable("item.gtceu.tool.tooltip.default_enchantments"));
             for (var entry : defaultEnchants.entrySet()) {
                 Enchantment enchant = entry.getKey();
-                if (enchant == null) continue;
+                if (enchant == null)
+                    continue;
                 tooltipComponents.add(enchant.getFullname(entry.getValue()));
             }
             tooltipComponents.add(CommonComponents.EMPTY);
@@ -571,5 +608,9 @@ public class StarTMultitoolItem extends GTToolItem {
                         .map(s -> Component.translatable("gtceu.tool.class." + s))
                         .collect(Component::empty, FormattingUtil::combineComponents,
                                 FormattingUtil::combineComponents)));
+    }
+
+    public static void clearSwingLock(java.util.UUID uuid) {
+        swingLocked.remove(uuid);
     }
 }

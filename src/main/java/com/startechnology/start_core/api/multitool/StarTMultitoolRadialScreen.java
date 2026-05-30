@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.startechnology.start_core.item.multitool.StarTMultitoolMode;
 import com.startechnology.start_core.network.StarTNetwork;
+import com.startechnology.start_core.network.packets.CPacketToggleSingleBlockMode;
 import com.startechnology.start_core.network.packets.CPacketUninstallMultitoolMode;
 
 import net.minecraft.ChatFormatting;
@@ -32,6 +33,10 @@ public class StarTMultitoolRadialScreen extends Screen {
 
     // Size of the icon drawn
     private static final int ICON_SIZE = 16;
+
+    // single block lock button width/height 
+    private static final int BUTTON_WIDTH = 26;
+    private static final int BUTTON_HEIGHT = 26;
 
     private final ItemStack stack;
     private final InteractionHand hand;
@@ -73,6 +78,16 @@ public class StarTMultitoolRadialScreen extends Screen {
         int centerX = width / 2;
         int centerY = height / 2;
         hoveredMode = getMouseMode(centerX, centerY, mouseX, mouseY);
+
+        boolean singleBlock = StarTMultitoolMode.isSingleBlockMode(stack);
+        StarTMultitoolRadialButton singleBlockButton = new StarTMultitoolRadialButton(
+            buttonX(), buttonY(), BUTTON_WIDTH, BUTTON_HEIGHT,
+            Component.translatable(
+                singleBlock
+                    ? "item.start_core.gregtech_multitool.single_block_on"
+                    : "item.start_core.gregtech_multitool.single_block_off"
+            )
+        );
 
         // full screen background
         graphics.fill(0, 0, width, height, 0x65000000);
@@ -140,6 +155,8 @@ public class StarTMultitoolRadialScreen extends Screen {
 
             pose.popPose(); 
         }
+
+        singleBlockButton.render(graphics, font, mouseX, mouseY, singleBlock);
     }
 
     private ItemStack getRepresentativeStack(StarTMultitoolMode mode) {
@@ -154,6 +171,18 @@ public class StarTMultitoolRadialScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        // radial button for single block mode first as click priority
+        boolean singleBlock = StarTMultitoolMode.isSingleBlockMode(stack);
+        StarTMultitoolRadialButton singleBlockButton = new StarTMultitoolRadialButton(
+            buttonX(), buttonY(), BUTTON_WIDTH, BUTTON_HEIGHT, Component.empty()
+        );
+        if (singleBlockButton.isHovered(mouseX, mouseY)) {
+            StarTNetwork.NETWORK.sendToServer(new CPacketToggleSingleBlockMode(hand));
+            StarTMultitoolMode.toggleSingleBlockMode(stack);
+            return true;
+        }
+
+
         StarTMultitoolMode mode = getMouseMode(width / 2, height / 2, mouseX, mouseY);
         if (mode != null) {
             if (hasShiftDown()) {
@@ -298,5 +327,14 @@ public class StarTMultitoolRadialScreen extends Screen {
 
     private double edgeAngle(double index) {
         return (Math.PI * 2.0D * index / installedModes.size()) - Math.PI / 2.0D;
+    }
+
+    // return location of button (should be to the right of the wheel)
+    private int buttonX() { 
+        return width / 2 + OUTER_RADIUS + 42; 
+    }
+
+    private int buttonY() { 
+        return height / 2 - BUTTON_HEIGHT / 2;
     }
 }

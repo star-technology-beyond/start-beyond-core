@@ -5,6 +5,8 @@ import com.lowdragmc.lowdraglib.networking.forge.LDLNetworkingImpl;
 import com.startechnology.start_core.StarTCore;
 import com.startechnology.start_core.network.packets.CPacketSetMultitoolMode;
 import com.startechnology.start_core.network.packets.CPacketUninstallMultitoolMode;
+import com.startechnology.start_core.network.packets.CPacketReleaseSingleBlockLock;
+import com.startechnology.start_core.network.packets.CPacketToggleSingleBlockMode;
 
 public class StarTNetwork {
     public static final INetworking NETWORK = LDLNetworkingImpl.createNetworking(
@@ -13,5 +15,7 @@ public class StarTNetwork {
     public static void init() {
         NETWORK.registerC2S(CPacketSetMultitoolMode.class);
         NETWORK.registerC2S(CPacketUninstallMultitoolMode.class);
+        NETWORK.registerC2S(CPacketReleaseSingleBlockLock.class);
+        NETWORK.registerC2S(CPacketToggleSingleBlockMode.class);
     }
 }

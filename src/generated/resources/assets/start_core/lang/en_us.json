@@ -506,6 +506,8 @@
   "item.start_core.gregtech_multitool.l9": "§7Middle clicking a block will attempt to select the best tool for the block's functions. If there are multiple options, the priority is the tool installation order with oldest first.",
   "item.start_core.gregtech_multitool.line": "§c§lGregTech Multitool",
   "item.start_core.gregtech_multitool.selected_mode": "Selected: %s",
+  "item.start_core.gregtech_multitool.single_block_off": "§7Single Block: OFF",
+  "item.start_core.gregtech_multitool.single_block_on": "§6Single Block: ON",
   "item.start_core.lucinducer": "Lucinducer",
   "item.start_core.lucinducer.tooltip1": "§7Copies and applies Dream-Link network information.",
   "item.start_core.lucinducer.tooltip2": "§7While held offhand, the stored network will be applied to any placed Dream-Link Hatch or Cover.",

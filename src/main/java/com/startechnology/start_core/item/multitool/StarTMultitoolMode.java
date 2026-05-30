@@ -21,7 +21,8 @@ public class StarTMultitoolMode {
     public static final String TAG_KEY = "multitoolMode";
     public static final String TAG_INSTALLED = "installedModes";
     public static final String TAG_MATERIAL = "modeMaterial";
-
+    public static final String TAG_SINGLE_BLOCK = "singleBlockMode";
+    
     // store the tool type and material of this mode
     private final GTToolType toolType;
     private final Material material;
@@ -237,5 +238,18 @@ public class StarTMultitoolMode {
     @Override
     public int hashCode() {
         return id().hashCode();
+    }
+
+    public static boolean isSingleBlockMode(ItemStack stack) {
+        CompoundTag tag = stack.getTag();
+        return tag != null && tag.getBoolean(TAG_SINGLE_BLOCK);
+    }
+
+    public static void setSingleBlockMode(ItemStack stack, boolean enabled) {
+        stack.getOrCreateTag().putBoolean(TAG_SINGLE_BLOCK, enabled);
+    }
+
+    public static void toggleSingleBlockMode(ItemStack stack) {
+        setSingleBlockMode(stack, !isSingleBlockMode(stack));
     }
 }
