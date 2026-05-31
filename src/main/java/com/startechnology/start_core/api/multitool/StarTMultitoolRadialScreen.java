@@ -1,12 +1,15 @@
 package com.startechnology.start_core.api.multitool;
 
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
+import com.gregtechceu.gtceu.common.data.GTMaterialItems;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.startechnology.start_core.item.multitool.StarTMultitoolMode;
 import com.startechnology.start_core.network.StarTNetwork;
 import com.startechnology.start_core.network.packets.CPacketToggleSingleBlockMode;
-import com.startechnology.start_core.network.packets.CPacketUninstallMultitoolMode;
+import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,7 +17,9 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.joml.Matrix4f;
 
 import java.util.List;
@@ -34,15 +39,41 @@ public class StarTMultitoolRadialScreen extends Screen {
     // Size of the icon drawn
     private static final int ICON_SIZE = 16;
 
-    // single block lock button width/height 
+    // single block lock button width/height
     private static final int BUTTON_WIDTH = 26;
     private static final int BUTTON_HEIGHT = 26;
 
+    // gap between outer radius and buttons
+    private static final int BUTTON_GAP = 42;
+
+    // colour of the entire screen
+    private static final int COL_SCREEN = 0x65000000;
+
+    // highlight circle colour when hovering an item
+    private static final int COL_HOVER_HIGHLIGHT_CIRCLE = 0x77FFAA00;
+
+    // colour of the centre label
+    private static final int COL_CENTRE_LABEL_NON_HOVER = 0xFFFFFFFF;
+    private static final int COL_CENTRE_LABEL_HOVER = 0xFFEFC75E;
+
+    // colour of the hints
+    private static final int COL_HINT_BASE = 0xFFBFC7D5;
+    private static final int COL_HINT_EJECT = 0xFFFF5555;
+
+    // colour of the circle segments for a mode
+    private static final int COL_SEGMENT = 0x99101418;
+    private static final int COL_SEGMENT_HOVER = 0x88EFC75E;
+
+    // current state of the radial screen
     private final ItemStack stack;
     private final InteractionHand hand;
     private StarTMultitoolMode hoveredMode;
     private StarTMultitoolMode selectedMode;
     private List<StarTMultitoolMode> installedModes;
+
+    // stacks used for button icons, we need to lazily load these
+    private ItemStack barrierStack;
+    private ItemStack steelGearStack;
 
     protected StarTMultitoolRadialScreen(ItemStack stack, InteractionHand hand) {
         super(Component.translatable("key.start_core.multitool_selector"));
@@ -50,6 +81,23 @@ public class StarTMultitoolRadialScreen extends Screen {
         this.hand = hand;
         this.installedModes = StarTMultitoolMode.getInstalled(stack);
         this.selectedMode = StarTMultitoolMode.getActive(stack);
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+
+        // lazily load the stacks, barrier should be guaranteed.
+        barrierStack = new ItemStack(Items.BARRIER);
+
+        // modifications to gt/in kjs may remove the steel gear,
+        // since we want good support we just default to compass if unavailable
+        try {
+            ItemEntry<? extends Item> entry = GTMaterialItems.MATERIAL_ITEMS.get(TagPrefix.gear, GTMaterials.Steel);
+            steelGearStack = (entry != null) ? new ItemStack(entry.get()) : new ItemStack(Items.COMPASS);
+        } catch (Exception e) {
+            steelGearStack = new ItemStack(Items.COMPASS);
+        }
     }
 
     @Override
@@ -79,23 +127,16 @@ public class StarTMultitoolRadialScreen extends Screen {
         int centerY = height / 2;
         hoveredMode = getMouseMode(centerX, centerY, mouseX, mouseY);
 
+        // make buttons for the different config/modes
         boolean singleBlock = StarTMultitoolMode.isSingleBlockMode(stack);
-        StarTMultitoolRadialButton singleBlockButton = new StarTMultitoolRadialButton(
-            buttonX(), buttonY(), BUTTON_WIDTH, BUTTON_HEIGHT,
-            Component.translatable(
-                singleBlock
-                    ? "item.start_core.gregtech_multitool.single_block_on"
-                    : "item.start_core.gregtech_multitool.single_block_off"
-            )
-        );
+        StarTMultitoolRadialButton singleBlockButton = singleBlockButton(singleBlock);
+        StarTMultitoolRadialButton configButton = configButton();
 
         // full screen background
-        graphics.fill(0, 0, width, height, 0x65000000);
+        graphics.fill(0, 0, width, height, COL_SCREEN);
 
         PoseStack pose = graphics.pose();
 
-        // draw the circle segments like
-        // effortless building
         pose.pushPose();
         drawModeCircleSegments(pose.last().pose(), centerX, centerY);
         pose.popPose();
@@ -109,29 +150,24 @@ public class StarTMultitoolRadialScreen extends Screen {
             int iconY = centerY + (int) Math.round(Math.sin(angle) * ICON_RADIUS) - ICON_SIZE / 2;
 
             ItemStack toolStack = getRepresentativeStack(mode);
-
             boolean hovered = mode == hoveredMode;
-            boolean active = mode == selectedMode;
 
-            // draw a small highlight circle behind the icon if active or hovered
-            if (hovered || active) {
-                int bgColor = hovered ? 0x77FFAA00 : 0x6658C7F3;
+            // draw a small highlight circle behind the icon if hovered
+            if (hovered) {
                 fillCircle(pose.last().pose(), iconX + ICON_SIZE / 2, iconY + ICON_SIZE / 2, ICON_SIZE / 2 + 4,
-                        bgColor);
+                        COL_HOVER_HIGHLIGHT_CIRCLE);
             }
 
-            // render the item
             if (!toolStack.isEmpty()) {
                 graphics.renderItem(toolStack, iconX, iconY);
             }
         }
 
-        // center area to show label & hints
+        // centre area for label & hints
         StarTMultitoolMode labelMode = hoveredMode == null ? selectedMode : hoveredMode;
-
         if (labelMode != null) {
             boolean isSneaking = hasShiftDown();
-            int labelColor = hoveredMode == null ? 0xFFFFFFFF : 0xFFEFC75E;
+            int labelColor = hoveredMode == null ? COL_CENTRE_LABEL_NON_HOVER : COL_CENTRE_LABEL_HOVER;
 
             // translate the next rendering in the pose
             // 250z up so we render ontop of items while in the pose
@@ -146,55 +182,51 @@ public class StarTMultitoolRadialScreen extends Screen {
                 graphics.drawCenteredString(font,
                         Component.translatable("key.start_core.multitool_selector.eject")
                                 .withStyle(ChatFormatting.RED),
-                        centerX, centerY + 4, 0xFFFF5555);
+                        centerX, centerY + 4, COL_HINT_EJECT);
             } else {
                 graphics.drawCenteredString(font,
                         Component.translatable("key.start_core.multitool_selector.hint"),
-                        centerX, centerY + 4, 0xFFBFC7D5);
+                        centerX, centerY + 4, COL_HINT_BASE);
             }
 
-            pose.popPose(); 
+            pose.popPose();
         }
 
+        // render our buttons on either side of the wheel
         singleBlockButton.render(graphics, font, mouseX, mouseY, singleBlock);
-    }
-
-    private ItemStack getRepresentativeStack(StarTMultitoolMode mode) {
-        try {
-            ItemStack result = ToolHelper.get(mode.toolType(), mode.material());
-            if (result != null && !result.isEmpty())
-                return result;
-        } catch (Exception ignored) {
-        }
-        return ItemStack.EMPTY;
+        configButton.render(graphics, font, mouseX, mouseY, false);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        // radial button for single block mode first as click priority
+        // single blocok button for single block mode first as click priority
         boolean singleBlock = StarTMultitoolMode.isSingleBlockMode(stack);
-        StarTMultitoolRadialButton singleBlockButton = new StarTMultitoolRadialButton(
-            buttonX(), buttonY(), BUTTON_WIDTH, BUTTON_HEIGHT, Component.empty()
-        );
-        if (singleBlockButton.isHovered(mouseX, mouseY)) {
+
+        if (singleBlockButton(singleBlock).isHovered(mouseX, mouseY)) {
             StarTNetwork.NETWORK.sendToServer(new CPacketToggleSingleBlockMode(hand));
             StarTMultitoolMode.toggleSingleBlockMode(stack);
             return true;
         }
 
+        // config button to show the auto select screen
+        if (configButton().isHovered(mouseX, mouseY)) {
+            minecraft.setScreen(new StarTMultitoolAutoSelectScreen(stack, hand));
+            return true;
+        }
 
+        // fall through to circle
         StarTMultitoolMode mode = getMouseMode(width / 2, height / 2, mouseX, mouseY);
         if (mode != null) {
             if (hasShiftDown()) {
                 eject(mode);
-                onClose();
             } else {
                 select(mode);
-                onClose();
             }
+            onClose();
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button); // Better default fallback
+
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
@@ -209,7 +241,7 @@ public class StarTMultitoolRadialScreen extends Screen {
 
     @Override
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
-        // letting to should select the hovered mode
+        // letting go should select the hovered mode
         if (StarTMultitoolClientEvents.OPEN_SELECTOR.matches(keyCode, scanCode)) {
             if (hoveredMode != null) {
                 select(hoveredMode);
@@ -218,6 +250,22 @@ public class StarTMultitoolRadialScreen extends Screen {
             return true;
         }
         return super.keyReleased(keyCode, scanCode, modifiers);
+    }
+
+    private StarTMultitoolRadialButton singleBlockButton(boolean singleBlock) {
+        return new StarTMultitoolRadialButton(
+                singleBlockButtonX(), buttonY(), BUTTON_WIDTH, BUTTON_HEIGHT,
+                barrierStack,
+                Component.translatable(singleBlock
+                        ? "item.start_core.gregtech_multitool.single_block_on"
+                        : "item.start_core.gregtech_multitool.single_block_off"));
+    }
+
+    private StarTMultitoolRadialButton configButton() {
+        return new StarTMultitoolRadialButton(
+                autoSelectConfigButtonX(), buttonY(), BUTTON_WIDTH, BUTTON_HEIGHT,
+                steelGearStack,
+                Component.translatable("item.start_core.gregtech_multitool.auto_select_btn"));
     }
 
     private void select(StarTMultitoolMode mode) {
@@ -261,14 +309,11 @@ public class StarTMultitoolRadialScreen extends Screen {
         // draw a segment per mode
         for (StarTMultitoolMode mode : installedModes) {
             int idx = installedModes.indexOf(mode);
-
             // if the mode is hovered then change the colour
-            int color = mode == hoveredMode ? 0x88EFC75E : mode == selectedMode ? 0x7058C7F3 : 0x99101418;
-            double start = edgeAngle(idx - 0.46D);
-            double end = edgeAngle(idx + 0.46D);
-
-            // add the circle segment for this mode
-            addCircleSegment(buffer, matrix, centerX, centerY, INNER_RADIUS, OUTER_RADIUS, start, end, color);
+            int color = mode == hoveredMode ? COL_SEGMENT_HOVER : COL_SEGMENT;
+            addCircleSegment(buffer, matrix, centerX, centerY,
+                    INNER_RADIUS, OUTER_RADIUS,
+                    edgeAngle(idx - 0.46D), edgeAngle(idx + 0.46D), color);
         }
 
         BufferUploader.drawWithShader(buffer.end());
@@ -321,7 +366,7 @@ public class StarTMultitoolRadialScreen extends Screen {
                 .endVertex();
     }
 
-    private double centerAngle(StarTMultitoolMode mode) {
+        private double centerAngle(StarTMultitoolMode mode) {
         return edgeAngle(installedModes.indexOf(mode));
     }
 
@@ -329,12 +374,27 @@ public class StarTMultitoolRadialScreen extends Screen {
         return (Math.PI * 2.0D * index / installedModes.size()) - Math.PI / 2.0D;
     }
 
-    // return location of button (should be to the right of the wheel)
-    private int buttonX() { 
-        return width / 2 + OUTER_RADIUS + 42; 
+    // should be to the right of the wheel
+    private int singleBlockButtonX() {
+        return width / 2 + OUTER_RADIUS + BUTTON_GAP;
     }
 
-    private int buttonY() { 
+    // should be to the left of the wheel
+    private int autoSelectConfigButtonX() {
+        return (width / 2) - OUTER_RADIUS - BUTTON_WIDTH - BUTTON_GAP;
+    }
+
+    private int buttonY() {
         return height / 2 - BUTTON_HEIGHT / 2;
+    }
+
+    private ItemStack getRepresentativeStack(StarTMultitoolMode mode) {
+        try {
+            ItemStack result = ToolHelper.get(mode.toolType(), mode.material());
+            if (result != null && !result.isEmpty())
+                return result;
+        } catch (Exception ignored) {
+        }
+        return ItemStack.EMPTY;
     }
 }

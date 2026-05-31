@@ -519,5 +519,13 @@ public class LangHandler {
         provider.add("item.start_core.gregtech_multitool.installed", "Installed Modes:");
         provider.add("item.start_core.gregtech_multitool.single_block_on", "§6Single Block: ON");
         provider.add("item.start_core.gregtech_multitool.single_block_off", "§7Single Block: OFF");
+        provider.add("item.start_core.gregtech_multitool.auto_select_btn", "§7Auto Config");
+        provider.add("item.start_core.gregtech_multitool.auto_select", "Auto Selecting Tool");
+        provider.add("item.start_core.gregtech_multitool.regex_pattern_placeholder", "regex pattern..");
+        provider.add("item.start_core.gregtech_multitool.auto_select_rules_header", "Customise Auto Select Rules");
+        provider.add("item.start_core.gregtech_multitool.pattern_header", "PATTERN");
+        provider.add("item.start_core.gregtech_multitool.tool_header", "TOOL");
+        provider.add("item.start_core.gregtech_multitool.add_btn", "ADD");
+        provider.add("item.start_core.gregtech_multitool.save_btn", "SAVE");
     }
 }
