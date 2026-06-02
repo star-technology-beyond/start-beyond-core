@@ -57,8 +57,10 @@ public class StarTWindTurbineProvider extends CapabilityBlockProvider<StarTWindT
         if (!capData.getBoolean("formed")) return;
 
         int euT = capData.getInt("euT");
-        if (euT <= 0) return;
-
+        if (euT <= 0) {
+            tooltip.add(Component.translatable(("wind.start_core.wind_controller.waiting_for_fluid")).withStyle(ChatFormatting.YELLOW));
+            return;
+        }
         tooltip.add(Component.translatable("gtceu.top.energy_production").append(" ").append(getEnergyProductionText(euT, capData.getInt("tier"))));
 
         if (capData.getBoolean("usingLubricant")) {

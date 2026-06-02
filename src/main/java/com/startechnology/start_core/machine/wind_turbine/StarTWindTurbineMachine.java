@@ -393,6 +393,10 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
         cachedBearing.setTargetSpeed(getTargetRPM());
     }
 
+    public boolean isContraptionAssemblingOrRunning() {
+        return cachedBearing != null && (cachedBearing.isAssembling() || cachedBearing.isRunning());
+    }
+
     // stops the bearing
     private void stopBearing() {
         if (cachedBearing == null)

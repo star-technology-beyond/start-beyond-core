@@ -107,6 +107,7 @@
   "block.start_core.hv1": "§7Extract primary, secondary, and tertiary outputs from bacterial colonies. §7The specific primary, secondary and tertiary outputs are determined by the §5Affinities §7of the bacteria.",
   "block.start_core.hv2": "§7The consumption of the bacteria scales with the §fMetabolism §7of the bacteria.",
   "block.start_core.hv3": "§7The amount fluid of output is base §fProduction§7 of the bacteria multiplied by their individual scalers.",
+  "block.start_core.hv_wind_turbine": "§6HV§r Wind Turbine",
   "block.start_core.iv_1024a_modular_conduit_node": "§9IV§r 1,024§eA§r Modular Conduit Node",
   "block.start_core.iv_1024a_modular_conduit_terminal": "§9IV§r 1,024§eA§r Modular Conduit Terminal",
   "block.start_core.iv_16a_modular_conduit_node": "§9IV§r 16§eA§r Modular Conduit Node",
@@ -201,6 +202,7 @@
   "block.start_core.modular_combustion_frame_tooltip_laser": "Can use §dLaser Hatches",
   "block.start_core.modular_interface_node": "Modular Interface Node",
   "block.start_core.modular_interface_terminal": "Modular Interface Terminal",
+  "block.start_core.mv_wind_turbine": "§bMV§r Wind Turbine",
   "block.start_core.neutronium_crate": "Neutronium Crate",
   "block.start_core.neutronium_drum": "Neutronium Drum",
   "block.start_core.oneiric_relay": "Oneiric Relay",
@@ -775,5 +777,6 @@
   "wind.start_core.wind_controller.energy": "§eGenerating:§f %s EU/t",
   "wind.start_core.wind_controller.lubricant_boost": "§6Lubricant Boost: §a+20%",
   "wind.start_core.wind_controller.seed_oil": "§6Running on Seed Oil",
+  "wind.start_core.wind_controller.waiting_for_fluid": "Waiting for Lubricant or Seed Oil",
   "wind.start_core.wind_controller.weather_boost": "§bWeather Boost: §f%sx"
 }

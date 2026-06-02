@@ -61,7 +61,9 @@ public class StarTWindTurbinePredicates {
 
             Boolean contraptionActive = blockWorldState.getMatchContext()
                     .getOrDefault(CONTRAPTION_ACTIVE_KEY, Boolean.FALSE);
-            return contraptionActive;
+            return contraptionActive
+                    || blockWorldState.getController() instanceof StarTWindTurbineMachine turbine
+                    && (turbine.isFormed() || turbine.isContraptionAssemblingOrRunning());
         }, () -> new BlockInfo[]{ new BlockInfo(blocks[0].defaultBlockState()) });
     }
 }

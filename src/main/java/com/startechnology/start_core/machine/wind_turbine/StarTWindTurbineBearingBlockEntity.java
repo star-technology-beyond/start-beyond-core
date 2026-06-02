@@ -100,35 +100,38 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
 
     @Override
     public void assemble() {
-        if (!(level.getBlockState(worldPosition).getBlock() instanceof BearingBlock))
-            return;
+        try {
+            if (!(level.getBlockState(worldPosition).getBlock() instanceof BearingBlock))
+                return;
 
-        if (cachedBladePositions.isEmpty()) return;
+            if (cachedBladePositions.isEmpty()) return;
 
-        Direction direction = getBlockState().getValue(BearingBlock.FACING);
-        BearingContraption contraption = new BearingContraption(false, direction);
-        
-        // set the anchor manually to the block
-        contraption.anchor = worldPosition.relative(direction);
-        contraption.bounds = new AABB(BlockPos.ZERO);
+            Direction direction = getBlockState().getValue(BearingBlock.FACING);
+            BearingContraption contraption = new BearingContraption(false, direction);
+            
+            // set the anchor manually to the block
+            contraption.anchor = worldPosition.relative(direction);
+            contraption.bounds = new AABB(BlockPos.ZERO);
 
-        // add all the blocks in the turbine blades to the contraption
-        for (BlockPos pos : cachedBladePositions) {
-            contraption.addBlock(level, pos, ((CreateContraptionAccessor)contraption).start_core$capture(level, pos));
+            // add all the blocks in the turbine blades to the contraption
+            for (BlockPos pos : cachedBladePositions) {
+                contraption.addBlock(level, pos, ((CreateContraptionAccessor)contraption).start_core$capture(level, pos));
+            }
+
+             // make the contraption from the blocks and begin updating it
+            contraption.removeBlocksFromWorld(level, BlockPos.ZERO);
+            movedContraption = ControlledContraptionEntity.create(level, this, contraption);
+            BlockPos anchor = worldPosition.relative(direction);
+            movedContraption.setPos(anchor.getX(), anchor.getY(), anchor.getZ());
+            movedContraption.setRotationAxis(direction.getAxis());
+            level.addFreshEntity(movedContraption);
+            running = true;
+            angle = 0;
+            sendData();
+            updateGeneratedRotation();
+        } finally {
+            isAssembling = false;
         }
-
-         // make the contraption from the blocks and begin updating it
-        contraption.removeBlocksFromWorld(level, BlockPos.ZERO);
-        movedContraption = ControlledContraptionEntity.create(level, this, contraption);
-        BlockPos anchor = worldPosition.relative(direction);
-        movedContraption.setPos(anchor.getX(), anchor.getY(), anchor.getZ());
-        movedContraption.setRotationAxis(direction.getAxis());
-        level.addFreshEntity(movedContraption);
-        running = true;
-        angle = 0;
-        sendData();
-        updateGeneratedRotation();
-        isAssembling = false;
     }
 
 

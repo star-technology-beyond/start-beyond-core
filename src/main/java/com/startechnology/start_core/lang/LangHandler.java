@@ -512,5 +512,6 @@ public class LangHandler {
         provider.add("wind.start_core.wind_controller.seed_oil", "§6Running on Seed Oil");
         provider.add("wind.start_core.wind_controller.weather_boost", "§bWeather Boost: §f%sx");
         provider.add("wind.start_core.wind_controller.crowding_penalty", "§cCrowding Penalty: -50%");
+        provider.add("wind.start_core.wind_controller.waiting_for_fluid", "Waiting for Lubricant or Seed Oil");
     }
 }
