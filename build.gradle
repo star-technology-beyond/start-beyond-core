@@ -29,6 +29,10 @@ loom {
     // and want loom to stop warning you about their license
     silentMojangMappingsLicense()
 
+    mixin {
+        defaultRefmapName.set("start_core.refmap.json")
+    }
+
     // since loom 0.10, you are **required** to use the
     // "forge" block to configure forge-specific features,
     // such as the mixinConfigs array or datagen

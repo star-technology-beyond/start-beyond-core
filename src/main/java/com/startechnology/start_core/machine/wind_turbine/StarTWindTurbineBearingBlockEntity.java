@@ -8,6 +8,7 @@ import java.util.Queue;
 import java.util.Set;
 
 import com.google.common.base.Supplier;
+import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.ControlledContraptionEntity;
 import com.simibubi.create.content.contraptions.bearing.BearingBlock;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEntity {
 
@@ -98,6 +100,27 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
         this.cachedBladePositions = positions;
     }
 
+    private void setContraptionCoilsActive(boolean active) {
+        if (movedContraption == null)
+            return;
+
+        var blocks = movedContraption.getContraption().getBlocks();
+        for (var entry : new ArrayList<>(blocks.entrySet())) {
+            var info = entry.getValue();
+            BlockState state = info.state();
+            if (!state.hasProperty(GTBlockStateProperties.ACTIVE)
+                    || state.getValue(GTBlockStateProperties.ACTIVE) == active)
+                continue;
+
+            movedContraption.setBlock(
+                    entry.getKey(),
+                    new StructureTemplate.StructureBlockInfo(
+                            info.pos(),
+                            state.setValue(GTBlockStateProperties.ACTIVE, active),
+                            info.nbt()));
+        }
+    }
+
     @Override
     public void assemble() {
         try {
@@ -115,7 +138,8 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
 
             // add all the blocks in the turbine blades to the contraption
             for (BlockPos pos : cachedBladePositions) {
-                contraption.addBlock(level, pos, ((CreateContraptionAccessor)contraption).start_core$capture(level, pos));
+                contraption.addBlock(level, pos,
+                        ((CreateContraptionAccessor)contraption).start_core$capture(level, pos));
             }
 
              // make the contraption from the blocks and begin updating it
@@ -125,6 +149,7 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
             movedContraption.setPos(anchor.getX(), anchor.getY(), anchor.getZ());
             movedContraption.setRotationAxis(direction.getAxis());
             level.addFreshEntity(movedContraption);
+            setContraptionCoilsActive(true);
             running = true;
             angle = 0;
             sendData();
@@ -143,7 +168,19 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
         // ELSE DA MULTIBLOCK CAN DISASSEMBLE IN A WEIRD PLACE AND 
         // EVERYONE WILL BE SAD :( !!!
         angle = 0;
-        applyRotation(); 
+        applyRotation();
+        if (movedContraption != null) {
+            movedContraption.getContraption().getBlocks().replaceAll((pos, info) -> {
+                BlockState state = info.state();
+                if (!state.hasProperty(GTBlockStateProperties.ACTIVE))
+                    return info;
+
+                return new StructureTemplate.StructureBlockInfo(
+                        info.pos(),
+                        state.setValue(GTBlockStateProperties.ACTIVE, false),
+                        info.nbt());
+            });
+        }
         super.disassemble();
     }
 

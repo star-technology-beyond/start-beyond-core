@@ -51,6 +51,7 @@ public class StarTMachines {
         StarTKomaruFrameMachines.init();
         StarTModularCombustionMachines.init();
         StarTCrossDimensionalLaserMachines.init();
+        StarTEnergyDynamos.init();
         StarTWindTurbineMachines.init();
     }
 }

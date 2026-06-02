@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.startechnology.start_core.StarTCore;
 import com.startechnology.start_core.machine.StarTMachineUtils;
+import com.startechnology.start_core.machine.StarTEnergyDynamos;
 import dev.latvian.mods.kubejs.KubeJS;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -65,7 +66,7 @@ public class StarTWindTurbineMachines {
                     .where("C", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("steel_frame")))
                     .where("D", Predicates.blocks(GTBlocks.STEEL_BRICKS_HULL.get()))
                     .where("E", Predicates.blocks(GTMachines.FLUID_IMPORT_HATCH[LV].getBlock()))
-                    .where("F", Predicates.blocks(GTMachines.ENERGY_OUTPUT_HATCH[MV].getBlock()))
+                    .where("F", Predicates.blocks(StarTEnergyDynamos.ENERGY_OUTPUT_HATCH_4A[MV].getBlock()))
                     .where("G", StarTWindTurbinePredicates.windTurbineBearing())
                     .where("H", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("steel_gearbox")))
                     .where("I", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("cupronickel_coil_block")))
@@ -84,13 +85,13 @@ public class StarTWindTurbineMachines {
 
                 case HV -> FactoryBlockPattern.start()
                     .aisle("         ", "         ", "         ", "         ", "         ", "         ", "         ", "    AA   ", "   A     ", "         ", "         ", "         ", "         ", "    AA   ", "   A     ", "         ", "         ", "         ") 
-                    .aisle("         ", "         ", "         ", "         ", "         ", "         ", "      A  ", "    B    ", "  A      ", "         ", "         ", "         ", "      A  ", "    B    ", "  A      ", "         ", "         ", "         ") 
-                    .aisle("   B B   ", "         ", "         ", "         ", "         ", "       A ", "         ", "    B    ", "         ", " A       ", "         ", "       A ", "         ", "    B    ", "         ", " A       ", "         ", "         ") 
-                    .aisle("  BCDCB  ", "   EFE   ", "   GEG   ", "    B    ", "A   E    ", "        A", "         ", "    B    ", "         ", "         ", "A        ", "        A", "         ", "    B    ", "         ", "         ", "A        ", "         ") 
-                    .aisle("  HCCCH  ", "  BEEEB  ", "   EEE   ", "   BIB   ", "A  EJE  A", "    I    ", "    K    ", "    K    ", "    K    ", "    K    ", "ABBBKBBBA", "    K    ", "    K    ", "    K    ", "    K    ", "    K    ", "A   K   A", "    L    ") 
-                    .aisle("  BCCCB  ", "   EEE   ", "   G@G   ", "    B    ", "    E   A", "A        ", "         ", "    B    ", "         ", "         ", "        A", "A        ", "         ", "    B    ", "         ", "         ", "        A", "         ") 
-                    .aisle("   BHB   ", "    B    ", "         ", "         ", "         ", " A       ", "         ", "    B    ", "         ", "       A ", "         ", " A       ", "         ", "    B    ", "         ", "       A ", "         ", "         ") 
-                    .aisle("         ", "         ", "         ", "         ", "         ", "         ", "  A      ", "    B    ", "      A  ", "         ", "         ", "         ", "  A      ", "    B    ", "      A  ", "         ", "         ", "         ") 
+                    .aisle("         ", "         ", "         ", "         ", "         ", "         ", "      A  ", "    N    ", "  A      ", "         ", "         ", "         ", "      A  ", "    N    ", "  A      ", "         ", "         ", "         ") 
+                    .aisle("   B B   ", "         ", "         ", "         ", "         ", "       A ", "         ", "    N    ", "         ", " A       ", "         ", "       A ", "         ", "    N    ", "         ", " A       ", "         ", "         ") 
+                    .aisle("  BCDCB  ", "   EFE   ", "   GEG   ", "    B    ", "A   E    ", "        A", "         ", "    N    ", "         ", "         ", "A        ", "        A", "         ", "    N    ", "         ", "         ", "A        ", "         ") 
+                    .aisle("  HCCCH  ", "  BEEEB  ", "   EEE   ", "   BIB   ", "A  EJE  A", "    O    ", "    K    ", "    K    ", "    K    ", "    K    ", "ANNNKNNNA", "    K    ", "    K    ", "    K    ", "    K    ", "    K    ", "A   K   A", "    L    ") 
+                    .aisle("  BCCCB  ", "   EEE   ", "   G@G   ", "    B    ", "    E   A", "A        ", "         ", "    N    ", "         ", "         ", "        A", "A        ", "         ", "    N    ", "         ", "         ", "        A", "         ") 
+                    .aisle("   BHB   ", "    B    ", "         ", "         ", "         ", " A       ", "         ", "    N    ", "         ", "       A ", "         ", " A       ", "         ", "    N    ", "         ", "       A ", "         ", "         ") 
+                    .aisle("         ", "         ", "         ", "         ", "         ", "         ", "  A      ", "    N    ", "      A  ", "         ", "         ", "         ", "  A      ", "    N    ", "      A  ", "         ", "         ", "         ") 
                     .aisle("         ", "         ", "         ", "         ", "         ", "         ", "         ", "   AA    ", "     A   ", "         ", "         ", "         ", "         ", "   AA    ", "     A   ", "         ", "         ", "         ") 
                     .where(" ", Predicates.any())
                     .where("A", StarTWindTurbinePredicates.windTurbineBlade(
@@ -99,13 +100,19 @@ public class StarTWindTurbineMachines {
                     .where("C", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("steel_turbine_casing")))
                     .where("D", Predicates.blocks(GTMachines.FLUID_IMPORT_HATCH[LV].getBlock()))
                     .where("E", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("clean_machine_casing")))
-                    .where("F", Predicates.blocks(GTMachines.ENERGY_OUTPUT_HATCH[HV].getBlock()))
+                    .where("F", Predicates.blocks(StarTEnergyDynamos.ENERGY_OUTPUT_HATCH_4A[HV].getBlock()))
                     .where("G", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("aluminium_frame")))
                     .where("H", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("black_steel_frame")))
                     .where("I", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("stainless_steel_gearbox")))
                     .where("J", StarTWindTurbinePredicates.windTurbineBearing())
-                    .where("K", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("stainless_steel_turbine_casing")))
-                    .where("L", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("kanthal_coil_block")))
+                    .where("K", StarTWindTurbinePredicates.windTurbineBlade(
+                        StarTMachineUtils.getGTCEuBlock("stainless_steel_turbine_casing")))
+                    .where("L", StarTWindTurbinePredicates.windTurbineBlade(
+                        StarTMachineUtils.getGTCEuBlock("kanthal_coil_block")))
+                    .where("N", StarTWindTurbinePredicates.windTurbineBlade(
+                        StarTMachineUtils.getGTCEuBlock("stainless_steel_frame")))
+                    .where("O", StarTWindTurbinePredicates.windTurbineBlade(
+                        StarTMachineUtils.getGTCEuBlock("stainless_steel_gearbox")))
                     .where("@", Predicates.controller(Predicates.blocks(definition.get())))
                     .build();
 
@@ -115,7 +122,7 @@ public class StarTWindTurbineMachines {
                     .aisle("##AAA##", "###@###", "#######", "###FGH#", "HGGFGH#", "HGGFGH#", "FFFMFFF", "#HGFGGH", "#HGFGGH", "#HGF###")
                     .where("#", Predicates.any())
                     .where("A", Predicates.blocks(StarTMachineUtils.getKjsBlock("high_steam_machine_casing")))
-                    .where("B", Predicates.blocks(GTMachines.ENERGY_OUTPUT_HATCH[tier].getBlock()))
+                    .where("B", Predicates.blocks(StarTEnergyDynamos.ENERGY_OUTPUT_HATCH_4A[tier].getBlock()))
                     .where("C", Predicates.blocks(GTBlocks.STEEL_BRICKS_HULL.get()))
                     .where("D", Predicates.blocks(GTBlocks.BRONZE_HULL.get()))
                     .where("W", StarTWindTurbinePredicates.windTurbineBearing())
@@ -149,7 +156,7 @@ public class StarTWindTurbineMachines {
     private static ResourceLocation getCasingTexture(int tier) {
         return switch (tier) {
             case MV -> GTCEu.id("block/casings/solid/machine_casing_solid_steel");
-            case HV -> GTCEu.id("block/casings/mechanic/machine_casing_turbine_stainless_steel");
+            case HV -> GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel");
             default -> KubeJS.id("block/casings/basic/high_steam_machine_casing");
         };
     }

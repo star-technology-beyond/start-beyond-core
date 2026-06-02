@@ -129,28 +129,12 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
     }
 
     public void doLogic() {
-        weatherMultiplier = getWeatherMultiplier();
-        isCrowded = StarTWindTurbineManager.hasNearbyTurbine(this, getCrowdingRadius());
 
-        usingLubricant = RecipeHelper.matchRecipe(this, lubricantRecipe).isSuccess()
-                && RecipeHelper.handleRecipeIO(this, lubricantRecipe, IO.IN, recipeLogic.getChanceCaches()).isSuccess();
-        usingSeedOil = false;
-
-        if (!usingLubricant) {
-            usingSeedOil = RecipeHelper.matchRecipe(this, seedOilRecipe).isSuccess()
-                    && RecipeHelper.handleRecipeIO(this, seedOilRecipe, IO.IN, recipeLogic.getChanceCaches())
-                            .isSuccess();
-
-            if (!usingSeedOil) {
-                euT = 0;
-                return;
-            }
-        }
-
-        double lubricantMultiplier = usingLubricant ? 1.2 : 1.0;
         double crowdingMultiplier = isCrowded ? 0.5 : 1.0;
+        double fluidMultiplier = usingSeedOil ? 0.85 : 1.0;
 
-        euT = Math.max(1, (int) (getBaseEuT() * lubricantMultiplier * weatherMultiplier * crowdingMultiplier));
+        euT = Math.max(1, (int) (GTValues.V[tier] * getOutputAmps() * fluidMultiplier * crowdingMultiplier));
+
     }
 
     public int getBaseEuT() {
@@ -160,6 +144,38 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
             case GTValues.HV -> 512;
             default -> (int) GTValues.V[tier];
         };
+    }
+
+    private double getOutputCurvePhase() {
+        long cycle = getLevel().getGameTime() / 75L;
+        double period = 60.0 * Math.PI;
+        long positionHash = getPos().asLong();
+
+        double offset = Math.floorMod(positionHash, 10_000L) / 10_000 * period;
+
+        return (cycle + offset) % period;
+    }
+
+    private double getOutputAmps() {
+        double cycles = getOutputCurvePhase();
+
+        double amps = 2.0 + Math.pow(Math.sin(cycles / 12.0), 2) + Math.abs(Math.cos(2.0 * cycles / 5.0));
+
+        amps *= switch (tier) {
+            case GTValues.MV -> 0.9;
+            case GTValues.HV -> 0.8;
+            default -> 1.0;
+        };
+
+        if (getLevel().isThundering()) {
+            return (amps + 4.0) / 2.0;
+        }
+
+        if (getLevel().isRaining()) {
+            return (amps + 2.0) / 1.5;
+        }
+
+        return amps;
     }
 
     public int getCrowdingRadius() {
@@ -173,21 +189,6 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
             case GTValues.HV -> 13;
             default -> 7;
         };
-    }
-
-    private double getWeatherMultiplier() {
-        var level = getLevel();
-
-        if (level.isThundering())
-            return 2.0;
-        if (level.isRaining())
-            return 1.5;
-
-        return 1.0;
-    }
-
-    public double getCurrentWeatherMultiplier() {
-        return weatherMultiplier;
     }
 
     private String getWeatherType() {
