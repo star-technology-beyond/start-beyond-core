@@ -10,6 +10,7 @@ import com.startechnology.start_core.machine.dreamlink.StarTDreamLinkHatches;
 import com.startechnology.start_core.machine.dreamlink.StarTDreamLinkTransmissionTowers;
 import com.startechnology.start_core.machine.drills.StarTDrillingRigs;
 import com.startechnology.start_core.machine.drum.StarTDrumMachines;
+import com.startechnology.start_core.machine.dyson_swarm.StarTDysonSwarmMachines;
 import com.startechnology.start_core.machine.fusion.StarTFusionMachines;
 import com.startechnology.start_core.machine.hellforge.StarTHellForgeMachines;
 import com.startechnology.start_core.machine.hpca.StarTHPCAParts;
@@ -45,6 +46,7 @@ public class StarTMachines {
         StarTThreadingStatBlocks.init();
         StarTCrates.init();
         StarTSolarMachines.init();
+        StarTDysonSwarmMachines.init();
         StarTModularConnectionHatches.init();
         StarTVacuumPumpMachines.init();
         StarTDrillingRigs.init();
