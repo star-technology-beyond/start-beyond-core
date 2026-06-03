@@ -47,7 +47,6 @@ public class StarTWindTurbineProvider extends CapabilityBlockProvider<StarTWindT
         data.putBoolean("usingLubricant", capability.isUsingLubricant());
         data.putBoolean("usingSeedOil", capability.isUsingSeedOil());
         data.putBoolean("isCrowded", capability.isCrowded());
-        data.putDouble("weatherMultiplier", capability.getCurrentWeatherMultiplier());
         data.putInt("tier", capability.getTier());
     }
 

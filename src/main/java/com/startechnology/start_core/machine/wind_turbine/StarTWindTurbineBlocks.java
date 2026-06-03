@@ -4,7 +4,7 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllContraptionTypes;
 import com.simibubi.create.api.contraption.ContraptionType;
 import com.simibubi.create.api.registry.CreateBuiltInRegistries;
-import com.simibubi.create.content.contraptions.bearing.BearingRenderer;
+import com.startechnology.start_core.machine.wind_turbine.client.StarTWindTurbineBearingRenderer;
 import com.startechnology.start_core.machine.StarTMachineUtils;
 
 import net.minecraft.core.Registry;
@@ -38,6 +38,7 @@ public class StarTWindTurbineBlocks {
     public static final BlockEntityEntry<StarTWindTurbineBearingBlockEntity> WIND_TURBINE_BEARING_BE =
         START_REGISTRATE
             .blockEntity("wind_turbine_bearing", StarTWindTurbineBearingBlockEntity::new)
+            .renderer(() -> StarTWindTurbineBearingRenderer::new)
             .validBlocks(WIND_TURBINE_BEARING)
             .register();
 
