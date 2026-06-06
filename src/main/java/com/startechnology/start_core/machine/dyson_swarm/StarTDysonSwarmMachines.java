@@ -26,7 +26,7 @@ import static com.startechnology.start_core.StarTCore.START_REGISTRATE;
 public class StarTDysonSwarmMachines {
 
     public static final MultiblockMachineDefinition T1_STELLAR_RAILGUN = START_REGISTRATE
-            .multiblock("uhv_railgun_module", (holder) -> new StarTDysonSwarmMachine(holder, "railgun", UHV))
+            .multiblock("uhv_dyson_railgun_module", (holder) -> new StarTDysonSwarmModule(holder, "railgun", UHV, StarTCore.resourceLocation("dyson_swarm_monitor")))
             .langValue("Basic Stellar Railgun Module [BSRM]")
 //            .tooltips()
 //            .paginatedTooltips()
@@ -61,7 +61,7 @@ public class StarTDysonSwarmMachines {
             ).register();
 
     public static final MultiblockMachineDefinition T2_STELLAR_RAILGUN = START_REGISTRATE
-            .multiblock("uev_railgun_module", (holder) -> new StarTDysonSwarmMachine(holder, "railgun", UEV))
+            .multiblock("uev_dyson_railgun_module", (holder) -> new StarTDysonSwarmModule(holder, "railgun", UEV, StarTCore.resourceLocation("dyson_swarm_monitor")))
             .langValue("Advanced Stellar Railgun Module [ASRM]")
 //            .tooltips()
 //            .paginatedTooltips()
@@ -96,7 +96,7 @@ public class StarTDysonSwarmMachines {
             ).register();
 
     public static final MultiblockMachineDefinition T3_STELLAR_RAILGUN = START_REGISTRATE
-            .multiblock("uiv_railgun_module", (holder) -> new StarTDysonSwarmMachine(holder, "railgun", UIV))
+            .multiblock("uiv_dyson_railgun_module", (holder) -> new StarTDysonSwarmModule(holder, "railgun", UIV, StarTCore.resourceLocation("dyson_swarm_monitor")))
             .langValue("Advanced II Stellar Railgun Module [A2SRM]")
 //            .tooltips()
 //            .paginatedTooltips()
@@ -120,7 +120,7 @@ public class StarTDysonSwarmMachines {
             ).register();
 
     public static final MultiblockMachineDefinition T1_PHOTONIC_ACCUMULATOR = START_REGISTRATE
-            .multiblock("uhv_photonic_accumulator", (holder) -> new StarTDysonSwarmMachine(holder, "receiver", UHV))
+            .multiblock("uhv_dyson_collector_module", (holder) -> new StarTDysonSwarmModule(holder, "receiver", UHV, StarTCore.resourceLocation("dyson_swarm_monitor")))
             .langValue("Basic Photonic Accumulator Module [BPAM]")
 //            .tooltips()
 //            .paginatedTooltips()
@@ -159,7 +159,7 @@ public class StarTDysonSwarmMachines {
             ).register();
 
     public static final MultiblockMachineDefinition T2_PHOTONIC_ACCUMULATOR = START_REGISTRATE
-            .multiblock("uev_photonic_accumulator", (holder) -> new StarTDysonSwarmMachine(holder, "receiver", UEV))
+            .multiblock("uev_dyson_collector_module", (holder) -> new StarTDysonSwarmModule(holder, "receiver", UEV, StarTCore.resourceLocation("dyson_swarm_monitor")))
             .langValue("Advanced Photonic Accumulator Module [APAM]")
 //            .tooltips()
 //            .paginatedTooltips()
@@ -201,7 +201,7 @@ public class StarTDysonSwarmMachines {
             ).register();
 
     public static final MultiblockMachineDefinition T3_PHOTONIC_ACCUMULATOR = START_REGISTRATE
-            .multiblock("uiv_photonic_accumulator", (holder) -> new StarTDysonSwarmMachine(holder, "receiver", UIV))
+            .multiblock("uiv_dyson_collector_module", (holder) -> new StarTDysonSwarmModule(holder, "receiver", UIV, StarTCore.resourceLocation("dyson_swarm_monitor")))
             .langValue("Advanced II Photonic Accumulator Module [A2PAM]")
 //            .tooltips()
 //            .paginatedTooltips()
@@ -224,7 +224,7 @@ public class StarTDysonSwarmMachines {
             ).register();
 
     public static final MultiblockMachineDefinition DYSON_SWARM_MONITOR = START_REGISTRATE
-            .multiblock("dyson_swarm_monitor", (holder) -> new StarTDysonSwarmMachine(holder, "monitor", UHV))
+            .multiblock("dyson_swarm_monitor", (holder) -> new StarTDysonSwarmMachine(holder, StarTCore.resourceLocation("uhv_dyson_collector_module"), StarTCore.resourceLocation("uev_dyson_collector_module"), StarTCore.resourceLocation("uiv_dyson_collector_module"), StarTCore.resourceLocation("uhv_dyson_railgun_module"), StarTCore.resourceLocation("uev_dyson_railgun_module"), StarTCore.resourceLocation("uiv_dyson_railgun_module"))) //there's surely a better way to write out these resource locations....
             .langValue("Dyson Swarm Monitor [DSM]")
 //            .tooltips()
 //            .paginatedTooltips()
