@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.common.data.GCYMBlocks;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.startechnology.start_core.StarTCore;
+import com.startechnology.start_core.block.fusion.StarTFusionBlocks;
 import com.startechnology.start_core.machine.StarTMachineUtils;
 import com.startechnology.start_core.machine.StarTPartAbility;
 import dev.latvian.mods.kubejs.KubeJS;
@@ -31,20 +32,33 @@ public class StarTDysonSwarmMachines {
 //            .paginatedTooltips()
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
-//            .appearanceBlock()
+            .appearanceBlock(() -> StarTMachineUtils.getKjsBlock("superdense_machine_casing"))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA")
-                    .aisle("C@B")
-                    .aisle("AAA")
-                    .where("A", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get())
-                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
-                    )
-                    .where("B", Predicates.abilities(StarTPartAbility.MODULAR_TERMINAL))
-                    .where("C", Predicates.abilities(PartAbility.INPUT_LASER))
+                    .aisle(" A   A ", " A B A ", "   B   ", "   B   ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("AC A CA", "ADDDDDA", " D E D ", " D E D ", " D E D ", " D E D ", "   E   ", "       ", "   E   ", "       ", "       ", "       ", "       ", "       ")
+                    .aisle(" A A A ", " DFFFD ", "       ", " G   G ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("  AHA  ", " DFIFD ", " E   E ", " E   E ", " E   E ", " E   E ", " E   E ", "       ", " I   I ", "       ", " E   E ", "       ", "       ", "       ")
+                    .aisle(" A A A ", " DFFFD ", " D   D ", " D   D ", "       ", " G   G ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("ACAGACA", "AAGJGAA", " A G A ", " DD@DD ", " D G D ", " DGGGD ", " D G D ", " DGGGD ", "   G   ", "  GGG  ", "   G   ", "   G   ", "   G   ", "   G   ")
+                    .aisle(" A   A ", " A   A ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .where(" ", Predicates.any())
+                    .where("A", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("hsse_frame")))
+                    .where("B", Predicates.blocks(StarTMachineUtils.getKjsBlock("enriched_naquadah_engine_intake_casing")))
+                    .where("C", Predicates.blocks(StarTMachineUtils.getKjsBlock("enriched_naquadah_pipe_casing")))
+                    .where("D", Predicates.blocks(StarTMachineUtils.getKjsBlock("superdense_machine_casing"))
+                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(2)))
+                    .where("E", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("superconducting_coil")))
+                    .where("F", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("atomic_casing")))
+                    .where("G", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("neutronium_frame")))
+                    .where("H", Predicates.abilities(StarTPartAbility.MODULAR_TERMINAL))
+                    .where("I", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("high_power_casing")))
+                    .where("J", Predicates.abilities(PartAbility.INPUT_LASER))
                     .where("@", Predicates.controller(Predicates.blocks(definition.get())))
-                    .build())
-//            .workableCasingModel()
-            .register();
+                    .build()
+            ).workableCasingModel(
+                    KubeJS.id("block/casings/abydos_multis/superdense_machine_casing"),
+                    StarTCore.resourceLocation("block/overlay/cross_dimensional_laser")
+            ).register();
 
     public static final MultiblockMachineDefinition T2_STELLAR_RAILGUN = START_REGISTRATE
             .multiblock("uev_railgun_module", (holder) -> new StarTDysonSwarmMachine(holder, "railgun", UEV))
@@ -53,20 +67,33 @@ public class StarTDysonSwarmMachines {
 //            .paginatedTooltips()
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
-//            .appearanceBlock()
+            .appearanceBlock(() -> StarTMachineUtils.getKjsBlock("draneko_casing"))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA")
-                    .aisle("C@B")
-                    .aisle("AAA")
-                    .where("A", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get())
-                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
-                    )
-                    .where("B", Predicates.abilities(StarTPartAbility.MODULAR_TERMINAL))
-                    .where("C", Predicates.abilities(PartAbility.INPUT_LASER))
+                    .aisle("       ", "   A   ", "   A   ", "   A   ", "   A   ", "   A   ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .aisle(" AAAAA ", " B A B ", "  CDC  ", "       ", "       ", "  DCD  ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("A     A", "   E   ", "B     B", "B     B", "       ", "       ", "       ", "       ", "D     D", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("A  F  A", "  BBB  ", "G     G", "       ", "B     B", "B     B", "       ", "       ", "C     C", "       ", "       ", "D     D", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("       ", " EBEBE ", "G     G", "       ", "G     G", "       ", "B     B", "B     B", "D     D", "       ", "       ", "C     C", "       ", "       ", "D     D", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("A     A", "G BBB G", "       ", "G     G", "       ", "G     G", "       ", "       ", "B     B", "B     B", "B     B", "D     D", "       ", "       ", "C     C", "       ", "       ", "D     D", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("A     A", "A  E  A", "       ", "G     G", "       ", "B     B", "B     B", "B     B", "       ", "       ", "G     G", "B     B", "B     B", "B     B", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("GAA AAG", " AAEAA ", " B   B ", " B   B ", " B   B ", "  B B  ", " GB BG ", "  BAB  ", " G A G ", "  GAG  ", "   A   ", " G A G ", "  GAG  ", "   A   ", " B A B ", " BGAGB ", " B A B ", "  BAB  ", "  BAB  ", "  BAB  ", "   A   ", "   A   ", "   A   ", "   A   ")
+                    .aisle(" GAHAG ", " GGAGG ", "  G@G  ", "  GAG  ", "   A   ", "   A   ", "   A   ", "   A   ", "   G   ", "   G   ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .where(" ", Predicates.any())
+                    .where("A", Predicates.blocks(StarTMachineUtils.getKjsBlock("draneko_casing"))
+                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(2)))
+                    .where("B", Predicates.blocks(StarTMachineUtils.getKjsBlock("advanced_assembly_casing")))
+                    .where("C", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("superconducting_coil")))
+                    .where("D", Predicates.blocks(StarTFusionBlocks.ADVANCED_FUSION_COIL.get()))
+                    .where("E", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("noble_mixing_casing")))
+                    .where("F", Predicates.abilities(StarTPartAbility.MODULAR_TERMINAL))
+                    .where("G", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("astrenalloy_nx_frame")))
+                    .where("H", Predicates.abilities(PartAbility.INPUT_LASER))
                     .where("@", Predicates.controller(Predicates.blocks(definition.get())))
-                    .build())
-//            .workableCasingModel()
-            .register();
+                    .build()
+            ).workableCasingModel(
+                    KubeJS.id("block/casings/end_multis/draneko_casing"),
+                    StarTCore.resourceLocation("block/overlay/cross_dimensional_laser")
+            ).register();
 
     public static final MultiblockMachineDefinition T3_STELLAR_RAILGUN = START_REGISTRATE
             .multiblock("uiv_railgun_module", (holder) -> new StarTDysonSwarmMachine(holder, "railgun", UIV))
@@ -75,20 +102,22 @@ public class StarTDysonSwarmMachines {
 //            .paginatedTooltips()
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
-//            .appearanceBlock()
+            .appearanceBlock(() -> StarTMachineUtils.getKjsBlock("draneko_casing"))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA")
-                    .aisle("C@B")
-                    .aisle("AAA")
+                    .aisle("A", "A", "A")
+                    .aisle("C", "@", "B")
+                    .aisle("A", "A", "A")
                     .where("A", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get())
                             .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
                     )
                     .where("B", Predicates.abilities(StarTPartAbility.MODULAR_TERMINAL))
                     .where("C", Predicates.abilities(PartAbility.INPUT_LASER))
                     .where("@", Predicates.controller(Predicates.blocks(definition.get())))
-                    .build())
-//            .workableCasingModel()
-            .register();
+                    .build()
+            ).workableCasingModel(
+                    KubeJS.id("block/casings/end_multis/draneko_casing"),
+                    StarTCore.resourceLocation("block/overlay/cross_dimensional_laser")
+            ).register();
 
     public static final MultiblockMachineDefinition T1_PHOTONIC_ACCUMULATOR = START_REGISTRATE
             .multiblock("uhv_photonic_accumulator", (holder) -> new StarTDysonSwarmMachine(holder, "receiver", UHV))
@@ -98,18 +127,36 @@ public class StarTDysonSwarmMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .generator(true)
-//            .appearanceBlock()
+            .appearanceBlock(() -> StarTMachineUtils.getKjsBlock("superdense_machine_casing"))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA")
-                    .aisle("B@C")
-                    .aisle("AAA")
-                    .where("A", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
-                    .where("B", Predicates.abilities(StarTPartAbility.MODULAR_TERMINAL))
-                    .where("C", Predicates.abilities(PartAbility.OUTPUT_LASER))
+                    .aisle("     ", "  A  ", "  A  ", "  A  ", "     ", "     ", "     ", "     ", "     ")
+                    .aisle("B   B", "BCCCB", "DEFED", "DEFED", "DEFED", "GCCCG", "H   H", "     ", "     ")
+                    .aisle("  D  ", "CIEIC", "E   E", "E   E", "E   E", "CCCCC", " JKJ ", "  C  ", "     ")
+                    .aisle(" DLD ", "CEEEC", "F M F", "F M F", "F M F", "CCFCC", " KFK ", " CFC ", "  F  ")
+                    .aisle("  D  ", "CIEIC", "E   E", "E   E", "E   E", "CCCCC", " JKJ ", "  C  ", "     ")
+                    .aisle("B   B", "BC@CB", "DEOED", "DEOED", "DEOED", "GCNCG", "H   H", "     ", "     ")
+                    .where(" ", Predicates.any())
+                    .where("A", Predicates.blocks(StarTMachineUtils.getKjsBlock("enriched_naquadah_engine_intake_casing")))
+                    .where("B", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("nonconducting_casing")))
+                    .where("C", Predicates.blocks(StarTMachineUtils.getKjsBlock("superdense_machine_casing")))
+                    .where("D", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("neutronium_frame")))
+                    .where("E", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("high_power_casing")))
+                    .where("F", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("superconducting_coil")))
+                    .where("G", Predicates.blocks(StarTMachineUtils.getKjsBlock("melodium_casing")))
+                    .where("H", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("birmabright_frame")))
+                    .where("I", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("advanced_computer_casing")))
+                    .where("J", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("computer_heat_vent")))
+                    .where("K", Predicates.blocks(StarTMachineUtils.getKjsBlock("zalloy_coil_block")))
+                    .where("L", Predicates.abilities(StarTPartAbility.MODULAR_TERMINAL))
+                    .where("M", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("uhv_ultimate_battery")))
+                    .where("N", Predicates.abilities(PartAbility.OUTPUT_LASER)) //"gtceu:uhv_4096a_laser_source_hatch"
+                    .where("O", Predicates.blocks(StarTMachineUtils.getKjsBlock("reinforced_fusion_glass")))
                     .where("@", Predicates.controller(Predicates.blocks(definition.get())))
-                    .build())
-//            .workableCasingModel()
-            .register();
+                    .build()
+            ).workableCasingModel(
+                    KubeJS.id("block/casings/abydos_multis/superdense_machine_casing"),
+                    StarTCore.resourceLocation("block/overlay/cross_dimensional_laser")
+            ).register();
 
     public static final MultiblockMachineDefinition T2_PHOTONIC_ACCUMULATOR = START_REGISTRATE
             .multiblock("uev_photonic_accumulator", (holder) -> new StarTDysonSwarmMachine(holder, "receiver", UEV))
@@ -119,18 +166,39 @@ public class StarTDysonSwarmMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .generator(true)
-//            .appearanceBlock()
+            .appearanceBlock(() -> StarTMachineUtils.getKjsBlock("advanced_assembly_casing"))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA")
-                    .aisle("B@C")
-                    .aisle("AAA")
-                    .where("A", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
-                    .where("B", Predicates.abilities(StarTPartAbility.MODULAR_TERMINAL))
-                    .where("C", Predicates.abilities(PartAbility.OUTPUT_LASER))
+                    .aisle(" A   A ", " ABCBA ", "  CCC  ", " ABCBA ", " A   A ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("AA   AA", "ADAAADA", " E   E ", "ADAAADA", "AAFFFAA", " G   G ", " G   G ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .aisle("AA   AA", "BDDDDDB", "B HIH B", "BDDDDDB", "AJJJJJA", "GJBBBJG", "GJBKBJG", " AEEEA ", " JBKBJ ", " JBBBJ ", " GJJJG ", "       ", "       ", "  AAA  ", "   G   ", "       ", "       ", "       ")
+                    .aisle("   L   ", "BADDDAB", "K IHI K", "BADDDAB", "GCM MCG", " B E B ", " EM ME ", " J E J ", " EM ME ", " B E B ", " JM MJ ", "  ANA  ", "  AAA  ", " A   A ", "       ", "   G   ", "       ", "       ")
+                    .aisle("   A   ", "BADDDAB", "K HIH K", "BADDDAB", " C E C ", " BM MB ", " E E E ", " JM MJ ", " E E E ", " BM MB ", " J E J ", "  NJN  ", "  AAA  ", " A A A ", " G A G ", "  GAG  ", "   A   ", "   E   ")
+                    .aisle("   A   ", "BADDDAB", "K IHI K", "BADDDAB", "GCM MCG", " B E B ", " EM ME ", " J E J ", " EM ME ", " B E B ", " JM MJ ", "  ANA  ", "  AAA  ", " A   A ", "       ", "   G   ", "       ", "       ")
+                    .aisle("AA   AA", "BDDDDDB", "BDHIH B", "BDDDDDB", "AJJJJJA", "GJBBBJG", "GJBKBJG", " AEEEA ", " JBKBJ ", " JBBBJ ", " GJJJG ", "       ", "       ", "  AAA  ", "   G   ", "       ", "       ", "       ")
+                    .aisle("AA   AA", "ADAAADA", " E   E ", "ADAAADA", "AACCCAA", " G   G ", " G   G ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .aisle(" A   A ", " ABOBA ", "  B@B  ", " ABBBA ", " A   A ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ", "       ")
+                    .where(" ", Predicates.any())
+                    .where("A", Predicates.blocks(StarTMachineUtils.getKjsBlock("draneko_casing")))
+                    .where("B", Predicates.blocks(StarTMachineUtils.getKjsBlock("advanced_assembly_casing")))
+                    .where("C", Predicates.blocks(StarTMachineUtils.getKjsBlock("enriched_naquadah_engine_intake_casing")))
+                    .where("D", Predicates.blocks(StarTMachineUtils.getKjsBlock("extreme_temperature_smelting_casing")))
+                    .where("E", Predicates.blocks(StarTMachineUtils.getKjsBlock("magmada_alloy_coil_block")))
+                    .where("F", Predicates.blocks(StarTMachineUtils.getKjsBlock("enriched_naquadah_firebox_casing")))
+                    .where("G", Predicates.blocks(StarTMachineUtils.getKjsBlock("astrenalloy_nx_frame")))
+                    .where("H", Predicates.blocks(StarTMachineUtils.getKjsBlock("reinforced_brimstone_casing")))
+                    .where("I", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("uhv_ultimate_battery")))
+                    .where("J", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("atomic_casing")))
+                    .where("K", Predicates.blocks(StarTMachineUtils.getKjsBlock("draco_resilient_fusion_glass")))
+                    .where("L", Predicates.abilities(StarTPartAbility.MODULAR_TERMINAL))
+                    .where("M", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("superconducting_coil")))
+                    .where("N", Predicates.blocks(StarTMachineUtils.getKjsBlock("melodium_casing")))
+                    .where("O", Predicates.abilities(PartAbility.OUTPUT_LASER))
                     .where("@", Predicates.controller(Predicates.blocks(definition.get())))
-                    .build())
-//            .workableCasingModel()
-            .register();
+                    .build()
+            ).workableCasingModel(
+                    KubeJS.id("block/casings/end_multis/draneko_casing"),
+                    StarTCore.resourceLocation("block/overlay/cross_dimensional_laser")
+            ).register();
 
     public static final MultiblockMachineDefinition T3_PHOTONIC_ACCUMULATOR = START_REGISTRATE
             .multiblock("uiv_photonic_accumulator", (holder) -> new StarTDysonSwarmMachine(holder, "receiver", UIV))
@@ -140,18 +208,20 @@ public class StarTDysonSwarmMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .generator(true)
-//            .appearanceBlock()
+            .appearanceBlock(() -> StarTMachineUtils.getKjsBlock("advanced_assembly_casing"))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA")
-                    .aisle("B@C")
-                    .aisle("AAA")
+                    .aisle("A", "A", "A")
+                    .aisle("B", "@", "C")
+                    .aisle("A", "A", "A")
                     .where("A", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
                     .where("B", Predicates.abilities(StarTPartAbility.MODULAR_TERMINAL))
                     .where("C", Predicates.abilities(PartAbility.OUTPUT_LASER))
                     .where("@", Predicates.controller(Predicates.blocks(definition.get())))
-                    .build())
-//            .workableCasingModel()
-            .register();
+                    .build()
+            ).workableCasingModel(
+                    KubeJS.id("block/casings/end_multis/draneko_casing"),
+                    StarTCore.resourceLocation("block/overlay/cross_dimensional_laser")
+            ).register();
 
     public static final MultiblockMachineDefinition DYSON_SWARM_MONITOR = START_REGISTRATE
             .multiblock("dyson_swarm_monitor", (holder) -> new StarTDysonSwarmMachine(holder, "monitor", UHV))
@@ -221,8 +291,7 @@ public class StarTDysonSwarmMachines {
             ).workableCasingModel(
                     KubeJS.id("block/casings/abydos_multis/noble_mixing_casing"),
                     StarTCore.resourceLocation("block/overlay/cross_dimensional_laser")
-            )
-            .register();
+            ).register();
 
     public static void init() {
     }
