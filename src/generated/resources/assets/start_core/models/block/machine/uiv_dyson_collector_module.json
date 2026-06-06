@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/block",
   "loader": "gtceu:machine",
-  "machine": "start_core:uiv_photonic_accumulator",
+  "machine": "start_core:uiv_dyson_collector_module",
   "texture_overrides": {
     "all": "kubejs:block/casings/end_multis/draneko_casing"
   },
