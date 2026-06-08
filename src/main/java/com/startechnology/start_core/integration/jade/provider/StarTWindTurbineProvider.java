@@ -46,6 +46,7 @@ public class StarTWindTurbineProvider extends CapabilityBlockProvider<StarTWindT
         data.putInt("euT", capability.getEuT());
         data.putBoolean("usingLubricant", capability.isUsingLubricant());
         data.putBoolean("usingSeedOil", capability.isUsingSeedOil());
+        data.putBoolean("usingFishOil", capability.isUsingFishOil());
         data.putBoolean("isCrowded", capability.isCrowded());
         data.putInt("tier", capability.getTier());
     }
@@ -63,17 +64,17 @@ public class StarTWindTurbineProvider extends CapabilityBlockProvider<StarTWindT
         tooltip.add(Component.translatable("gtceu.top.energy_production").append(" ").append(getEnergyProductionText(euT, capData.getInt("tier"))));
 
         if (capData.getBoolean("usingLubricant")) {
-            tooltip.add(Component.translatable("wind.start_core.wind_controller.lubricant_boost"));
+            tooltip.add(Component.translatable("wind.start_core.wind_controller.fluid",
+                Component.translatable("wind.start_core.wind_controller.lubricant")));
+            tooltip.add(Component.translatable("wind.start_core.wind_controller.output_modifier.full"));
         } else if (capData.getBoolean("usingSeedOil")) {
-            tooltip.add(Component.translatable("wind.start_core.wind_controller.seed_oil"));
-        }
-
-        double weatherMultiplier = capData.getDouble("weatherMultiplier");
-        if (weatherMultiplier > 1.0) {
-            tooltip.add(Component.translatable(
-                "wind.start_core.wind_controller.weather_boost",
-                FormattingUtil.formatNumbers(weatherMultiplier)
-            ));
+            tooltip.add(Component.translatable("wind.start_core.wind_controller.fluid",
+                Component.translatable("wind.start_core.wind_controller.seed_oil")));
+            tooltip.add(Component.translatable("wind.start_core.wind_controller.output_modifier.debuff"));
+        } else if (capData.getBoolean("usingFishOil")) {
+            tooltip.add(Component.translatable("wind.start_core.wind_controller.fluid",
+                Component.translatable("wind.start_core.wind_controller.fish_oil")));
+            tooltip.add(Component.translatable("wind.start_core.wind_controller.output_modifier.debuff"));
         }
 
         if (capData.getBoolean("isCrowded")) {

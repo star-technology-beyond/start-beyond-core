@@ -18,11 +18,13 @@
     "MultiblockControllerMachineMixin",
     "ParallelHatchPartMachineAccessor",
     "ParallelHatchPartMachineMixin",
+    "RecipeLogicMinimumParallelMixin",
     "ResearchManagerDataItemMixin",
     "CreateContraptionAccessor",
     "WireRecipeHandlerMixin",
     "WorkableElectricMultiblockMachineAccessor",
     "WorkableElectricMultiblockMachineMixin",
+    "WorkableMultiblockMachineMinimumParallelMixin",
     "compat.FakeSlotDropTargetMixin"
   ],
   "client": [

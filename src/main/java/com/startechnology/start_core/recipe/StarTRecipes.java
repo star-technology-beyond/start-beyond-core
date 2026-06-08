@@ -15,5 +15,7 @@ public class StarTRecipes {
         CrateRecipes.init(provider);
         DustBlockRecipeHandler.init(provider);
         CustomMaterialTypesRecipes.init(provider);
+        StarTDynamoHatches.init(provider);
+        WindTurbineRecipes.init(provider);
     }
 }

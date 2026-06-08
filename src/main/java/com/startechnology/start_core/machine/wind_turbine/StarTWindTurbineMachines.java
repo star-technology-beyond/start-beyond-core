@@ -117,8 +117,8 @@ public class StarTWindTurbineMachines {
                     .build();
 
                 default -> FactoryBlockPattern.start()
-                    .aisle("##ABA##", "###C###", "#######", "#######", "#######", "#######", "###D###", "#######", "#######", "#######")
-                    .aisle("##AEA##", "##CAC##", "###A###", "###A###", "###A###", "###A###", "###W###", "#######", "#######", "#######")
+                    .aisle("##AEA##", "###B###", "#######", "#######", "#######", "#######", "###D###", "#######", "#######", "#######")
+                    .aisle("##AAA##", "##CAC##", "###A###", "###A###", "###A###", "###A###", "###W###", "#######", "#######", "#######")
                     .aisle("##AAA##", "###@###", "#######", "###FGH#", "HGGFGH#", "HGGFGH#", "FFFMFFF", "#HGFGGH", "#HGFGGH", "#HGF###")
                     .where("#", Predicates.any())
                     .where("A", Predicates.blocks(StarTMachineUtils.getKjsBlock("high_steam_machine_casing")))

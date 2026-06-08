@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
+import com.startechnology.start_core.machine.parallel.IStarTMinimumParallelBlockCache;
 import com.startechnology.start_core.machine.parallel.IStarTMinimumParallelHatch;
 import com.startechnology.start_core.machine.parallel.StarTAbsoluteParallelHatchMachine;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,6 +28,9 @@ public class GTRecipeModifiersMixin {
             var minimumParallels = hatch instanceof IStarTMinimumParallelHatch minHatch ? minHatch.start_core$getMinimumParallels() : 1;
 
             if (maximumParallels < minimumParallels) {
+                if (controller instanceof IStarTMinimumParallelBlockCache cache) {
+                    cache.start_core$markMinimumParallelBlocked(recipe);
+                }
                 cir.setReturnValue(ModifierFunction.NULL);
                 return;
             }
