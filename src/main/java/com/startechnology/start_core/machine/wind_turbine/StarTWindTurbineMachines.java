@@ -4,6 +4,7 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
+import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.registry.registrate.MultiblockMachineBuilder;
@@ -12,7 +13,6 @@ import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.startechnology.start_core.StarTCore;
 import com.startechnology.start_core.machine.StarTMachineUtils;
-import com.startechnology.start_core.machine.StarTEnergyDynamos;
 import dev.latvian.mods.kubejs.KubeJS;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -66,7 +66,7 @@ public class StarTWindTurbineMachines {
                     .where("C", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("steel_frame")))
                     .where("D", Predicates.blocks(GTBlocks.STEEL_BRICKS_HULL.get()))
                     .where("E", Predicates.blocks(GTMachines.FLUID_IMPORT_HATCH[LV].getBlock()))
-                    .where("F", Predicates.blocks(StarTEnergyDynamos.ENERGY_OUTPUT_HATCH_4A[MV].getBlock()))
+                    .where("F", Predicates.abilities(PartAbility.OUTPUT_ENERGY))
                     .where("G", StarTWindTurbinePredicates.windTurbineBearing())
                     .where("H", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("steel_gearbox")))
                     .where("I", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("cupronickel_coil_block")))
@@ -100,7 +100,7 @@ public class StarTWindTurbineMachines {
                     .where("C", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("steel_turbine_casing")))
                     .where("D", Predicates.blocks(GTMachines.FLUID_IMPORT_HATCH[LV].getBlock()))
                     .where("E", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("clean_machine_casing")))
-                    .where("F", Predicates.blocks(StarTEnergyDynamos.ENERGY_OUTPUT_HATCH_4A[HV].getBlock()))
+                    .where("F", Predicates.abilities(PartAbility.OUTPUT_ENERGY))
                     .where("G", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("aluminium_frame")))
                     .where("H", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("black_steel_frame")))
                     .where("I", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("stainless_steel_gearbox")))
@@ -122,7 +122,7 @@ public class StarTWindTurbineMachines {
                     .aisle("##AAA##", "###@###", "#######", "###FGH#", "HGGFGH#", "HGGFGH#", "FFFMFFF", "#HGFGGH", "#HGFGGH", "#HGF###")
                     .where("#", Predicates.any())
                     .where("A", Predicates.blocks(StarTMachineUtils.getKjsBlock("high_steam_machine_casing")))
-                    .where("B", Predicates.blocks(StarTEnergyDynamos.ENERGY_OUTPUT_HATCH_4A[tier].getBlock()))
+                    .where("B", Predicates.abilities(PartAbility.OUTPUT_ENERGY))
                     .where("C", Predicates.blocks(GTBlocks.STEEL_BRICKS_HULL.get()))
                     .where("D", Predicates.blocks(GTBlocks.BRONZE_HULL.get()))
                     .where("W", StarTWindTurbinePredicates.windTurbineBearing())
