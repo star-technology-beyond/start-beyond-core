@@ -89,6 +89,7 @@ public class StarTCore {
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
+        StarTCoreClient.onClientSetup(event);
     }
 
     // You MUST have this for custom materials.

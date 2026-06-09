@@ -199,7 +199,7 @@ public class LangHandler {
         provider.add("config.jade.plugin_start_core.variadic_redstone_info", "[Star Technology] Variadic Redstone Information");
         provider.add("ui.start_core.redstone_signal", "§6Redstone Level: §c{0}");
         provider.add("ui.start_core.indicator", "§dIndicator: §f%s");
-        
+
         provider.add("start_core.machine.abyssal_harvester.line", "§5§lAbyssal Harvesting");
         provider.add("start_core.machine.abyssal_harvester.description", "§7Absorbs the latent tides of the end abyss, the harvester draws forth exotic abyssal fluids from dimensional fractures and concentrates it as a material fluid.");
         provider.add("start_core.machine.abyssal_harvester.ah0", "§6Abyssal Saturation:");
@@ -499,5 +499,24 @@ public class LangHandler {
         provider.add("ui.start_core.cross_dimensional_laser.output_per_sec", "§7EU Sent: %s §7EU/t");
         provider.add("ui.start_core.cross_dimensional_laser.hatch.input_per_sec_hover", "EU transferred to this array in the last second expressed in per tick");
         provider.add("ui.start_core.cross_dimensional_laser.hatch.output_per_sec_hover", "EU transferred out of this array in the last second expressed in per tick");
+        provider.add("block.start_core.wind_controller.line", "§6§lWind Energy");
+        provider.add("start_core.wind_controller.line0", "§7A wind generator whose output and rotor speed rise and fall with wind strength.");
+        provider.add("start_core.wind_controller.line1", "§6Lubrication:");
+        provider.add("start_core.wind_controller.line2", "§7Consumes fluid while running: LV §f80 L/s§7, MV §f240 L/s§7, HV §f720 L/s§7.");
+        provider.add("start_core.wind_controller.line3", "§fLubricant§7 gives full output. §fSeed Oil§7 and §fFish Oil§7 run at §c85%§7 output.");
+        provider.add("start_core.wind_controller.line4", "§bRotor Speed: §7Scales with current EU/t. Weather changes the wind curve and is already reflected in output.");
+        provider.add("start_core.wind_controller.line5", "§7If another formed Wind Turbine is inside this turbine's airspace radius, output is reduced by §c50%§7.");
+        provider.add("config.jade.plugin_start_core.wind_turbine_info", "[Star Technology] Wind Turbine Info");
+        provider.add("wind.start_core.wind_controller.energy", "§eGenerating:§f %s EU/t");
+        provider.add("wind.start_core.wind_controller.fluid", "§6Fluid: %s");
+        provider.add("wind.start_core.wind_controller.fluid_usage", "§6Fluid Usage: §b%s L/s");
+        provider.add("wind.start_core.wind_controller.output_modifier.full", "§6Output Modifier: §a100%");
+        provider.add("wind.start_core.wind_controller.output_modifier.debuff", "§6Output Modifier: §c85%");
+        provider.add("wind.start_core.wind_controller.lubricant", "§aLubricant");
+        provider.add("wind.start_core.wind_controller.seed_oil", "§cSeed Oil");
+        provider.add("wind.start_core.wind_controller.fish_oil", "§cFish Oil");
+        provider.add("wind.start_core.wind_controller.weather_boost", "§bWeather: §f%sx");
+        provider.add("wind.start_core.wind_controller.crowding_penalty", "§4Crowding Penalty: §c-50%");
+        provider.add("wind.start_core.wind_controller.waiting_for_fluid", "Waiting for Fluid");
     }
 }

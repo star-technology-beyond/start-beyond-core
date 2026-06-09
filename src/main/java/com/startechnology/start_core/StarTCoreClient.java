@@ -4,6 +4,8 @@ import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 import com.startechnology.start_core.machine.komaru.client.KomaruRenderer;
 import com.startechnology.start_core.machine.komaru.client.KomaruRendererManager;
 
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
 public class StarTCoreClient {
 
     public static void init() {
@@ -12,7 +14,10 @@ public class StarTCoreClient {
 
         if (StarTConfig.INSTANCE.client.komaruRenderer) {
             KomaruRendererManager.init();
-        }
+        }        
+    }
+
+    public static void onClientSetup(final FMLClientSetupEvent event) {
     }
 
 }

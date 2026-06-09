@@ -29,6 +29,10 @@ loom {
     // and want loom to stop warning you about their license
     silentMojangMappingsLicense()
 
+    mixin {
+        defaultRefmapName.set("start_core.refmap.json")
+    }
+
     // since loom 0.10, you are **required** to use the
     // "forge" block to configure forge-specific features,
     // such as the mixinConfigs array or datagen
@@ -54,6 +58,7 @@ loom {
     runConfigs.named("data").configure {
         programArg("--existing=" + file("src/main/resources").absolutePath)
         programArg("--existing-mod=gtceu")
+        programArg("--existing-mod=create")
         programArg("--existing=" + file("run/kubejs").absolutePath)
         programArgs("--client", "--server")
     }
@@ -175,6 +180,8 @@ dependencies {
     modImplementation("curse.maven:jade-324717:6106101")
     modImplementation("curse.maven:embeddium-908741:5681725")
     modImplementation("net.createmod.ponder:Ponder-Forge-$project.minecraft_version:$project.ponder_version")
+    modImplementation("curse.maven:create-328085:7178761")
+    modCompileOnly("dev.engine-room.flywheel:flywheel-forge-$project.minecraft_version:$project.flywheel_version")
 
     modRuntimeOnly("curse.maven:sgjourney-689083:6390662")
     modRuntimeOnly("curse.maven:thermal-extra-573674:6474572")
