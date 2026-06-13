@@ -63,7 +63,7 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
 
     public void startAssembly() {
         if (!running) {
-            /* go forth, my create ! assemble ! */ 
+            /* go forth, my create ! assemble ! */
             isAssembling = true;
             assembleNextTick = true;
         }
@@ -131,7 +131,7 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
 
             Direction direction = getBlockState().getValue(BearingBlock.FACING);
             BearingContraption contraption = new BearingContraption(false, direction);
-            
+
             // set the anchor manually to the block
             contraption.anchor = worldPosition.relative(direction);
             contraption.bounds = new AABB(BlockPos.ZERO);
@@ -142,7 +142,7 @@ public class StarTWindTurbineBearingBlockEntity extends WindmillBearingBlockEnti
                         ((CreateContraptionAccessor)contraption).start_core$capture(level, pos));
             }
 
-             // make the contraption from the blocks and begin updating it
+            // make the contraption from the blocks and begin updating it
             contraption.removeBlocksFromWorld(level, BlockPos.ZERO);
             movedContraption = ControlledContraptionEntity.create(level, this, contraption);
             BlockPos anchor = worldPosition.relative(direction);

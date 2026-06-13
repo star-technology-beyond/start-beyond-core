@@ -424,11 +424,11 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
         };
 
         if (bearingState.hasProperty(BearingBlock.FACING) &&
-            bearingState.getValue(BearingBlock.FACING) != targetFace) {
+                bearingState.getValue(BearingBlock.FACING) != targetFace) {
             getLevel().setBlock(
-                bearingPos,
-                bearingState.setValue(BearingBlock.FACING, targetFace),
-                3
+                    bearingPos,
+                    bearingState.setValue(BearingBlock.FACING, targetFace),
+                    3
             );
             findAndCacheBearing();
         }

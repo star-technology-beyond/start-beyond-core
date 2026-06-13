@@ -35,22 +35,37 @@ public class StarTLightningRodMachines {
                 .recipeType(GTRecipeTypes.DUMMY_RECIPES)
                 .pattern(definition -> switch (tier) {
                     case MV -> FactoryBlockPattern.start()
-                            .build();
+                        .aisle("AAA")
+                        .aisle("B@A")
+                        .aisle("AAA")
+                        .where("A", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("aluminium_frame")))
+                        .where("B", Predicates.ability(PartAbility.OUTPUT_ENERGY))
+                        .where("@", Predicates.controller(Predicates.blocks(definition.get())))
+                        .build();
                     case HV -> FactoryBlockPattern.start()
-                            .aisle()
-                            .build();
+                        .aisle("AAA")
+                        .aisle("B@A")
+                        .aisle("AAA")
+                        .where("A", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("stainless_steel_frame")))
+                        .where("B", Predicates.ability(PartAbility.OUTPUT_ENERGY))
+                        .where("@", Predicates.controller(Predicates.blocks(definition.get())))
+                        .build();
                     case EV -> FactoryBlockPattern.start()
-                            .aisle()
-                            .aisle()
-                            .build();
+                        .aisle("AAA")
+                        .aisle("B@A")
+                        .aisle("AAA")
+                        .where("A", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("black_steel_frame")))
+                        .where("B", Predicates.ability(PartAbility.OUTPUT_ENERGY))
+                        .where("@", Predicates.controller(Predicates.blocks(definition.get())))
+                        .build();
                     default -> FactoryBlockPattern.start()
-                            .aisle("AAA")
-                            .aisle("B@A")
-                            .aisle("AAA")
-                            .where("A", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("steel_frame")))
-                            .where("B", Predicates.ability(PartAbility.OUTPUT_ENERGY))
-                            .where("@", Predicates.controller(Predicates.blocks(definition.get())))
-                            .build();
+                        .aisle("AAA")
+                        .aisle("B@A")
+                        .aisle("AAA")
+                        .where("A", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("steel_frame")))
+                        .where("B", Predicates.ability(PartAbility.OUTPUT_ENERGY))
+                        .where("@", Predicates.controller(Predicates.blocks(definition.get())))
+                        .build();
                 });
 
         }
