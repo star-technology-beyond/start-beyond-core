@@ -8,9 +8,7 @@ import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.registry.registrate.MultiblockMachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
-import com.startechnology.start_core.StarTCore;
 import com.startechnology.start_core.machine.StarTMachineUtils;
-import org.jetbrains.annotations.NotNull;
 
 import static com.gregtechceu.gtceu.api.GTValues.EV;
 import static com.gregtechceu.gtceu.api.GTValues.HV;
@@ -19,7 +17,7 @@ import static com.gregtechceu.gtceu.api.GTValues.LV;
 
 
 public class StarTLightningRodMachines {
-    public static MultiblockMachineDefinition[] LIGHTING_ROD = StarTMachineUtils.registerTieredMultis(
+    public static MultiblockMachineDefinition[] LIGHTING_RODS = StarTMachineUtils.registerTieredMultis(
             "lightning_rod",
             StarTLightningRodMachine::new,
             StarTLightningRodMachines::buildLightingRod,

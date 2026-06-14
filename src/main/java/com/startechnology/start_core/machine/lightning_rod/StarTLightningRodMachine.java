@@ -3,11 +3,16 @@ package com.startechnology.start_core.machine.lightning_rod;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.utils.FormattingUtil;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.network.chat.Component;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -16,7 +21,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
     private static final int STRIKES_PER_STORM = 5;
     private static final int STORM_COOLDOWN = 24000;
     private static final long MAX_UNSTABLE_EU = 1000000;
-    private static final double DECAY_PER_TICK = 0.05;
+    private static final double DECAY_PER_TICK = 0.0025;
 
     @Getter
     private final int tier;
@@ -24,7 +29,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
     private int euT = 0;
 
     private long unstableEU = 0;
-    private long timeSinceLastStorm = 0;
+    private long timeSinceLastStorm = 24000;
 
     @Getter
     @Setter
@@ -40,15 +45,19 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
     public void LightingStrike() {
         long generatedUnstableEU = 1000;
 
-        unstableEU = Math.min(
-            unstableEU + generatedUnstableEU,
-            MAX_UNSTABLE_EU
-        );
+        int lightingChance = ThreadLocalRandom.current().nextInt(6000, 6768);
 
-        strikesThisStorm += 1;
+        if (lightingChance == 6767) {
+            unstableEU = Math.min(
+                unstableEU + generatedUnstableEU,
+                MAX_UNSTABLE_EU
+            );
+
+            strikesThisStorm += 1;
+        }
     }
 
-    public String getWeather() {
+    private String getWeather() {
         if (getLevel().isThundering())
             return "Thundering";
 
@@ -60,9 +69,33 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
     @Override
     public boolean isGenerator(){ return true;}
 
+    @Override
+    public void addDisplayText(List<Component> textList) {
+        super.addDisplayText(textList);
+
+        if (!isFormed())
+            return;
+
+        if (isActive()) {
+            textList.add(Component.literal("Generating: ")
+                .append(Component.literal("%s EU/t".formatted(FormattingUtil.formatNumbers(euT)))
+                    .withStyle(ChatFormatting.GREEN)));
+        } else {
+            textList.add(Component.literal("Buffers empty").withStyle(ChatFormatting.DARK_RED));
+        }
+
+        textList.add(Component.literal("Weather: ")
+            .append(Component.literal(getWeather()).withStyle(ChatFormatting.GRAY)));
+        textList.add(Component.literal("Unstable EU: ")
+            .append(Component.literal("" + unstableEU).withStyle(ChatFormatting.AQUA)));
+        textList.add(Component.literal("Strikes left: ")
+            .append(Component.literal("" + (STRIKES_PER_STORM - strikesThisStorm)).withStyle(ChatFormatting.GOLD)));
+        textList.add(Component.literal("Cooldown Period Remaining: ")
+            .append(Component.literal("" + (STORM_COOLDOWN - timeSinceLastStorm)).withStyle(ChatFormatting.BLUE)));
+
+    }
 
     public static class StarTLightningRodRecipeLogic extends RecipeLogic {
-        private static final int UPDATE_INTERVAL = 0;
 
         public StarTLightningRodRecipeLogic(StarTLightningRodMachine machine) {
             super(machine);
@@ -83,10 +116,13 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
             if (machine.timeSinceLastStorm < STORM_COOLDOWN) {
                 machine.timeSinceLastStorm += 1;
+
             } else if (machine.timeSinceLastStorm == STORM_COOLDOWN) {
+
                 if (machine.getWeather().equals("Thundering")){
                     if (machine.strikesThisStorm < STRIKES_PER_STORM) {
                         machine.LightingStrike();
+
                     } else if (machine.strikesThisStorm == STRIKES_PER_STORM) {
                         machine.timeSinceLastStorm = 0;
                         machine.strikesThisStorm = 0;
@@ -94,9 +130,12 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
                 }
             }
 
+
             if (machine.unstableEU > 0) {
-                machine.unstableEU -= (long) Math.max(1, machine.unstableEU * DECAY_PER_TICK);
+                machine.unstableEU -= Math.max(1L,
+                    Math.round(machine.unstableEU * DECAY_PER_TICK));
             }
+
         }
     }
 }
