@@ -1,15 +1,11 @@
 package com.startechnology.start_core.machine.lightning_rod;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
-import com.startechnology.start_core.machine.wind_turbine.StarTWindTurbineManager;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.world.item.crafting.Recipe;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -24,6 +20,8 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
     @Getter
     private final int tier;
+    @Getter
+    private int euT = 0;
 
     private long unstableEU = 0;
     private long timeSinceLastStorm = 0;
@@ -57,18 +55,31 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
         return  "Clear";
     }
 
+    protected RecipeLogic createRecipeLogic(Object... args){ return new StarTLightningRodRecipeLogic(this);}
+
+    @Override
+    public boolean isGenerator(){ return true;}
+
+
     public static class StarTLightningRodRecipeLogic extends RecipeLogic {
+        private static final int UPDATE_INTERVAL = 0;
 
         public StarTLightningRodRecipeLogic(StarTLightningRodMachine machine) {
             super(machine);
         }
 
-        @NotNull
         @Override
         public StarTLightningRodMachine getMachine(){return (StarTLightningRodMachine) super.getMachine();}
 
         public void serverTick() {
             var machine = getMachine();
+
+            if (!machine.isFormed || !isWorkingEnabled()) {
+                machine.euT = 0;
+                setStatus(Status.IDLE);
+                isActive = false;
+                return;
+            }
 
             if (machine.timeSinceLastStorm < STORM_COOLDOWN) {
                 machine.timeSinceLastStorm += 1;
@@ -76,6 +87,9 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
                 if (machine.getWeather().equals("Thundering")){
                     if (machine.strikesThisStorm < STRIKES_PER_STORM) {
                         machine.LightingStrike();
+                    } else if (machine.strikesThisStorm == STRIKES_PER_STORM) {
+                        machine.timeSinceLastStorm = 0;
+                        machine.strikesThisStorm = 0;
                     }
                 }
             }
@@ -83,12 +97,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
             if (machine.unstableEU > 0) {
                 machine.unstableEU -= (long) Math.max(1, machine.unstableEU * DECAY_PER_TICK);
             }
-
-
-
         }
     }
-
-
 }
 

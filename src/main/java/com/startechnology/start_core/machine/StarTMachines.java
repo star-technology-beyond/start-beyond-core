@@ -14,6 +14,7 @@ import com.startechnology.start_core.machine.fusion.StarTFusionMachines;
 import com.startechnology.start_core.machine.hellforge.StarTHellForgeMachines;
 import com.startechnology.start_core.machine.hpca.StarTHPCAParts;
 import com.startechnology.start_core.machine.komaru.StarTKomaruFrameMachines;
+import com.startechnology.start_core.machine.lightning_rod.StarTLightningRodMachines;
 import com.startechnology.start_core.machine.maintenance.StarTMaintenanceMachines;
 import com.startechnology.start_core.machine.modular_combustion.StarTModularCombustionMachines;
 import com.startechnology.start_core.machine.modular.StarTModularConnectionHatches;
@@ -53,5 +54,6 @@ public class StarTMachines {
         StarTCrossDimensionalLaserMachines.init();
         StarTEnergyDynamos.init();
         StarTWindTurbineMachines.init();
+        StarTLightningRodMachines.init();
     }
 }

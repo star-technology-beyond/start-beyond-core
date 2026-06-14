@@ -1,5 +1,6 @@
 package com.startechnology.start_core.machine.lightning_rod;
 
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
@@ -25,12 +26,12 @@ public class StarTLightningRodMachines {
             LV, MV, HV, EV
         );
 
-        private static @NotNull MultiblockMachineDefinition buildLightingRod(
+        private static MultiblockMachineDefinition buildLightingRod(
             int tier,
             MultiblockMachineBuilder builder
         ){
             return builder
-                .langValue("Lighting Rod")
+                .langValue("%s Lighting Rod".formatted(GTValues.VNF[tier] + "§r"))
                 .rotationState(RotationState.NON_Y_AXIS)
                 .recipeType(GTRecipeTypes.DUMMY_RECIPES)
                 .pattern(definition -> switch (tier) {
@@ -66,8 +67,11 @@ public class StarTLightningRodMachines {
                         .where("B", Predicates.ability(PartAbility.OUTPUT_ENERGY))
                         .where("@", Predicates.controller(Predicates.blocks(definition.get())))
                         .build();
-                });
+                })
+
+                .register();
 
         }
-
+    public static void init() {
+    }
 }
