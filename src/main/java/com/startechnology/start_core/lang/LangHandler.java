@@ -518,5 +518,7 @@ public class LangHandler {
         provider.add("wind.start_core.wind_controller.weather_boost", "§bWeather: §f%sx");
         provider.add("wind.start_core.wind_controller.crowding_penalty", "§4Crowding Penalty: §c-50%");
         provider.add("wind.start_core.wind_controller.waiting_for_fluid", "Waiting for Fluid");
+        provider.add("lightning.start_core.lighting_controller.energy","§eGenerating:§f %s EU/t" );
+        provider.add("lightning.start_core.lighting_controller.no_energy", "§4Buffers Empty" );
     }
 }

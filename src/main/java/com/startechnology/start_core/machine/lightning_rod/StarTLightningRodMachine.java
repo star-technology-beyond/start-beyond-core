@@ -60,8 +60,20 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
     private String getWeather() {
         if (getLevel().isThundering())
             return "Thundering";
+        if(getLevel().isRaining())
+            return "Raining";
 
         return  "Clear";
+    }
+
+    public String cooldownPeriod() {
+        int cooldownTicks = Math.toIntExact(STORM_COOLDOWN - timeSinceLastStorm);
+        int totalSeconds = cooldownTicks / 20;
+        int cooldownMinutes = totalSeconds / 60;
+        int cooldownSeconds = totalSeconds % 60;
+
+        return "%dm %02ds".formatted(cooldownMinutes, cooldownSeconds);
+
     }
 
     protected RecipeLogic createRecipeLogic(Object... args){ return new StarTLightningRodRecipeLogic(this);}
@@ -77,21 +89,23 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
             return;
 
         if (isActive()) {
-            textList.add(Component.literal("Generating: ")
-                .append(Component.literal("%s EU/t".formatted(FormattingUtil.formatNumbers(euT)))
-                    .withStyle(ChatFormatting.GREEN)));
+            textList.add(Component.literal("lightning.start_core.lighting_controller.energy"));
         } else {
-            textList.add(Component.literal("Buffers empty").withStyle(ChatFormatting.DARK_RED));
+            textList.add(Component.literal("lightning.start_core.lighting_controller.no_energy"));
         }
 
         textList.add(Component.literal("Weather: ")
-            .append(Component.literal(getWeather()).withStyle(ChatFormatting.GRAY)));
+            .append(Component.literal(getWeather())
+                .withStyle(ChatFormatting.GRAY)));
         textList.add(Component.literal("Unstable EU: ")
-            .append(Component.literal("" + unstableEU).withStyle(ChatFormatting.AQUA)));
+            .append(Component.literal("" + unstableEU)
+                .withStyle(ChatFormatting.BLUE)));
         textList.add(Component.literal("Strikes left: ")
-            .append(Component.literal("" + (STRIKES_PER_STORM - strikesThisStorm)).withStyle(ChatFormatting.GOLD)));
-        textList.add(Component.literal("Cooldown Period Remaining: ")
-            .append(Component.literal("" + (STORM_COOLDOWN - timeSinceLastStorm)).withStyle(ChatFormatting.BLUE)));
+            .append(Component.literal("" + (STRIKES_PER_STORM - strikesThisStorm))
+                .withStyle(ChatFormatting.GOLD)));
+        textList.add(Component.literal("Cooldown Remaining: ")
+            .append(Component.literal(cooldownPeriod())
+                .withStyle(ChatFormatting.BLUE)));
 
     }
 
