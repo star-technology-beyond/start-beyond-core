@@ -9,13 +9,15 @@ import lombok.Setter;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 
-public class StarTDysonSwarmMachine extends StarTModularControllerMachine {
+public class StarTDysonSwarmMonitor extends StarTModularControllerMachine {
 
-    private static final List<ResourceLocation> MODULE_ID = new ArrayList<>();
+    private static final List<ResourceLocation> COLLECTOR_MODULE_ID = new ArrayList<>();
+    private static final List<ResourceLocation> RAILGUN_MODULE_ID = new ArrayList<>();
 
     @Getter
     @Setter
@@ -36,20 +38,34 @@ public class StarTDysonSwarmMachine extends StarTModularControllerMachine {
     @Setter
     private int[] amplifierCounts = new int[3];
 
+    @Getter
+    @Setter
+    private int collectorTier;
+
     @Persisted
     private int runningTimer = 0;
 
-    protected List<StarTModularInterfaceHatchPartMachine> terminals = new ArrayList<>();
+    protected List<StarTModularInterfaceHatchPartMachine> railgunTerminals = new ArrayList<>();
+    protected List<StarTModularInterfaceHatchPartMachine> collectorTerminals = new ArrayList<>();
 
-    public StarTDysonSwarmMachine(IMachineBlockEntity holder, ResourceLocation... acceptedModuleIds) {
+
+    public StarTDysonSwarmMonitor(IMachineBlockEntity holder, ResourceLocation... acceptedModuleIds) {
         super(holder, acceptedModuleIds);
+
     }
 
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
 
+        // Gather the different terminals for each type
+        railgunTerminals = this.getMultiblockState().getMatchContext()
+                .getOrDefault(StarTDysonSwarmPredicates.RAILGUN_STORAGE_KEY, new ArrayList<>());
+        collectorTerminals = this.getMultiblockState().getMatchContext()
+                .getOrDefault(StarTDysonSwarmPredicates.COLLECTOR_STORAGE_KEY, new ArrayList<>());
+
         this.setupTerminals();
+
     }
 
     @Override
@@ -58,7 +74,7 @@ public class StarTDysonSwarmMachine extends StarTModularControllerMachine {
 
         // runs checks every 7.2s 500 times = 1hr
         if (runningTimer % 144 == 0) {
-            doMonitorLogic();
+            doLogic();
         }
 
         runningTimer++;
@@ -68,13 +84,29 @@ public class StarTDysonSwarmMachine extends StarTModularControllerMachine {
     }
 
     private void setupTerminals() {
-        for (StarTModularInterfaceHatchPartMachine terminal : terminals) {
-            terminal.setSupportedModules(MODULE_ID); //not entirely sure about how to add to this, will ask when u awake
+        for (StarTModularInterfaceHatchPartMachine collectorTerminal : collectorTerminals) {
+            collectorTerminal.setSupportedModules(COLLECTOR_MODULE_ID);
+            collectorTerminal.resetSupportedModule();
+
+            collectorTerminal.setSupportedMachineConsumer(collectorNode -> {
+                // TODO (not entirely sure what to put here yet)
+            });
+
+        }
+
+        for (StarTModularInterfaceHatchPartMachine railgunTerminal : railgunTerminals) {
+            railgunTerminal.setSupportedModules(RAILGUN_MODULE_ID);
+            railgunTerminal.resetSupportedModule();
+
+            railgunTerminal.setSupportedMachineConsumer(railgunNode -> {
+                // TODO (not entirely sure what to put here yet)
+            });
+
         }
     }
 
-    private void doMonitorLogic() {
-        /*
+    private void doLogic() {
+        /* TODO
          * Update controller ui with counts and avg durability %, run through the durabilities hashmap and deal damage to all dependent on shield count (not in this order).
          * If the durability reaches 0, remove from hashmap, get the tier and type from the id and take 1 off the typeCount array in the position of tier.
          */
@@ -82,7 +114,7 @@ public class StarTDysonSwarmMachine extends StarTModularControllerMachine {
     }
 
     private void ejectSwarms(String type, int count, boolean all) {
-        // should be pretty straight forward to understand what I'm planning here
+        // TODO should be pretty straight forward to understand what I'm planning here
     }
 
 

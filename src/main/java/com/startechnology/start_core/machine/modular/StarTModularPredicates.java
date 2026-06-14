@@ -36,9 +36,38 @@ public class StarTModularPredicates {
         };
     }
 
+    private static Predicate<MultiblockState> createKeyedInterfaceHatchPredicate(String storageKey, IO io) {
+        return (MultiblockState blockWorldState) -> {
+            BlockEntity state = blockWorldState.getTileEntity();
+
+            if (state instanceof  IMachineBlockEntity machineBlockEntity &&
+                machineBlockEntity.getMetaMachine() instanceof StarTModularInterfaceHatchPartMachine interfaceHatchPartMachine
+            ) {
+                if (io == IO.OUT && !interfaceHatchPartMachine.isTerminal() || io == IO.IN && interfaceHatchPartMachine.isTerminal()) {
+                    return false;
+                }
+
+                ArrayList<StarTModularInterfaceHatchPartMachine> interfaces = blockWorldState.getMatchContext().getOrDefault(storageKey, new ArrayList<>());
+
+                interfaces.add(interfaceHatchPartMachine);
+                blockWorldState.getMatchContext().set(storageKey, interfaces);
+                return true;
+            }
+            return false;
+        };
+    }
+
     public static TraceabilityPredicate createKeyedAutoScalingTerminalPredicate(String storageKey) {
         return new TraceabilityPredicate(createKeyedAutoScalingConduitPredicate(storageKey, IO.OUT), () -> Arrays.asList(new MachineDefinition[]{
             StarTModularConnectionHatches.MODULAR_AUTO_SCALING_CONDUIT_TERMINAL
+        }).stream()
+                .map((MachineDefinition machineDefinition) -> new BlockInfo(machineDefinition.getBlock()))
+                .toArray(BlockInfo[]::new));
+    }
+
+    public static TraceabilityPredicate createKeyedInterfaceTerminalPredicate(String storageKey) {
+        return new TraceabilityPredicate(createKeyedInterfaceHatchPredicate(storageKey, IO.OUT), () -> Arrays.asList(new MachineDefinition[]{
+                StarTModularConnectionHatches.MODULAR_TERMINAL
         }).stream()
                 .map((MachineDefinition machineDefinition) -> new BlockInfo(machineDefinition.getBlock()))
                 .toArray(BlockInfo[]::new));

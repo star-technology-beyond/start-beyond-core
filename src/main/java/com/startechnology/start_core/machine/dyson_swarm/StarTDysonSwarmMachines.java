@@ -1,15 +1,10 @@
 package com.startechnology.start_core.machine.dyson_swarm;
 
-import com.gregtechceu.gtceu.GTCEu;
-import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.RotationState;
-import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
-import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
-import com.gregtechceu.gtceu.common.data.GCYMBlocks;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.startechnology.start_core.StarTCore;
@@ -26,7 +21,7 @@ import static com.startechnology.start_core.StarTCore.START_REGISTRATE;
 public class StarTDysonSwarmMachines {
 
     public static final MultiblockMachineDefinition T1_STELLAR_RAILGUN = START_REGISTRATE
-            .multiblock("uhv_dyson_railgun_module", (holder) -> new StarTDysonSwarmModule(holder, "railgun", UHV, StarTCore.resourceLocation("dyson_swarm_monitor")))
+            .multiblock("uhv_dyson_railgun_module", (holder) -> new StarTDysonRailgunModule(holder, UHV, StarTCore.resourceLocation("dyson_swarm_monitor")))
             .langValue("Basic Stellar Railgun Module [BSRM]")
 //            .tooltips()
 //            .paginatedTooltips()
@@ -61,7 +56,7 @@ public class StarTDysonSwarmMachines {
             ).register();
 
     public static final MultiblockMachineDefinition T2_STELLAR_RAILGUN = START_REGISTRATE
-            .multiblock("uev_dyson_railgun_module", (holder) -> new StarTDysonSwarmModule(holder, "railgun", UEV, StarTCore.resourceLocation("dyson_swarm_monitor")))
+            .multiblock("uev_dyson_railgun_module", (holder) -> new StarTDysonRailgunModule(holder, UEV, StarTCore.resourceLocation("dyson_swarm_monitor")))
             .langValue("Advanced Stellar Railgun Module [ASRM]")
 //            .tooltips()
 //            .paginatedTooltips()
@@ -96,7 +91,7 @@ public class StarTDysonSwarmMachines {
             ).register();
 
     public static final MultiblockMachineDefinition T3_STELLAR_RAILGUN = START_REGISTRATE
-            .multiblock("uiv_dyson_railgun_module", (holder) -> new StarTDysonSwarmModule(holder, "railgun", UIV, StarTCore.resourceLocation("dyson_swarm_monitor")))
+            .multiblock("uiv_dyson_railgun_module", (holder) -> new StarTDysonRailgunModule(holder, UIV, StarTCore.resourceLocation("dyson_swarm_monitor")))
             .langValue("Advanced II Stellar Railgun Module [A2SRM]")
 //            .tooltips()
 //            .paginatedTooltips()
@@ -120,7 +115,7 @@ public class StarTDysonSwarmMachines {
             ).register();
 
     public static final MultiblockMachineDefinition T1_PHOTONIC_ACCUMULATOR = START_REGISTRATE
-            .multiblock("uhv_dyson_collector_module", (holder) -> new StarTDysonSwarmModule(holder, "receiver", UHV, StarTCore.resourceLocation("dyson_swarm_monitor")))
+            .multiblock("uhv_dyson_collector_module", (holder) -> new StarTDysonCollectorModule(holder, UHV, StarTCore.resourceLocation("dyson_swarm_monitor")))
             .langValue("Basic Photonic Accumulator Module [BPAM]")
 //            .tooltips()
 //            .paginatedTooltips()
@@ -159,7 +154,7 @@ public class StarTDysonSwarmMachines {
             ).register();
 
     public static final MultiblockMachineDefinition T2_PHOTONIC_ACCUMULATOR = START_REGISTRATE
-            .multiblock("uev_dyson_collector_module", (holder) -> new StarTDysonSwarmModule(holder, "receiver", UEV, StarTCore.resourceLocation("dyson_swarm_monitor")))
+            .multiblock("uev_dyson_collector_module", (holder) -> new StarTDysonCollectorModule(holder, UEV, StarTCore.resourceLocation("dyson_swarm_monitor")))
             .langValue("Advanced Photonic Accumulator Module [APAM]")
 //            .tooltips()
 //            .paginatedTooltips()
@@ -201,7 +196,7 @@ public class StarTDysonSwarmMachines {
             ).register();
 
     public static final MultiblockMachineDefinition T3_PHOTONIC_ACCUMULATOR = START_REGISTRATE
-            .multiblock("uiv_dyson_collector_module", (holder) -> new StarTDysonSwarmModule(holder, "receiver", UIV, StarTCore.resourceLocation("dyson_swarm_monitor")))
+            .multiblock("uiv_dyson_collector_module", (holder) -> new StarTDysonCollectorModule(holder, UIV, StarTCore.resourceLocation("dyson_swarm_monitor")))
             .langValue("Advanced II Photonic Accumulator Module [A2PAM]")
 //            .tooltips()
 //            .paginatedTooltips()
@@ -224,7 +219,7 @@ public class StarTDysonSwarmMachines {
             ).register();
 
     public static final MultiblockMachineDefinition DYSON_SWARM_MONITOR = START_REGISTRATE
-            .multiblock("dyson_swarm_monitor", (holder) -> new StarTDysonSwarmMachine(holder, StarTCore.resourceLocation("uhv_dyson_collector_module"), StarTCore.resourceLocation("uev_dyson_collector_module"), StarTCore.resourceLocation("uiv_dyson_collector_module"), StarTCore.resourceLocation("uhv_dyson_railgun_module"), StarTCore.resourceLocation("uev_dyson_railgun_module"), StarTCore.resourceLocation("uiv_dyson_railgun_module"))) //there's surely a better way to write out these resource locations....
+            .multiblock("dyson_swarm_monitor", (holder) -> new StarTDysonSwarmMonitor(holder, StarTCore.resourceLocation("uhv_dyson_collector_module"), StarTCore.resourceLocation("uev_dyson_collector_module"), StarTCore.resourceLocation("uiv_dyson_collector_module"), StarTCore.resourceLocation("uhv_dyson_railgun_module"), StarTCore.resourceLocation("uev_dyson_railgun_module"), StarTCore.resourceLocation("uiv_dyson_railgun_module"))) //there's surely a better way to write out these resource locations....
             .langValue("Dyson Swarm Monitor [DSM]")
 //            .tooltips()
 //            .paginatedTooltips()
@@ -246,7 +241,7 @@ public class StarTDysonSwarmMachines {
                     .aisle(" KKKKKCKKKKKHHCHHLLLLLCLLLLM ", " XXXXXXXXX N OOO N XXXXXXXXX ", "           N POP N           ", "            NPOPN            ", "            NPOPN            ", "             OPO             ", "             OPO             ", "             OPO             ", "             P P             ", "            NP PN            ", "           E P P E           ", "            NOOON            ", "              D              ", "             EEE             ", "                             ", "                             ", "                             ", "              Q              ", "             QRQ             ", "              Q              ", "                             ", "                             ")
                     .aisle(" KKKSKCKSKKKHHCHHLLLTLCLTLLM ", " XXXXXXXXX  OUOUO  XXXXXXXXX ", "            P   P            ", "           NP V PN           ", "           NP   PN           ", "            P V P            ", "            P   P            ", "            P V P            ", "            O O O            ", "           NO O ON           ", "          E O O O E          ", "           NOOPOON           ", "             OPO             ", "            EOPOE            ", "                             ", "                             ", "             QQQ             ", "            QQQQQ            ", "            QQRQQ            ", "            QQQQQ            ", "             QQQ             ", "                             ")
                     .aisle("KKKKKKKKKKKKKHCHLLLLLLLLLLLLM", " XXXXXXXXX OUOUOUO XXXXXXXXX ", "           P     P           ", "           P     P           ", "           P     P           ", "           O     O           ", "           O     O           ", "           O     O           ", "           P     P           ", "           P     P           ", "          EP     PE          ", "           OO   OO           ", "            O   O            ", "           EO   OE           ", "                             ", "              Q              ", "            QQQQQ            ", "            QQQQQ            ", "           QQQRQQQ           ", "            QQQQQ            ", "            QQQQQ            ", "              Q              ")
-                    .aisle("KCKCCKWKCCKCCCCCCCLCCLWLCCLCM", " XXXXXXXXX OOUCUOO XXXXXXXXX ", "          COV C VOC          ", "           O  C  O           ", "          COV C VOC          ", "           P  C  P           ", "           PV C VP           ", "           P  C  P           ", "            O C O            ", "            O C O            ", "          E O C O E          ", "           OP C PO           ", "           DP C PD           ", "           EP C PE           ", "                             ", "             QRQ             ", "            QQRQQ            ", "           QQQRQQQ           ", "           RRRRRRR           ", "           QQQRQQQ           ", "            QQRQQ            ", "             QRQ             ")
+                    .aisle("KCKCCKWKCCKCCCCCCCLCCLYLCCLCM", " XXXXXXXXX OOUCUOO XXXXXXXXX ", "          COV C VOC          ", "           O  C  O           ", "          COV C VOC          ", "           P  C  P           ", "           PV C VP           ", "           P  C  P           ", "            O C O            ", "            O C O            ", "          E O C O E          ", "           OP C PO           ", "           DP C PD           ", "           EP C PE           ", "                             ", "             QRQ             ", "            QQRQQ            ", "           QQQRQQQ           ", "           RRRRRRR           ", "           QQQRQQQ           ", "            QQRQQ            ", "             QRQ             ")
                     .aisle("KKKKKKKKKKKKKHCHLLLLLLLLLLLLM", " XXXXXXXXX OUOUOUO XXXXXXXXX ", "           P     P           ", "           P     P           ", "           P     P           ", "           O     O           ", "           O     O           ", "           O     O           ", "           P     P           ", "           P     P           ", "          EP     PE          ", "           OO   OO           ", "            O   O            ", "           EO   OE           ", "                             ", "              Q              ", "            QQQQQ            ", "            QQQQQ            ", "           QQQRQQQ           ", "            QQQQQ            ", "            QQQQQ            ", "              Q              ")
                     .aisle(" KKKSKCKSKKKHHCHHLLLTLCLTLLM ", " XXXXXXXXX  OUOUO  XXXXXXXXX ", "            P   P            ", "           NP V PN           ", "           NP   PN           ", "            P V P            ", "            P   P            ", "            P V P            ", "            O O O            ", "           NO O ON           ", "          E O O O E          ", "           NOOPOON           ", "             OPO             ", "            EOPOE            ", "                             ", "                             ", "             QQQ             ", "            QQQQQ            ", "            QQRQQ            ", "            QQQQQ            ", "             QQQ             ", "                             ")
                     .aisle(" KKKKKCKKKKKHHCHHLLLLLCLLLLM ", " XXXXXXXXX N OOO N XXXXXXXXX ", "           N POP N           ", "            NPOPN            ", "            NPOPN            ", "             OPO             ", "             OPO             ", "             OPO             ", "             P P             ", "            NP PN            ", "           E P P E           ", "            NOOON            ", "              D              ", "             EEE             ", "                             ", "                             ", "                             ", "              Q              ", "             QRQ             ", "              Q              ", "                             ", "                             ")
@@ -284,8 +279,9 @@ public class StarTDysonSwarmMachines {
                     .where("T", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("advanced_computer_casing")))
                     .where("U", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("high_temperature_smelting_casing")))
                     .where("V", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("superconducting_coil")))
-                    .where("W", Predicates.abilities(StarTPartAbility.MODULAR_TERMINAL_INTERFACE))
+                    .where("W", StarTDysonSwarmPredicates.railgunModulesPredicate)
                     .where("X", Predicates.any()) // bottom of bounding box for modules, extends upwards to top.
+                    .where("Y", StarTDysonSwarmPredicates.collectorModulesPredicate)
                     .where("@", Predicates.controller(Predicates.blocks(definition.get())))
                     .build()
             ).workableCasingModel(
@@ -293,6 +289,5 @@ public class StarTDysonSwarmMachines {
                     StarTCore.resourceLocation("block/overlay/cross_dimensional_laser")
             ).register();
 
-    public static void init() {
-    }
+    public static void init() {}
 }
