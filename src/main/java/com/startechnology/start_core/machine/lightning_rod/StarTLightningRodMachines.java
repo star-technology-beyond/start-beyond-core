@@ -20,19 +20,19 @@ import static com.gregtechceu.gtceu.api.GTValues.LV;
 
 
 public class StarTLightningRodMachines {
-    public static MultiblockMachineDefinition[] LIGHTING_RODS = StarTMachineUtils.registerTieredMultis(
+    public static MultiblockMachineDefinition[] LIGHTNING_RODS = StarTMachineUtils.registerTieredMultis(
             "lightning_rod",
             StarTLightningRodMachine::new,
-            StarTLightningRodMachines::buildLightingRod,
+            StarTLightningRodMachines::buildLightningRod,
             LV, MV, HV, EV
         );
 
-        private static MultiblockMachineDefinition buildLightingRod(
+        private static MultiblockMachineDefinition buildLightningRod(
             int tier,
             MultiblockMachineBuilder builder
         ){
             return builder
-                .langValue("%s Lighting Rod".formatted(GTValues.VNF[tier] + "§r"))
+                .langValue("%s Lightning Rod".formatted(GTValues.VNF[tier] + "§r"))
                 .rotationState(RotationState.NON_Y_AXIS)
                 .recipeType(GTRecipeTypes.DUMMY_RECIPES)
                 .pattern(definition -> switch (tier) {

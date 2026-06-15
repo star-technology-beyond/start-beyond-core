@@ -3,6 +3,7 @@ package com.startechnology.start_core.machine.lightning_rod;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.ChatFormatting;
@@ -28,8 +29,11 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
     @Getter
     private int euT = 0;
 
+    @Persisted
     private long unstableEU = 0;
-    private long timeSinceLastStorm = 24000;
+
+    @Persisted
+    private long timeSinceLastStorm = 23800;
 
     @Getter
     @Setter
@@ -42,23 +46,22 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
     }
 
-    public void LightningStrike() {
-        long generatedUnstableEU = 1000;
+    private void LightningStrike() {
+        long generatedUnstableEU = 2048;
 
-        int lightningChance = ThreadLocalRandom.current().nextInt(6766, 6768);
 
-        if (lightningChance == 6767) {
-            unstableEU = Math.min(
-                unstableEU + generatedUnstableEU,
-                MAX_UNSTABLE_EU
-            );
+        unstableEU = Math.min(
+            unstableEU + generatedUnstableEU,
+            MAX_UNSTABLE_EU
+        );
 
-            strikesThisStorm += 1;
+        strikesThisStorm += 1;
+        System.out.println("KABOOM!");
 
-        }
     }
 
     private String getWeather() {
+        System.out.println("Weatherman!");
         if (getLevel().isThundering())
             return "lightning.start_core.lightning_controller.weather_thunder";
         if(getLevel().isRaining())
@@ -67,7 +70,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
         return  "lightning.start_core.lightning_controller.weather_clear";
     }
 
-    public String cooldownPeriod() {
+    private String cooldownPeriod() {
         int cooldownTicks = Math.toIntExact(STORM_COOLDOWN - timeSinceLastStorm);
         int totalSeconds = cooldownTicks / 20;
         int cooldownMinutes = totalSeconds / 60;
@@ -130,16 +133,23 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
             if (machine.timeSinceLastStorm < STORM_COOLDOWN) {
                 machine.timeSinceLastStorm += 1;
+                System.out.println("Cooldown ticking");
 
             } else if (machine.timeSinceLastStorm == STORM_COOLDOWN) {
-
-                if (machine.getWeather().equals("Thundering")){
+                System.out.println("Cooldown finished");
+                if (machine.getWeather().equals("lightning.start_core.lightning_controller.weather_thunder")){
+                    System.out.println("Thunder!");
                     if (machine.strikesThisStorm < STRIKES_PER_STORM) {
+                        System.out.println("kaboom?");
                         machine.LightningStrike();
 
                     } else if (machine.strikesThisStorm == STRIKES_PER_STORM) {
+                        System.out.println("No more kaboom :(");
                         machine.timeSinceLastStorm = 0;
-                        machine.strikesThisStorm = 0;
+                        if (!machine.getWeather().equals("lightning.start_core.lightning_controller.weather_thunder")){
+                            machine.strikesThisStorm = 0;
+                        }
+
                     }
                 }
             }
@@ -148,6 +158,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
             if (machine.unstableEU > 0) {
                 machine.unstableEU -= Math.max(1L,
                     Math.round(machine.unstableEU * DECAY_PER_TICK));
+                System.out.println("Decay Decay Decay");
             }
 
         }
