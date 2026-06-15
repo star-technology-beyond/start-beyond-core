@@ -1,5 +1,6 @@
 package com.startechnology.start_core.machine.lightning_rod;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
@@ -7,8 +8,12 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.registry.registrate.MultiblockMachineBuilder;
+import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import com.startechnology.start_core.StarTCore;
 import com.startechnology.start_core.machine.StarTMachineUtils;
+import dev.latvian.mods.kubejs.KubeJS;
+import net.minecraft.resources.ResourceLocation;
 
 import static com.gregtechceu.gtceu.api.GTValues.EV;
 import static com.gregtechceu.gtceu.api.GTValues.HV;
@@ -66,10 +71,22 @@ public class StarTLightningRodMachines {
                         .where("@", Predicates.controller(Predicates.blocks(definition.get())))
                         .build();
                 })
-
+                .workableCasingModel(
+                    getCasingTexture(tier),
+                    StarTCore.resourceLocation("block/overlay/lightning_rod")
+                )
                 .register();
 
         }
+
+        private static ResourceLocation getCasingTexture(int tier){
+            return switch (tier) {
+                case MV -> GTCEu.id("block/casings/solid/machine_casing_solid_steel");
+                case HV -> GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel");
+                default -> KubeJS.id("block/casings/basic/high_steam_machine_casing");
+            };
+        }
+
     public static void init() {
     }
 }

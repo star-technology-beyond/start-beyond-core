@@ -3,12 +3,12 @@ package com.startechnology.start_core.machine.lightning_rod;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -42,12 +42,12 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
     }
 
-    public void LightingStrike() {
+    public void LightningStrike() {
         long generatedUnstableEU = 1000;
 
-        int lightingChance = ThreadLocalRandom.current().nextInt(6000, 6768);
+        int lightningChance = ThreadLocalRandom.current().nextInt(6700, 6768);
 
-        if (lightingChance == 6767) {
+        if (lightningChance == 6767) {
             unstableEU = Math.min(
                 unstableEU + generatedUnstableEU,
                 MAX_UNSTABLE_EU
@@ -59,11 +59,11 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
     private String getWeather() {
         if (getLevel().isThundering())
-            return "Thundering";
+            return "lightning.start_core.lightning_controller.weather_thunder";
         if(getLevel().isRaining())
-            return "Raining";
+            return "lightning.start_core.lightning_controller.weather_rain";
 
-        return  "Clear";
+        return  "lightning.start_core.lightning_controller.weather_clear";
     }
 
     public String cooldownPeriod() {
@@ -89,21 +89,20 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
             return;
 
         if (isActive()) {
-            textList.add(Component.literal("lightning.start_core.lighting_controller.energy"));
+            textList.add(Component.translatable("lightning.start_core.lightning_controller.energy"));
         } else {
-            textList.add(Component.literal("lightning.start_core.lighting_controller.no_energy"));
+            textList.add(Component.translatable("lightning.start_core.lightning_controller.no_energy"));
         }
 
-        textList.add(Component.literal("Weather: ")
-            .append(Component.literal(getWeather())
-                .withStyle(ChatFormatting.GRAY)));
-        textList.add(Component.literal("Unstable EU: ")
+        textList.add(Component.translatable("lightning.start_core.lightning_controller.weather_indicator")
+            .append(Component.translatable(getWeather())));
+        textList.add(Component.translatable("lightning.start_core.lightning_controller.unstable_eu_buffer")
             .append(Component.literal("" + unstableEU)
                 .withStyle(ChatFormatting.BLUE)));
-        textList.add(Component.literal("Strikes left: ")
+        textList.add(Component.translatable("lightning.start_core.lightning_controller.strikes_left")
             .append(Component.literal("" + (STRIKES_PER_STORM - strikesThisStorm))
                 .withStyle(ChatFormatting.GOLD)));
-        textList.add(Component.literal("Cooldown Remaining: ")
+        textList.add(Component.translatable("lightning.start_core.lightning_controller.cooldown_timer")
             .append(Component.literal(cooldownPeriod())
                 .withStyle(ChatFormatting.BLUE)));
 
@@ -135,7 +134,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
                 if (machine.getWeather().equals("Thundering")){
                     if (machine.strikesThisStorm < STRIKES_PER_STORM) {
-                        machine.LightingStrike();
+                        machine.LightningStrike();
 
                     } else if (machine.strikesThisStorm == STRIKES_PER_STORM) {
                         machine.timeSinceLastStorm = 0;

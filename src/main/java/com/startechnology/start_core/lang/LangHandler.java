@@ -518,7 +518,14 @@ public class LangHandler {
         provider.add("wind.start_core.wind_controller.weather_boost", "§bWeather: §f%sx");
         provider.add("wind.start_core.wind_controller.crowding_penalty", "§4Crowding Penalty: §c-50%");
         provider.add("wind.start_core.wind_controller.waiting_for_fluid", "Waiting for Fluid");
-        provider.add("lightning.start_core.lighting_controller.energy","§eGenerating:§f %s EU/t" );
-        provider.add("lightning.start_core.lighting_controller.no_energy", "§4Buffers Empty" );
+        provider.add("lightning.start_core.lightning_controller.energy","§eGenerating:§f %s EU/t" );
+        provider.add("lightning.start_core.lightning_controller.no_energy", "§4Buffers Empty" );
+        provider.add("lightning.start_core.lightning_controller.weather_indicator", "Weather: ");
+        provider.add("lightning.start_core.lightning_controller.weather_thunder", "Thunder");
+        provider.add("lightning.start_core.lightning_controller.weather_rain", "Rain");
+        provider.add("lightning.start_core.lightning_controller.weather_clear", "Clear");
+        provider.add("lightning.start_core.lightning_controller.unstable_eu_buffer", "Unstable EU: ");
+        provider.add("lightning.start_core.lightning_controller.strikes_left", "Strikes left: ");
+        provider.add("lightning.start_core.lightning_controller.cooldown_timer", "Cooldown remaining: ");
     }
 }
