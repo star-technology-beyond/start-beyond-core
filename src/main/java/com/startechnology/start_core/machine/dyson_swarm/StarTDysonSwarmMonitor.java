@@ -1,23 +1,20 @@
 package com.startechnology.start_core.machine.dyson_swarm;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.startechnology.start_core.machine.modular.StarTModularControllerMachine;
 import com.startechnology.start_core.machine.modular.StarTModularInterfaceHatchPartMachine;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 
-public class StarTDysonSwarmMonitor extends StarTModularControllerMachine {
+public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
 
-    private static final List<ResourceLocation> COLLECTOR_MODULE_ID = new ArrayList<>();
-    private static final List<ResourceLocation> RAILGUN_MODULE_ID = new ArrayList<>();
 
     @Getter
     @Setter
@@ -45,13 +42,17 @@ public class StarTDysonSwarmMonitor extends StarTModularControllerMachine {
     @Persisted
     private int runningTimer = 0;
 
+    protected List<ResourceLocation> railgunModuleIds;
+    protected List<ResourceLocation> collectorModuleIds;
     protected List<StarTModularInterfaceHatchPartMachine> railgunTerminals = new ArrayList<>();
     protected List<StarTModularInterfaceHatchPartMachine> collectorTerminals = new ArrayList<>();
 
 
-    public StarTDysonSwarmMonitor(IMachineBlockEntity holder, ResourceLocation... acceptedModuleIds) {
-        super(holder, acceptedModuleIds);
+    public StarTDysonSwarmMonitor(IMachineBlockEntity holder, List<ResourceLocation> railgunModuleIds, List<ResourceLocation> collectorModuleIds) {
+        super(holder);
 
+        this.railgunModuleIds = railgunModuleIds;
+        this.collectorModuleIds = collectorModuleIds;
     }
 
     @Override
@@ -85,22 +86,22 @@ public class StarTDysonSwarmMonitor extends StarTModularControllerMachine {
 
     private void setupTerminals() {
         for (StarTModularInterfaceHatchPartMachine collectorTerminal : collectorTerminals) {
-            collectorTerminal.setSupportedModules(COLLECTOR_MODULE_ID);
+            collectorTerminal.setSupportedModules(collectorModuleIds);
             collectorTerminal.resetSupportedModule();
 
-            collectorTerminal.setSupportedMachineConsumer(collectorNode -> {
-                // TODO (not entirely sure what to put here yet)
-            });
+//            collectorTerminal.setSupportedMachineConsumer(collectorNode -> {
+//                // TODO (not entirely sure what to put here yet)
+//            });
 
         }
 
         for (StarTModularInterfaceHatchPartMachine railgunTerminal : railgunTerminals) {
-            railgunTerminal.setSupportedModules(RAILGUN_MODULE_ID);
+            railgunTerminal.setSupportedModules(railgunModuleIds);
             railgunTerminal.resetSupportedModule();
 
-            railgunTerminal.setSupportedMachineConsumer(railgunNode -> {
-                // TODO (not entirely sure what to put here yet)
-            });
+//            railgunTerminal.setSupportedMachineConsumer(railgunNode -> {
+//                // TODO (not entirely sure what to put here yet)
+//            });
 
         }
     }

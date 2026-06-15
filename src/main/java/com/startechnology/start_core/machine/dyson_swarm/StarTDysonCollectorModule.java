@@ -1,20 +1,18 @@
 package com.startechnology.start_core.machine.dyson_swarm;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.startechnology.start_core.machine.modular.StarTModularInterfaceHatchPartMachine;
 import lombok.Getter;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class StarTDysonCollectorModule extends WorkableElectricMultiblockMachine {
 
-    private static final List<ResourceLocation> MODULE_ID = new ArrayList<>();
-    private final List<ResourceLocation> acceptedMultiblockIds;
     private final int tier;
 
     @Getter
@@ -23,21 +21,25 @@ public class StarTDysonCollectorModule extends WorkableElectricMultiblockMachine
     @Persisted
     private int runningTimer = 0;
 
-    protected List<StarTModularInterfaceHatchPartMachine> terminals;
+    protected List<ResourceLocation> acceptedMultiblockIds;
+    private boolean readyToUpdate;
 
     public StarTDysonCollectorModule(IMachineBlockEntity holder, int tier, ResourceLocation... acceptedMultiblockIds) {
         super(holder);
 
         this.tier = tier;
-        this.acceptedMultiblockIds = List.copyOf((Arrays.asList(acceptedMultiblockIds)));
+        this.acceptedMultiblockIds = Arrays.asList(acceptedMultiblockIds);
     }
 
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
 
+        this.readyToUpdate = false;
+
         this.setupTerminals();
 //        StarTDysonSwarmMonitor.setCollectorTier(this.tier);
+        this.readyToUpdate = true;
     }
 
     @Override
@@ -61,8 +63,10 @@ public class StarTDysonCollectorModule extends WorkableElectricMultiblockMachine
     }
 
     private void setupTerminals() {
-        for (StarTModularInterfaceHatchPartMachine terminal : terminals) {
-            terminal.setSupportedModules(MODULE_ID); //not entirely sure about how to add to this, will ask when u awake
+        for (IMultiPart part : getParts()) {
+            if (part instanceof  StarTModularInterfaceHatchPartMachine terminal) {
+                terminal.setSupportedModules(acceptedMultiblockIds);
+            }
         }
     }
 

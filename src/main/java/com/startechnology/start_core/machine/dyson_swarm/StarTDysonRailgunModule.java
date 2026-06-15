@@ -1,9 +1,9 @@
 package com.startechnology.start_core.machine.dyson_swarm;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.startechnology.start_core.machine.modular.StarTModularControllerMachine;
 import com.startechnology.start_core.machine.modular.StarTModularInterfaceHatchPartMachine;
 import net.minecraft.resources.ResourceLocation;
 
@@ -11,10 +11,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class StarTDysonRailgunModule extends StarTModularControllerMachine {
+public class StarTDysonRailgunModule extends WorkableElectricMultiblockMachine {
 
-    private static final List<ResourceLocation> MODULE_ID = new ArrayList<>();
-    private final List<ResourceLocation> acceptedMultiblockIds;
+    protected List<ResourceLocation> acceptedMultiblockIds;
     private final int tier;
 
     @Persisted
@@ -24,10 +23,10 @@ public class StarTDysonRailgunModule extends StarTModularControllerMachine {
     private boolean readyToUpdate;
 
     public StarTDysonRailgunModule(IMachineBlockEntity holder, int tier, ResourceLocation... acceptedMultiblockIds) {
-        super(holder, acceptedMultiblockIds);
+        super(holder);
 
         this.tier = tier;
-        this.acceptedMultiblockIds = List.copyOf(Arrays.asList(acceptedMultiblockIds));
+        this.acceptedMultiblockIds = Arrays.asList(acceptedMultiblockIds);
     }
 
     @Override
@@ -56,8 +55,10 @@ public class StarTDysonRailgunModule extends StarTModularControllerMachine {
     }
 
     private void setupTerminals() {
-        for (StarTModularInterfaceHatchPartMachine terminal : terminals) {
-            terminal.setSupportedModules(MODULE_ID); //not entirely sure about how to add to this, will ask when u awake
+        for (IMultiPart part : getParts()) {
+            if (part instanceof  StarTModularInterfaceHatchPartMachine terminal) {
+                terminal.setSupportedModules(acceptedMultiblockIds);
+            }
         }
     }
 

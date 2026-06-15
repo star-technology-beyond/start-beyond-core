@@ -12,13 +12,19 @@ import com.startechnology.start_core.block.fusion.StarTFusionBlocks;
 import com.startechnology.start_core.machine.StarTMachineUtils;
 import com.startechnology.start_core.machine.StarTPartAbility;
 import dev.latvian.mods.kubejs.KubeJS;
+import net.minecraft.resources.ResourceLocation;
 
+
+import java.util.List;
 
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.startechnology.start_core.StarTCore.START_REGISTRATE;
 
 
 public class StarTDysonSwarmMachines {
+
+    private static final ResourceLocation[] railgunModuleIds = { StarTCore.resourceLocation("uhv_dyson_collector_module"), StarTCore.resourceLocation("uev_dyson_collector_module"), StarTCore.resourceLocation("uiv_dyson_collector_module") };
+    private static final ResourceLocation[] collectorModuleIds = { StarTCore.resourceLocation("uhv_dyson_railgun_module"), StarTCore.resourceLocation("uev_dyson_railgun_module"), StarTCore.resourceLocation("uiv_dyson_railgun_module") };
 
     public static final MultiblockMachineDefinition T1_STELLAR_RAILGUN = START_REGISTRATE
             .multiblock("uhv_dyson_railgun_module", (holder) -> new StarTDysonRailgunModule(holder, UHV, StarTCore.resourceLocation("dyson_swarm_monitor")))
@@ -219,7 +225,7 @@ public class StarTDysonSwarmMachines {
             ).register();
 
     public static final MultiblockMachineDefinition DYSON_SWARM_MONITOR = START_REGISTRATE
-            .multiblock("dyson_swarm_monitor", (holder) -> new StarTDysonSwarmMonitor(holder, StarTCore.resourceLocation("uhv_dyson_collector_module"), StarTCore.resourceLocation("uev_dyson_collector_module"), StarTCore.resourceLocation("uiv_dyson_collector_module"), StarTCore.resourceLocation("uhv_dyson_railgun_module"), StarTCore.resourceLocation("uev_dyson_railgun_module"), StarTCore.resourceLocation("uiv_dyson_railgun_module"))) //there's surely a better way to write out these resource locations....
+            .multiblock("dyson_swarm_monitor", (holder) -> new StarTDysonSwarmMonitor(holder, List.of(railgunModuleIds), List.of(collectorModuleIds)))
             .langValue("Dyson Swarm Monitor [DSM]")
 //            .tooltips()
 //            .paginatedTooltips()
