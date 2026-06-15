@@ -85,7 +85,7 @@ public class StarTDysonSwarmMachines {
                     .where("B", Predicates.blocks(StarTMachineUtils.getKjsBlock("advanced_assembly_casing")))
                     .where("C", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("superconducting_coil")))
                     .where("D", Predicates.blocks(StarTFusionBlocks.ADVANCED_FUSION_COIL.get()))
-                    .where("E", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("noble_mixing_casing")))
+                    .where("E", Predicates.blocks(StarTMachineUtils.getKjsBlock("noble_mixing_casing")))
                     .where("F", Predicates.abilities(StarTPartAbility.MODULAR_NODE_INTERFACE))
                     .where("G", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("astrenalloy_nx_frame")))
                     .where("H", Predicates.abilities(PartAbility.INPUT_LASER))
@@ -197,7 +197,7 @@ public class StarTDysonSwarmMachines {
                     .where("@", Predicates.controller(Predicates.blocks(definition.get())))
                     .build()
             ).workableCasingModel(
-                    KubeJS.id("block/casings/end_multis/draneko_casing"),
+                    KubeJS.id("block/casings/threading/advanced_assembly_casing"),
                     StarTCore.resourceLocation("block/overlay/cross_dimensional_laser")
             ).register();
 

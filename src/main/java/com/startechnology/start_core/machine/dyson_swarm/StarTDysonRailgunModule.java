@@ -40,6 +40,11 @@ public class StarTDysonRailgunModule extends WorkableElectricMultiblockMachine {
     }
 
     @Override
+    public void onStructureInvalid() {
+        super.onStructureInvalid();
+    }
+
+    @Override
     public boolean onWorking() {
         boolean value = super.onWorking();
 
