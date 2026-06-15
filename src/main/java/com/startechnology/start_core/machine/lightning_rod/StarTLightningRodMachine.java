@@ -8,7 +8,7 @@ import lombok.Setter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
+
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -45,7 +45,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
     public void LightningStrike() {
         long generatedUnstableEU = 1000;
 
-        int lightningChance = ThreadLocalRandom.current().nextInt(6700, 6768);
+        int lightningChance = ThreadLocalRandom.current().nextInt(6766, 6768);
 
         if (lightningChance == 6767) {
             unstableEU = Math.min(
@@ -54,6 +54,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
             );
 
             strikesThisStorm += 1;
+
         }
     }
 
