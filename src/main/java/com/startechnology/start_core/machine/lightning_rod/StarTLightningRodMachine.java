@@ -1,8 +1,11 @@
 package com.startechnology.start_core.machine.lightning_rod;
 
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
+import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +24,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
     private static final int STRIKES_PER_STORM = 5;
     private static final int STORM_COOLDOWN = 24000;
-    private static final long MAX_UNSTABLE_EU = 1000000;
+    private static final long MAX_UNSTABLE_EU = 100000000;
     private static final double DECAY_PER_TICK = 0.0025;
 
     @Getter
@@ -30,9 +33,11 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
     private int euT = 0;
 
     @Persisted
+    @DescSynced
     private long unstableEU = 0;
 
     @Persisted
+    @DescSynced
     private long timeSinceLastStorm = 23800;
 
     @Getter
@@ -46,24 +51,38 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
     }
 
+    private static int getGeneratedUnstableEU(int tier) {
+        return switch (tier) {
+            case GTValues.LV -> 1137778;
+            case GTValues.MV -> 4551111;
+            case GTValues.HV -> 18204444;
+            case GTValues.EV -> 72817778;
+            default -> 1137778;
+        };
+    }
+
     private void LightningStrike() {
-        long generatedUnstableEU = 2048;
+        long generatedUnstableEU = getGeneratedUnstableEU(tier);
 
+        int strikeChance = (int)(Math.random() * 101);
+        System.out.println(strikeChance);
 
-        unstableEU = Math.min(
-            unstableEU + generatedUnstableEU,
-            MAX_UNSTABLE_EU
-        );
+        if (strikeChance == 1) {
+            unstableEU = Math.min(
+                unstableEU + generatedUnstableEU,
+                MAX_UNSTABLE_EU
+            );
 
-        strikesThisStorm += 1;
-        System.out.println("KABOOM!");
-
+            strikesThisStorm += 1;
+            System.out.println("KABOOM!");
+        }
     }
 
     private String getWeather() {
         System.out.println("Weatherman!");
         if (getLevel().isThundering())
             return "lightning.start_core.lightning_controller.weather_thunder";
+
         if(getLevel().isRaining())
             return "lightning.start_core.lightning_controller.weather_rain";
 
@@ -121,6 +140,20 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
         @Override
         public StarTLightningRodMachine getMachine(){return (StarTLightningRodMachine) super.getMachine();}
 
+        public void produceEnergy(){
+            EnergyContainerList energyContainer = getMachine().energyContainer;
+
+            if (energyContainer == null || getMachine().euT <= 0)
+                return;
+
+            long resultEnergy = energyContainer.getEnergyStored() + getMachine().euT;
+
+            if (resultEnergy >= 0L && resultEnergy <= energyContainer.getEnergyCapacity()) {
+                energyContainer.changeEnergy(getMachine().euT);
+                getMachine().unstableEU = Math.min(0, getMachine().unstableEU - getMachine().euT);
+            }
+        }
+
         public void serverTick() {
             var machine = getMachine();
 
@@ -146,12 +179,18 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
                     } else if (machine.strikesThisStorm == STRIKES_PER_STORM) {
                         System.out.println("No more kaboom :(");
                         machine.timeSinceLastStorm = 0;
+
                         if (!machine.getWeather().equals("lightning.start_core.lightning_controller.weather_thunder")){
                             machine.strikesThisStorm = 0;
                         }
 
                     }
                 }
+
+                isActive = machine.euT > 0;
+                setStatus(isActive ? Status.WORKING : Status.IDLE);
+
+                produceEnergy();
             }
 
 
