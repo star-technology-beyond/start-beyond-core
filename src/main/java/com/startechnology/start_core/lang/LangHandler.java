@@ -520,6 +520,7 @@ public class LangHandler {
         provider.add("wind.start_core.wind_controller.waiting_for_fluid", "Waiting for Fluid");
         provider.add("lightning.start_core.lightning_controller.energy","§eGenerating: " );
         provider.add("lightning.start_core.lightning_controller.no_energy", "§4Buffers Empty" );
+        provider.add("lightning.start_core.lightning_controller.full_dynamo", "§4Dynamo Full");
         provider.add("lightning.start_core.lightning_controller.weather_indicator", "Weather: ");
         provider.add("lightning.start_core.lightning_controller.weather_thunder", "Thunder");
         provider.add("lightning.start_core.lightning_controller.weather_rain", "Rain");
