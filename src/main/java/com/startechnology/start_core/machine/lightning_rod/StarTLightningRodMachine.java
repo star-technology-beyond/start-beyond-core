@@ -177,21 +177,19 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
                         machine.timeSinceLastStorm = 0;
                         machine.strikesThisStorm = 0;
 
-
                     }
                 }
-
-                isActive = machine.euT > 0;
-                System.out.println("EuT: " + machine.euT);
-                setStatus(isActive ? Status.WORKING : Status.IDLE);
-                produceEnergy();
             }
 
-
             if (machine.unstableEU > 0) {
+                produceEnergy();
+                System.out.println("Produce energy called");
                 machine.unstableEU -= Math.max(1L,
                     Math.round(machine.unstableEU * DECAY_PER_TICK));
             }
+
+            isActive = machine.euT > 0;
+            setStatus(isActive ? Status.WORKING : Status.IDLE);
 
         }
     }
