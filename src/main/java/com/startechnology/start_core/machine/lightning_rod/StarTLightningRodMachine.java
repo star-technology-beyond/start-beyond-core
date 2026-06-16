@@ -5,6 +5,7 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
+import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import net.minecraft.network.chat.Component;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -65,7 +66,6 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
         long generatedUnstableEU = getGeneratedUnstableEU(tier);
 
         int strikeChance = (int)(Math.random() * 101);
-        System.out.println(strikeChance);
 
         if (strikeChance == 1) {
             unstableEU = Math.min(
@@ -74,12 +74,10 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
             );
 
             strikesThisStorm += 1;
-            System.out.println("KABOOM!");
         }
     }
 
     private String getWeather() {
-        System.out.println("Weatherman!");
         if (getLevel().isThundering())
             return "lightning.start_core.lightning_controller.weather_thunder";
 
@@ -112,7 +110,9 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
             return;
 
         if (isActive()) {
-            textList.add(Component.translatable("lightning.start_core.lightning_controller.energy"));
+            textList.add(Component.translatable("lightning.start_core.lightning_controller.energy")
+                .append(Component.literal("%s EU/t".formatted(FormattingUtil.formatNumbers(euT)))
+                    .withStyle(ChatFormatting.GREEN)));
         } else {
             textList.add(Component.translatable("lightning.start_core.lightning_controller.no_energy"));
         }
@@ -142,15 +142,16 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
         public void produceEnergy(){
             EnergyContainerList energyContainer = getMachine().energyContainer;
+            getMachine().euT = Math.max(0, (int) (getMachine().unstableEU * 0.81));
 
             if (energyContainer == null || getMachine().euT <= 0)
                 return;
 
             long resultEnergy = energyContainer.getEnergyStored() + getMachine().euT;
-
+            System.out.println("ResultEnergy: " + resultEnergy);
             if (resultEnergy >= 0L && resultEnergy <= energyContainer.getEnergyCapacity()) {
                 energyContainer.changeEnergy(getMachine().euT);
-                getMachine().unstableEU = Math.min(0, getMachine().unstableEU - getMachine().euT);
+                getMachine().unstableEU = Math.max(0, getMachine().unstableEU - getMachine().euT);
             }
         }
 
@@ -166,30 +167,23 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
             if (machine.timeSinceLastStorm < STORM_COOLDOWN) {
                 machine.timeSinceLastStorm += 1;
-                System.out.println("Cooldown ticking");
 
             } else if (machine.timeSinceLastStorm == STORM_COOLDOWN) {
-                System.out.println("Cooldown finished");
                 if (machine.getWeather().equals("lightning.start_core.lightning_controller.weather_thunder")){
-                    System.out.println("Thunder!");
                     if (machine.strikesThisStorm < STRIKES_PER_STORM) {
-                        System.out.println("kaboom?");
                         machine.LightningStrike();
 
                     } else if (machine.strikesThisStorm == STRIKES_PER_STORM) {
-                        System.out.println("No more kaboom :(");
                         machine.timeSinceLastStorm = 0;
+                        machine.strikesThisStorm = 0;
 
-                        if (!machine.getWeather().equals("lightning.start_core.lightning_controller.weather_thunder")){
-                            machine.strikesThisStorm = 0;
-                        }
 
                     }
                 }
 
                 isActive = machine.euT > 0;
+                System.out.println("EuT: " + machine.euT);
                 setStatus(isActive ? Status.WORKING : Status.IDLE);
-
                 produceEnergy();
             }
 
@@ -197,7 +191,6 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
             if (machine.unstableEU > 0) {
                 machine.unstableEU -= Math.max(1L,
                     Math.round(machine.unstableEU * DECAY_PER_TICK));
-                System.out.println("Decay Decay Decay");
             }
 
         }
