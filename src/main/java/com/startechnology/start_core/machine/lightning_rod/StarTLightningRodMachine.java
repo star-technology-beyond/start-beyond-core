@@ -176,7 +176,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
             long resultEnergy = energyContainer.getEnergyStored() + getMachine().euT;
 
-            if (resultEnergy >= 0L && 0 == energyContainer.getEnergyCapacity()) {
+            if (resultEnergy >= 0L && resultEnergy <= energyContainer.getEnergyCapacity()) {
                 getMachine().fullDynamo = false;
                 energyContainer.changeEnergy(getMachine().euT);
                 getMachine().unstableEU = Math.max(0, getMachine().unstableEU - getMachine().euT);
