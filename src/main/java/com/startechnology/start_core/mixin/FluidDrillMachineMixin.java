@@ -68,7 +68,7 @@ public class FluidDrillMachineMixin {
     public static Block getFrameState(int tier) {
         Material material = switch(tier) {
             case GTValues.HV -> GTMaterials.Titanium;
-            case GTValues.EV -> GTMaterials.TungstenSteel;
+            case GTValues.EV -> GTMaterials.Tungstensteel;
             case GTValues.ZPM -> GTMaterials.NaquadahEnriched;
             default -> GTMaterials.Steel;
         };
