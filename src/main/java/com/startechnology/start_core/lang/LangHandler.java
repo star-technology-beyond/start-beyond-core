@@ -332,14 +332,14 @@ public class LangHandler {
 
         provider.add("start_core.multiblock.frame.linked_modules", "Linked Modules: %s");
 
-        provider.add("start_core.multiblock.frame.cooled_deionized", "§7Coolant: §bDe-Ionized Water");
+        provider.add("start_core.multiblock.frame.cooled_deionized", "§7Coolant: §bDeionized Water");
         provider.add("start_core.multiblock.frame.cooled_distilled", "§7Coolant: §1Distilled Water");
         provider.add("start_core.multiblock.frame.not_cooled", "§7Coolant: §cNone");
         provider.add("start_core.multiblock.frame.coolant_consumption", "Coolant Usage: %s B/h");
 
         provider.add("block.start_core.modular_combustion_frame_description", "§6§lModular Combustion Complex");
         provider.add("block.start_core.modular_combustion_frame_d1", "§7A Modular Frame that can hold up to 8 different Combustion or Rocket Modules");
-        provider.add("block.start_core.modular_combustion_frame_d2", "§3Cooling Boosting: §7Consumes 500B an hour per module connected of §fDistilled Water§7 for a §a+20% §fEU/t §7output, or with §fDe-Ionized Water§7 for a §a+40% §fEU/t §7output, and a providing no coolant leads to a §4-10% §fEU/t §7to the energy output");
+        provider.add("block.start_core.modular_combustion_frame_d2", "§3Cooling Boosting: §7Consumes 500B an hour per module connected of §fDistilled Water§7 for a §a+20% §fEU/t §7output, or with §fDeionized Water§7 for a §a+40% §fEU/t §7output, and a providing no coolant leads to a §4-10% §fEU/t §7to the energy output");
         provider.add("block.start_core.modular_combustion_frame_d3", "§cModular Frame: §7Place the Module so its §fTerminal Hatch §7faces directly into a §fNode Hatch §7on the Multiblock. The §fTerminal Hatch §7UI will show whether the connection is active and which Multiblock this Module connects to. The §fFrame §7enables all §fModule Machines §7attached to it.");
         provider.add("block.start_core.modular_combustion_frame_tooltip_laser", "Can use §dLaser Hatches");
 
