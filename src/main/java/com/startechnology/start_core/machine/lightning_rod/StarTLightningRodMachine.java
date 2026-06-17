@@ -9,11 +9,11 @@ import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.startechnology.start_core.machine.modular.StarTModularConduitHatchPartMachine;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 
 
@@ -59,9 +59,9 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
     //@Override
     //public void onStructureFormed() {
-    //    for (IMultiPart part : getParts()) {
-    //        if (part instanceof StarTModularConduitHatchPartMachine coil) {
-    //              { coil.getPartPositions();
+    //    for (BlockPos pos : getPartPositions()) {
+    //        if (pos instanceof coil) {
+    //        }
     //    }
     //}
 
@@ -77,7 +77,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
     }
 
     private void lightningStrikeCheck() {
-        int strikeChance = (int)(Math.random() * 6); // Controls chance of thunder
+        int strikeChance = (int)(Math.random() * 3); // Controls chance of thunder
 
         if (strikeChance == 1) {
             strikesThisStorm += 1;
@@ -85,6 +85,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
         } else {
             doLightningStrike = false;
         }
+        System.out.println(doLightningStrike);
     }
 
     private void LightningStrike() {
@@ -189,7 +190,13 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
         public void serverTick() {
             var machine = getMachine();
 
-            if (!machine.isFormed || !isWorkingEnabled()) {
+            if (machine.unstableEU > 0) {
+
+            }
+
+            if (!machine.isFormed || !machine.isWorkingEnabled()) {
+                machine.unstableEU -= Math.max(1L,
+                    Math.round(machine.unstableEU * DECAY_PER_TICK));
                 machine.euT = 0;
                 setStatus(Status.IDLE);
                 isActive = false;
@@ -197,8 +204,10 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
             }
 
             if (machine.getLevel().getGameTime() % 100 == 0) {
-                if (machine.strikesThisStorm < STRIKES_PER_STORM) {
+                if (machine.strikesThisStorm < STRIKES_PER_STORM && machine.timeSinceLastStorm == STORM_COOLDOWN) {
                     machine.lightningStrikeCheck();
+                    System.out.println("Strikes this storm" + machine.strikesThisStorm);
+
                 }
             }
 
@@ -211,22 +220,24 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
                             machine.LightningStrike();
                         }
                     } else if (machine.strikesThisStorm == STRIKES_PER_STORM) {
+                        machine.LightningStrike();
                         machine.timeSinceLastStorm = 0;
                     }
                 }
             }
 
-            if ((machine.getWeather().equals("lightning.start_core.lightning_controller.weather_clear" ) ||
-                machine.getWeather().equals("lightning.start_core.lightning_controller.weather_rain"))
+            if (!machine.getWeather().equals("lightning.start_core.lightning_controller.weather_thunder" )
                 && machine.strikesThisStorm == STRIKES_PER_STORM) {
                 machine.strikesThisStorm = 0;
             }
 
             if (machine.unstableEU > 0) {
-                produceEnergy();
-
+                System.out.println("EUT:" + machine.euT);
+                System.out.println("Pre Decay:" + machine.unstableEU);
                 machine.unstableEU -= Math.max(1L,
                     Math.round(machine.unstableEU * DECAY_PER_TICK));
+                System.out.println("Post Decay" + machine.unstableEU);
+                produceEnergy();
             }
 
             isActive = machine.unstableEU > 0;
