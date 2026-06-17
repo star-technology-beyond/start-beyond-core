@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.startechnology.start_core.machine.modular.StarTModularConduitHatchPartMachine;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.ChatFormatting;
@@ -55,12 +56,13 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
         this.tier = tier;
 
     }
-    //
+
     //@Override
     //public void onStructureFormed() {
-        //for (IMultiPart part : getParts()) {
-        //    if (part instanceof
-      //  }
+    //    for (IMultiPart part : getParts()) {
+    //        if (part instanceof StarTModularConduitHatchPartMachine coil) {
+    //              { coil.getPartPositions();
+    //    }
     //}
 
 
@@ -75,7 +77,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
     }
 
     private void lightningStrikeCheck() {
-        int strikeChance = (int)(Math.random() * 11); // Controls chance of thunder
+        int strikeChance = (int)(Math.random() * 6); // Controls chance of thunder
 
         if (strikeChance == 1) {
             strikesThisStorm += 1;
@@ -166,7 +168,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
         public void produceEnergy(){
             EnergyContainerList energyContainer = getMachine().energyContainer;
-            getMachine().euT = Math.max(0, (int) (getMachine().unstableEU * 0.01));
+            getMachine().euT = Math.max(0, (int) (getMachine().unstableEU * 0.3155));
 
             if (energyContainer == null || getMachine().euT <= 0) {
                 return;
@@ -174,7 +176,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
             long resultEnergy = energyContainer.getEnergyStored() + getMachine().euT;
 
-            if (resultEnergy >= 0L && resultEnergy <= energyContainer.getEnergyCapacity()) {
+            if (resultEnergy >= 0L && 0 == energyContainer.getEnergyCapacity()) {
                 getMachine().fullDynamo = false;
                 energyContainer.changeEnergy(getMachine().euT);
                 getMachine().unstableEU = Math.max(0, getMachine().unstableEU - getMachine().euT);
@@ -195,7 +197,9 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
             }
 
             if (machine.getLevel().getGameTime() % 100 == 0) {
-                machine.lightningStrikeCheck();
+                if (machine.strikesThisStorm < STRIKES_PER_STORM) {
+                    machine.lightningStrikeCheck();
+                }
             }
 
             if (machine.timeSinceLastStorm < STORM_COOLDOWN) {
