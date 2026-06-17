@@ -5,15 +5,12 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
-import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 
 
@@ -27,9 +24,11 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
     private static final int STRIKES_PER_STORM = 5; // Maximum strikes that can occur without a weather change
     private static final int STORM_COOLDOWN = 24000; // Amount of time before multi can be struck again
+    private static final int LIGHTNING_SURGE_TICKS = 100;
+    private static final int STRIKE_ROLL_INTERVAL = 100;
     private static final double DECAY_PER_TICK = 0.0025;
+    private static final double FULL_COIL_STABILISATION_RATE = 0.3155;
     private boolean fullDynamo = false; // Controller flag
-    private boolean doLightningStrike = true;
 
     @Getter
     private final int tier;
@@ -42,7 +41,7 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
     @Persisted
     @DescSynced
-    private long timeSinceLastStorm = 23800;
+    private long timeSinceLastStorm = STORM_COOLDOWN;
 
     @Persisted
     @DescSynced
@@ -50,21 +49,20 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
     @Setter
     private int strikesThisStorm = 0;
 
+    @Persisted
+    @DescSynced
+    private int surgeTicksRemaining = 0;
+
+    @Persisted
+    @DescSynced
+    private long surgeEUt = 0;
+
     public StarTLightningRodMachine(IMachineBlockEntity holder, int tier) {
         super(holder);
 
         this.tier = tier;
 
     }
-
-    //@Override
-    //public void onStructureFormed() {
-    //    for (BlockPos pos : getPartPositions()) {
-    //        if (pos instanceof coil) {
-    //        }
-    //    }
-    //}
-
 
     private static int getGeneratedUnstableEU(int tier) { // How much uEU is generated per strike (tier dependent)
         return switch (tier) {
@@ -76,27 +74,48 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
         };
     }
 
-    private void lightningStrikeCheck() {
-        int strikeChance = (int)(Math.random() * 3); // Controls chance of thunder
+    // Slightly cleaner method of Thunderstorm check
+    private boolean isThunderstorm() {
+        return getLevel() != null && getLevel().isThundering();
+    }
 
-        if (strikeChance == 1) {
-            strikesThisStorm += 1;
-            doLightningStrike = true;
-        } else {
-            doLightningStrike = false;
+    private boolean shouldStartLightningSurge() {
+        return Math.random() < (1.0 / 3.0);
+    }
+
+    // Counter for Surge/Power Gen and starts countdown
+    private void startLightningSurge() {
+        strikesThisStorm++;
+        surgeEUt = getGeneratedUnstableEU(tier);
+        surgeTicksRemaining = LIGHTNING_SURGE_TICKS;
+
+        if (strikesThisStorm >= STRIKES_PER_STORM) {
+            timeSinceLastStorm = 0;
         }
-        System.out.println(doLightningStrike);
     }
 
-    private void LightningStrike() {
-        long generatedUnstableEU = getGeneratedUnstableEU(tier); // gets related uEU amount
+    // Generates Surge Power
+    private void generateSurgeTick() {
+        if (surgeTicksRemaining <= 0) {
+            return;
+        }
 
-        unstableEU =  unstableEU + generatedUnstableEU;// Adds to the multis internal buffer, but will not cross the limit
+        unstableEU += surgeEUt;
+        surgeTicksRemaining--;
     }
 
+    // Decay centralised into the one method
+    private void decayUnstableEU() {
+        if (unstableEU <= 0) {
+            return;
+        }
+
+        long decay = Math.max(1L, Math.round(unstableEU * DECAY_PER_TICK));
+        unstableEU = Math.max(0L, unstableEU - decay);
+    }
 
     private String getWeather() { // returns the current weather
-        if (getLevel().isThundering())
+        if (isThunderstorm())
             return "lightning.start_core.lightning_controller.weather_thunder";
 
         if(getLevel().isRaining())
@@ -113,6 +132,17 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
 
         return "%dm %02ds".formatted(cooldownMinutes, cooldownSeconds);
 
+    }
+
+    // Adjusted old EnergyContainer to new LightningHatch (Name Pending still idk)
+    private StarTLightningOutputHatchPartMachine getLightningOutputHatch() {
+        for (IMultiPart part : getParts()) {
+            if (part instanceof StarTLightningOutputHatchPartMachine hatch && hatch.getTier() == tier) {
+                return hatch;
+            }
+        }
+
+        return null;
     }
 
     protected RecipeLogic createRecipeLogic(Object... args){ return new StarTLightningRodRecipeLogic(this);}
@@ -138,22 +168,18 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
             textList.add(Component.translatable("lightning.start_core.lightning_controller.full_dynamo"));
         }
         else {
-            textList.add(Component.translatable("lightning.start_core.lightning_controller.energy")
-                .append(Component.literal("%s EU/t".formatted(FormattingUtil.formatNumbers(euT)))
-                    .withStyle(ChatFormatting.GREEN)));
+            textList.add(Component.translatable("lightning.start_core.lightning_controller.energy",
+                FormattingUtil.formatNumbers(euT)));
         }
 
-        textList.add(Component.translatable("lightning.start_core.lightning_controller.weather_indicator")
-            .append(Component.translatable(getWeather())));
-        textList.add(Component.translatable("lightning.start_core.lightning_controller.unstable_eu_buffer")
-            .append(Component.literal("" + unstableEU)
-                .withStyle(ChatFormatting.BLUE)));
-        textList.add(Component.translatable("lightning.start_core.lightning_controller.strikes_left")
-            .append(Component.literal("" + (STRIKES_PER_STORM - strikesThisStorm))
-                .withStyle(ChatFormatting.GOLD)));
-        textList.add(Component.translatable("lightning.start_core.lightning_controller.cooldown_timer")
-            .append(Component.literal(cooldownPeriod())
-                .withStyle(ChatFormatting.BLUE)));
+        textList.add(Component.translatable("lightning.start_core.lightning_controller.weather_indicator",
+            Component.translatable(getWeather())));
+        textList.add(Component.translatable("lightning.start_core.lightning_controller.unstable_eu_buffer",
+            FormattingUtil.formatNumbers(unstableEU)));
+        textList.add(Component.translatable("lightning.start_core.lightning_controller.strikes_left",
+            STRIKES_PER_STORM - strikesThisStorm));
+        textList.add(Component.translatable("lightning.start_core.lightning_controller.cooldown_timer",
+            cooldownPeriod()));
 
     }
 
@@ -168,79 +194,74 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
         public StarTLightningRodMachine getMachine(){return (StarTLightningRodMachine) super.getMachine();}
 
         public void produceEnergy(){
-            EnergyContainerList energyContainer = getMachine().energyContainer;
-            getMachine().euT = Math.max(0, (int) (getMachine().unstableEU * 0.3155));
+            StarTLightningRodMachine machine = getMachine();
+            StarTLightningOutputHatchPartMachine hatch = machine.getLightningOutputHatch();
 
-            if (energyContainer == null || getMachine().euT <= 0) {
+            if (hatch == null || machine.unstableEU <= 0) {
+                machine.euT = 0;
+                machine.fullDynamo = hatch == null;
                 return;
             }
 
-            long resultEnergy = energyContainer.getEnergyStored() + getMachine().euT;
+            long desiredEUt = Math.max(0L, Math.round(machine.unstableEU * FULL_COIL_STABILISATION_RATE));
 
-            if (resultEnergy >= 0L && resultEnergy <= energyContainer.getEnergyCapacity()) {
-                getMachine().fullDynamo = false;
-                energyContainer.changeEnergy(getMachine().euT);
-                getMachine().unstableEU = Math.max(0, getMachine().unstableEU - getMachine().euT);
+            if (desiredEUt <= 0) {
+                machine.euT = 0;
+                return;
+            }
 
-            } else {
-                getMachine().fullDynamo = true;
+            long accepted = hatch.acceptLightningEnergy(desiredEUt);
+
+            // Check here to ensure that only accepted amount of EU in Hatch is output and if no space then stays unstable to decay
+            machine.euT = Math.toIntExact(Math.min(Integer.MAX_VALUE, accepted));
+            machine.fullDynamo = accepted < desiredEUt;
+
+            if (accepted > 0) {
+                machine.unstableEU = Math.max(0L, machine.unstableEU - accepted);
             }
         }
 
         public void serverTick() {
             var machine = getMachine();
 
-            if (machine.unstableEU > 0) {
-
-            }
-
             if (!machine.isFormed || !machine.isWorkingEnabled()) {
-                machine.unstableEU -= Math.max(1L,
-                    Math.round(machine.unstableEU * DECAY_PER_TICK));
+                machine.decayUnstableEU();
                 machine.euT = 0;
                 setStatus(Status.IDLE);
                 isActive = false;
                 return;
             }
 
-            if (machine.getLevel().getGameTime() % 100 == 0) {
-                if (machine.strikesThisStorm < STRIKES_PER_STORM && machine.timeSinceLastStorm == STORM_COOLDOWN) {
-                    machine.lightningStrikeCheck();
-                    System.out.println("Strikes this storm" + machine.strikesThisStorm);
-
-                }
-            }
-
             if (machine.timeSinceLastStorm < STORM_COOLDOWN) {
-                machine.timeSinceLastStorm += 1;
-            } else if (machine.timeSinceLastStorm == STORM_COOLDOWN) {
-                if (machine.getWeather().equals("lightning.start_core.lightning_controller.weather_thunder")){
-                    if (machine.strikesThisStorm < STRIKES_PER_STORM) {
-                        if (machine.doLightningStrike) {
-                            machine.LightningStrike();
-                        }
-                    } else if (machine.strikesThisStorm == STRIKES_PER_STORM) {
-                        machine.LightningStrike();
-                        machine.timeSinceLastStorm = 0;
-                    }
+                machine.timeSinceLastStorm++;
+
+                if (machine.timeSinceLastStorm >= STORM_COOLDOWN) {
+                    machine.strikesThisStorm = 0;
                 }
             }
 
-            if (!machine.getWeather().equals("lightning.start_core.lightning_controller.weather_thunder" )
-                && machine.strikesThisStorm == STRIKES_PER_STORM) {
-                machine.strikesThisStorm = 0;
+            // Check for whether strike can occur - must meet below requirements
+            boolean canRollStrike = machine.isThunderstorm()
+                && machine.timeSinceLastStorm >= STORM_COOLDOWN
+                && machine.strikesThisStorm < STRIKES_PER_STORM
+                && machine.surgeTicksRemaining <= 0
+                && machine.getLevel().getGameTime() % STRIKE_ROLL_INTERVAL == 0;
+
+            if (canRollStrike && machine.shouldStartLightningSurge()) {
+                machine.startLightningSurge();
             }
+
+            machine.generateSurgeTick();
 
             if (machine.unstableEU > 0) {
-                System.out.println("EUT:" + machine.euT);
-                System.out.println("Pre Decay:" + machine.unstableEU);
-                machine.unstableEU -= Math.max(1L,
-                    Math.round(machine.unstableEU * DECAY_PER_TICK));
-                System.out.println("Post Decay" + machine.unstableEU);
                 produceEnergy();
+                machine.decayUnstableEU();
+            } else {
+                machine.euT = 0;
+                machine.fullDynamo = false;
             }
 
-            isActive = machine.unstableEU > 0;
+            isActive = machine.unstableEU > 0 || machine.surgeTicksRemaining > 0;
             setStatus(isActive ? Status.WORKING : Status.IDLE);
 
             progress = (progress + 1) % UPDATE_INTERVAL;
@@ -253,4 +274,3 @@ public class StarTLightningRodMachine extends WorkableElectricMultiblockMachine 
         }
     }
 }
-

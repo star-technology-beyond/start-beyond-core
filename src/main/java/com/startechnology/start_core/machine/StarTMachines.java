@@ -25,6 +25,7 @@ import com.startechnology.start_core.machine.threading.StarTThreadingControllerM
 import com.startechnology.start_core.machine.threading.StarTThreadingStatBlocks;
 import com.startechnology.start_core.machine.vacuum_pump.StarTVacuumPumpMachines;
 import com.startechnology.start_core.machine.wind_turbine.StarTWindTurbineMachines;
+import com.startechnology.start_core.machine.lightning_rod.StarTLightningOutputHatches;
 
 public class StarTMachines {
 
@@ -55,5 +56,6 @@ public class StarTMachines {
         StarTEnergyDynamos.init();
         StarTWindTurbineMachines.init();
         StarTLightningRodMachines.init();
+        StarTLightningOutputHatches.init();
     }
 }

@@ -20,6 +20,8 @@ public class StarTPartAbility {
     /* Enables the usage of modular nodes in this machine */
     public static final PartAbility MODULAR_NODE = new PartAbility("modular_node");
 
+    public static final PartAbility LIGHTNING_OUTPUT_HATCH = new PartAbility("lightning_output_hatch");
+
     /* NOTE: 
      * There should only ever be ONE modular node on a module machine
      * (doesn't make much sense to have multiple "link" spots)

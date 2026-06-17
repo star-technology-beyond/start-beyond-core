@@ -11,6 +11,8 @@ import com.gregtechceu.gtceu.api.registry.registrate.MultiblockMachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.startechnology.start_core.StarTCore;
 import com.startechnology.start_core.machine.StarTMachineUtils;
+import com.startechnology.start_core.machine.StarTPartAbility;
+
 
 
 import static com.gregtechceu.gtceu.api.GTValues.EV;
@@ -41,7 +43,7 @@ public class StarTLightningRodMachines {
                         .aisle("B@A")
                         .aisle("AAA")
                         .where("A", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("aluminium_frame")))
-                        .where("B", Predicates.ability(PartAbility.OUTPUT_ENERGY))
+                        .where("B", Predicates.ability(StarTPartAbility.LIGHTNING_OUTPUT_HATCH).setExactLimit(1))
                         .where("@", Predicates.controller(Predicates.blocks(definition.get())))
                         .build();
                     case HV -> FactoryBlockPattern.start()
@@ -49,7 +51,7 @@ public class StarTLightningRodMachines {
                         .aisle("B@A")
                         .aisle("AAA")
                         .where("A", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("stainless_steel_frame")))
-                        .where("B", Predicates.ability(PartAbility.OUTPUT_ENERGY))
+                        .where("B", Predicates.ability(StarTPartAbility.LIGHTNING_OUTPUT_HATCH).setExactLimit(1))
                         .where("@", Predicates.controller(Predicates.blocks(definition.get())))
                         .build();
                     case EV -> FactoryBlockPattern.start()
@@ -57,7 +59,7 @@ public class StarTLightningRodMachines {
                         .aisle("B@A")
                         .aisle("AAA")
                         .where("A", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("black_steel_frame")))
-                        .where("B", Predicates.ability(PartAbility.OUTPUT_ENERGY))
+                        .where("B", Predicates.ability(StarTPartAbility.LIGHTNING_OUTPUT_HATCH).setExactLimit(1))
                         .where("@", Predicates.controller(Predicates.blocks(definition.get())))
                         .build();
                     default -> FactoryBlockPattern.start()
@@ -65,7 +67,7 @@ public class StarTLightningRodMachines {
                         .aisle("B@A")
                         .aisle("AAA")
                         .where("A", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("steel_frame")))
-                        .where("B", Predicates.ability(PartAbility.OUTPUT_ENERGY))
+                        .where("B", Predicates.ability(StarTPartAbility.LIGHTNING_OUTPUT_HATCH).setExactLimit(1))
                         .where("@", Predicates.controller(Predicates.blocks(definition.get())))
                         .build();
                 })
