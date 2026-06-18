@@ -16,7 +16,6 @@
     "MaterialRecipeHandlerMixin",
     "MEPatternBufferPartMachineMixin",
     "MultiblockControllerMachineMixin",
-    "NotifiableItemStackHandlerMixin",
     "ParallelHatchPartMachineAccessor",
     "ParallelHatchPartMachineMixin",
     "RecipeLogicMinimumParallelMixin",
