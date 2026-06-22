@@ -26,24 +26,28 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
     // using these 3 to display in controller and to communicate between the 3 locations
     @Getter
     @Setter
-    private int[] mirrorCounts = new int[3];
+    private int mirrorCount = 0;
 
     @Getter
-    private int[] shieldCounts = new int[3];
-
-    @Getter
-    @Setter
-    private int[] amplifierCounts = new int[3];
+    private int shieldCount = 0;
 
     @Getter
     @Setter
-    private int collectorTier;
+    private int amplifierCount = 0;
+
+    @Getter
+    @Setter
+    private Integer collectorTier;
+
+    @Getter
+    @Setter
+    private Integer railgunTier;
 
     @Persisted
     private int runningTimer = 0;
 
-    private StarTDysonCollectorModule starTDysonCollectorModule;
-    private StarTDysonRailgunModule starTDysonRailgunModule;
+    private StarTDysonSwarmCollectorModule starTDysonCollectorModule;
+    private StarTDysonSwarmRailgunModule starTDysonRailgunModule;
 
     protected List<ResourceLocation> railgunModuleIds;
     protected List<ResourceLocation> collectorModuleIds;
@@ -93,7 +97,7 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
             collectorTerminal.resetSupportedModule();
 
             collectorTerminal.setSupportedMachineControllerConsumer(collectorControllerMachine ->
-                    this.starTDysonCollectorModule = (StarTDysonCollectorModule) collectorControllerMachine);
+                    this.starTDysonCollectorModule = (StarTDysonSwarmCollectorModule) collectorControllerMachine);
 
         }
 
@@ -102,7 +106,7 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
             railgunTerminal.resetSupportedModule();
 
             railgunTerminal.setSupportedMachineControllerConsumer(railgunControllerMachine ->
-                    this.starTDysonRailgunModule = (StarTDysonRailgunModule) railgunControllerMachine);
+                    this.starTDysonRailgunModule = (StarTDysonSwarmRailgunModule) railgunControllerMachine);
 
         }
     }
@@ -116,7 +120,9 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
     }
 
     private void ejectSwarms(String type, int count, boolean all) {
-        // TODO should be pretty straight forward to understand what I'm planning here
+        /* TODO should be pretty straight forward to understand what I'm planning here
+           Note: don't forget to run this whenever railgun unforms
+         */
     }
 
 

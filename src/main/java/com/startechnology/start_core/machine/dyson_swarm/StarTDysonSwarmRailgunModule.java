@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.Arrays;
 import java.util.List;
 
-public class StarTDysonRailgunModule extends WorkableElectricMultiblockMachine {
+public class StarTDysonSwarmRailgunModule extends WorkableElectricMultiblockMachine {
 
     protected List<ResourceLocation> acceptedMultiblockIds;
     private final int tier;
@@ -22,7 +22,7 @@ public class StarTDysonRailgunModule extends WorkableElectricMultiblockMachine {
 
     private boolean readyToUpdate;
 
-    public StarTDysonRailgunModule(IMachineBlockEntity holder, int tier, ResourceLocation... acceptedMultiblockIds) {
+    public StarTDysonSwarmRailgunModule(IMachineBlockEntity holder, int tier, ResourceLocation... acceptedMultiblockIds) {
         super(holder);
 
         this.tier = tier;
