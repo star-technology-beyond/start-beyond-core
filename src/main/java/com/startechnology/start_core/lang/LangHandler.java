@@ -499,6 +499,7 @@ public class LangHandler {
         provider.add("ui.start_core.cross_dimensional_laser.output_per_sec", "§7EU Sent: %s §7EU/t");
         provider.add("ui.start_core.cross_dimensional_laser.hatch.input_per_sec_hover", "EU transferred to this array in the last second expressed in per tick");
         provider.add("ui.start_core.cross_dimensional_laser.hatch.output_per_sec_hover", "EU transferred out of this array in the last second expressed in per tick");
+
         provider.add("block.start_core.wind_controller.line", "§6§lWind Energy");
         provider.add("start_core.wind_controller.line0", "§7A wind generator whose output and rotor speed rise and fall with wind strength.");
         provider.add("start_core.wind_controller.line1", "§6Lubrication:");
@@ -518,5 +519,9 @@ public class LangHandler {
         provider.add("wind.start_core.wind_controller.weather_boost", "§bWeather: §f%sx");
         provider.add("wind.start_core.wind_controller.crowding_penalty", "§4Crowding Penalty: §c-50%");
         provider.add("wind.start_core.wind_controller.waiting_for_fluid", "Waiting for Fluid");
+
+        provider.add("dyson_swarm.start_core.collector_module.generating", "§eGenerating:§f %s EU/t");
+        provider.add("dyson_swarm.start_core.mirror_count", "Mirror Count: %s");
+        provider.add("dyson_swarm.start_core.amplifier_count", "Amplifier Count: %s");
     }
 }

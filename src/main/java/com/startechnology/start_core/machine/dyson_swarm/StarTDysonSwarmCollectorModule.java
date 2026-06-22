@@ -1,20 +1,27 @@
 package com.startechnology.start_core.machine.dyson_swarm;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
+import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.startechnology.start_core.machine.modular.StarTModularInterfaceHatchPartMachine;
-import lombok.Getter;
-import lombok.Setter;
-import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 
+import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
+
+import lombok.Getter;
+import lombok.Setter;
+import net.minecraft.ChatFormatting;
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
+import net.minecraft.network.chat.Component;
+
 
 public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMachine {
 
@@ -98,6 +105,27 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
                 (this.railgunTier == GTValues.UEV) ? 1.005 : 1.0025;
 
         euT = (int) Math.floor(this.mirrorCount * Math.pow(tierMultiplier, this.amplifierCount) * GTValues.V[railgunTier]);
+    }
+
+    public boolean canVoidRecipeOutputs(RecipeCapability<?> capability) {
+        return false;
+    }
+
+    public boolean regressWhenWaiting() {
+        return false;
+    }
+
+    @Override
+    public void addDisplayText(List<Component> textList) {
+        super.addDisplayText(textList);
+
+        if (!isFormed()) return;
+
+        if (isActive()) {
+            textList.add(Component.translatable("dyson_swarm.start_core.mirror_count", FormattingUtil.formatNumbers(mirrorCount)));
+            textList.add(Component.translatable("dyson_swarm.start_core.amplifier_count", FormattingUtil.formatNumbers(amplifierCount)));
+            textList.add(Component.translatable("dyson_swarm.start_core.collector_module.generating", FormattingUtil.formatNumbers(euT)));
+        }
     }
 
     public static class StarTDysonSwarmCollectorLogic extends RecipeLogic {
