@@ -7,7 +7,6 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.startechnology.start_core.machine.modular.StarTModularInterfaceHatchPartMachine;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,10 +15,11 @@ public class StarTDysonRailgunModule extends WorkableElectricMultiblockMachine {
     protected List<ResourceLocation> acceptedMultiblockIds;
     private final int tier;
 
+    private StarTDysonSwarmMonitor starTDysonSwarmMonitor;
+
     @Persisted
     private int runningTimer = 0;
 
-    protected List<StarTModularInterfaceHatchPartMachine> terminals = new ArrayList<>();
     private boolean readyToUpdate;
 
     public StarTDysonRailgunModule(IMachineBlockEntity holder, int tier, ResourceLocation... acceptedMultiblockIds) {
@@ -63,6 +63,10 @@ public class StarTDysonRailgunModule extends WorkableElectricMultiblockMachine {
         for (IMultiPart part : getParts()) {
             if (part instanceof  StarTModularInterfaceHatchPartMachine terminal) {
                 terminal.setSupportedModules(acceptedMultiblockIds);
+                terminal.resetSupportedModule();
+
+                terminal.setSupportedMachineControllerConsumer(dysonMonitorMachine ->
+                        this.starTDysonSwarmMonitor = (StarTDysonSwarmMonitor) dysonMonitorMachine);
             }
         }
     }

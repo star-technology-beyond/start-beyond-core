@@ -23,6 +23,7 @@ public class StarTDysonCollectorModule extends WorkableElectricMultiblockMachine
 
     protected List<ResourceLocation> acceptedMultiblockIds;
     private boolean readyToUpdate;
+    private StarTDysonSwarmMonitor starTDysonSwarmMonitor;
 
     public StarTDysonCollectorModule(IMachineBlockEntity holder, int tier, ResourceLocation... acceptedMultiblockIds) {
         super(holder);
@@ -38,7 +39,8 @@ public class StarTDysonCollectorModule extends WorkableElectricMultiblockMachine
         this.readyToUpdate = false;
 
         this.setupTerminals();
-//        StarTDysonSwarmMonitor.setCollectorTier(this.tier);
+        starTDysonSwarmMonitor.setCollectorTier(this.tier);
+
         this.readyToUpdate = true;
     }
 
@@ -66,6 +68,10 @@ public class StarTDysonCollectorModule extends WorkableElectricMultiblockMachine
         for (IMultiPart part : getParts()) {
             if (part instanceof  StarTModularInterfaceHatchPartMachine terminal) {
                 terminal.setSupportedModules(acceptedMultiblockIds);
+                terminal.resetSupportedModule();
+
+                terminal.setSupportedMachineControllerConsumer(dysonMonitorMachine ->
+                        this.starTDysonSwarmMonitor = (StarTDysonSwarmMonitor) dysonMonitorMachine);
             }
         }
     }

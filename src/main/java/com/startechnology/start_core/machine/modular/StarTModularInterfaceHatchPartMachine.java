@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +23,6 @@ import com.gregtechceu.gtceu.api.machine.feature.multiblock.IWorkableMultiContro
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup;
@@ -71,6 +69,10 @@ public class StarTModularInterfaceHatchPartMachine extends TieredIOPartMachine i
     @Setter
     @NotNull
     protected Consumer<IStarTModularSupportedModules> supportedMachineConsumer;
+
+    @Setter
+    @NotNull
+    protected Consumer<MultiblockControllerMachine> supportedMachineControllerConsumer;
 
     @Persisted
     @DescSynced
@@ -177,6 +179,11 @@ public class StarTModularInterfaceHatchPartMachine extends TieredIOPartMachine i
 
         /* Get supported state */
         boolean isSupported = modulesSupportedContainer.isSupportedMultiblockId(multiblockId, getPos());
+
+        // sends over the controller to the modules if needed
+        if (modulesSupportedContainer.getOnSupportedMachineControllerConsumer() != null) {
+            modulesSupportedContainer.getOnSupportedMachineControllerConsumer().accept(multiblockControllerMachine);
+        }
 
         /* Changed to true state for supported */
         if (this.isSupportedModule == false && isSupported && modulesSupportedContainer.getOnSupportedConsumer() != null) {
@@ -382,6 +389,11 @@ public class StarTModularInterfaceHatchPartMachine extends TieredIOPartMachine i
     @Override
     public Consumer<IStarTModularSupportedModules> getOnSupportedConsumer() {
         return supportedMachineConsumer;
+    }
+
+    @Override
+    public Consumer<MultiblockControllerMachine> getOnSupportedMachineControllerConsumer() {
+        return supportedMachineControllerConsumer;
     }
 
     @Override

@@ -42,6 +42,9 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
     @Persisted
     private int runningTimer = 0;
 
+    private StarTDysonCollectorModule starTDysonCollectorModule;
+    private StarTDysonRailgunModule starTDysonRailgunModule;
+
     protected List<ResourceLocation> railgunModuleIds;
     protected List<ResourceLocation> collectorModuleIds;
     protected List<StarTModularInterfaceHatchPartMachine> railgunTerminals = new ArrayList<>();
@@ -89,9 +92,8 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
             collectorTerminal.setSupportedModules(collectorModuleIds);
             collectorTerminal.resetSupportedModule();
 
-//            collectorTerminal.setSupportedMachineConsumer(collectorNode -> {
-//                // TODO (not entirely sure what to put here yet)
-//            });
+            collectorTerminal.setSupportedMachineControllerConsumer(collectorControllerMachine ->
+                    this.starTDysonCollectorModule = (StarTDysonCollectorModule) collectorControllerMachine);
 
         }
 
@@ -99,9 +101,8 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
             railgunTerminal.setSupportedModules(railgunModuleIds);
             railgunTerminal.resetSupportedModule();
 
-//            railgunTerminal.setSupportedMachineConsumer(railgunNode -> {
-//                // TODO (not entirely sure what to put here yet)
-//            });
+            railgunTerminal.setSupportedMachineControllerConsumer(railgunControllerMachine ->
+                    this.starTDysonRailgunModule = (StarTDysonRailgunModule) railgunControllerMachine);
 
         }
     }
