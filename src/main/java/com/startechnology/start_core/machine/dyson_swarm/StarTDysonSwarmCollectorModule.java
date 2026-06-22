@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.startechnology.start_core.machine.modular.StarTModularInterfaceHatchPartMachine;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMachine {
+
+    protected List<ResourceLocation> acceptedMultiblockIds;
 
     @Getter
     private int euT = 0;
@@ -26,10 +29,18 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
     @Getter
     private final int[] maxSwarmCounts = { 250, 500, 1000 }; //placeholder nums, may change when balancing
 
+    @Setter
+    private int mirrorCount;
+
+    @Setter
+    private int amplifierCount;
+
+    @Setter
+    private int railgunTier;
+
     @Persisted
     private int runningTimer = 0;
 
-    protected List<ResourceLocation> acceptedMultiblockIds;
     private boolean readyToUpdate;
     private StarTDysonSwarmMonitor starTDysonSwarmMonitor;
 
@@ -47,7 +58,6 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
         this.readyToUpdate = false;
 
         this.setupTerminals();
-        starTDysonSwarmMonitor.setCollectorTier(this.tier);
 
         this.readyToUpdate = true;
     }
@@ -55,24 +65,14 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
     @Override
     public void onStructureInvalid() {
         super.onStructureInvalid();
+
+        mirrorCount = 0;
+        amplifierCount = 0;
+        railgunTier = 0;
+        euT = 0;
     }
 
-    @Override
-    public boolean onWorking() {
-        boolean value = super.onWorking();
-
-        // runs checks every 7.2s 500 times = 1hr
-        if (runningTimer % 144 == 0) {
-            doLogic();
-        }
-
-        runningTimer++;
-        if (runningTimer > 72000) runningTimer %= 72000; // resets once every hour of running
-
-        return value;
-    }
-
-    protected  RecipeLogic createRecipeLogic(Object... args) {
+    protected RecipeLogic createRecipeLogic(Object... args) {
         return new StarTDysonSwarmCollectorLogic(this);
     }
 
@@ -82,22 +82,22 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
                 terminal.setSupportedModules(acceptedMultiblockIds);
                 terminal.resetSupportedModule();
 
-                terminal.setSupportedMachineControllerConsumer(dysonMonitorMachine ->
-                        this.starTDysonSwarmMonitor = (StarTDysonSwarmMonitor) dysonMonitorMachine);
             }
         }
     }
 
 //  Get mirror, and amplifier counts. Then work out the power output based off those nums. Then output the power.
     private void doLogic() {
-        int mirrorCount = starTDysonSwarmMonitor.getMirrorCount();
-        int amplifierCount = starTDysonSwarmMonitor.getAmplifierCount();
-        int railgunTier = starTDysonSwarmMonitor.getRailgunTier();
+        if(!this.readyToUpdate) return;
 
-        double tierMultiplier = (railgunTier == GTValues.UHV) ? 1.0075 :
-                (railgunTier == GTValues.UEV) ? 1.005 : 1.0025;
+        System.out.printf("Mirror Count: %d\n", this.mirrorCount);
+        System.out.printf("Amplifier Count: %d\n", this.amplifierCount);
+        System.out.printf("Railgun Tier: %d\n", this.railgunTier);
 
-        euT = (int) Math.floor(mirrorCount * Math.pow(tierMultiplier, amplifierCount) * GTValues.V[railgunTier]);
+        double tierMultiplier = (this.railgunTier == GTValues.UHV) ? 1.0075 :
+                (this.railgunTier == GTValues.UEV) ? 1.005 : 1.0025;
+
+        euT = (int) Math.floor(this.mirrorCount * Math.pow(tierMultiplier, this.amplifierCount) * GTValues.V[railgunTier]);
     }
 
     public static class StarTDysonSwarmCollectorLogic extends RecipeLogic {
@@ -128,9 +128,8 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
         @Override
         public void serverTick() {
             var machine = getMachine();
-            var monitor = getMachine().starTDysonSwarmMonitor;
 
-            if (!machine.isFormed || !isWorkingEnabled() || monitor.getRailgunTier() == null || monitor.getCollectorTier() == null) {
+            if (!machine.isFormed || !isWorkingEnabled()) {
                 machine.euT = 0;
                 setStatus(Status.IDLE);
                 isActive = false;

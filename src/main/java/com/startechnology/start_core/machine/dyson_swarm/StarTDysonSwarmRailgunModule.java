@@ -5,6 +5,7 @@ import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.startechnology.start_core.machine.modular.StarTModularInterfaceHatchPartMachine;
+import lombok.Getter;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Arrays;
@@ -13,6 +14,8 @@ import java.util.List;
 public class StarTDysonSwarmRailgunModule extends WorkableElectricMultiblockMachine {
 
     protected List<ResourceLocation> acceptedMultiblockIds;
+
+    @Getter
     private final int tier;
 
     private StarTDysonSwarmMonitor starTDysonSwarmMonitor;
@@ -65,8 +68,6 @@ public class StarTDysonSwarmRailgunModule extends WorkableElectricMultiblockMach
                 terminal.setSupportedModules(acceptedMultiblockIds);
                 terminal.resetSupportedModule();
 
-                terminal.setSupportedMachineControllerConsumer(dysonMonitorMachine ->
-                        this.starTDysonSwarmMonitor = (StarTDysonSwarmMonitor) dysonMonitorMachine);
             }
         }
     }

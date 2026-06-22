@@ -23,8 +23,8 @@ import static com.startechnology.start_core.StarTCore.START_REGISTRATE;
 
 public class StarTDysonSwarmMachines {
 
-    private static final ResourceLocation[] railgunModuleIds = { StarTCore.resourceLocation("uhv_dyson_collector_module"), StarTCore.resourceLocation("uev_dyson_collector_module"), StarTCore.resourceLocation("uiv_dyson_collector_module") };
-    private static final ResourceLocation[] collectorModuleIds = { StarTCore.resourceLocation("uhv_dyson_railgun_module"), StarTCore.resourceLocation("uev_dyson_railgun_module"), StarTCore.resourceLocation("uiv_dyson_railgun_module") };
+    private static final ResourceLocation[] railgunModuleIds = { StarTCore.resourceLocation("uhv_dyson_railgun_module"), StarTCore.resourceLocation("uev_dyson_railgun_module"), StarTCore.resourceLocation("uiv_dyson_railgun_module") };
+    private static final ResourceLocation[] collectorModuleIds = { StarTCore.resourceLocation("uhv_dyson_collector_module"), StarTCore.resourceLocation("uev_dyson_collector_module"), StarTCore.resourceLocation("uiv_dyson_collector_module") };
 
     public static final MultiblockMachineDefinition T1_STELLAR_RAILGUN = START_REGISTRATE
             .multiblock("uhv_dyson_railgun_module", (holder) -> new StarTDysonSwarmRailgunModule(holder, UHV, StarTCore.resourceLocation("dyson_swarm_monitor")))

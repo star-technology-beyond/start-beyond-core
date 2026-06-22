@@ -2,11 +2,14 @@ package com.startechnology.start_core.machine.dyson_swarm;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.startechnology.start_core.StarTCore;
 import com.startechnology.start_core.machine.modular.StarTModularInterfaceHatchPartMachine;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,15 +40,16 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
 
     @Getter
     @Setter
-    private Integer collectorTier;
+    private int collectorTier = 0;
 
     @Getter
     @Setter
-    private Integer railgunTier;
+    private int railgunTier = 0;
 
     @Persisted
     private int runningTimer = 0;
 
+    private boolean readyToUpdate;
     private StarTDysonSwarmCollectorModule starTDysonCollectorModule;
     private StarTDysonSwarmRailgunModule starTDysonRailgunModule;
 
@@ -66,6 +70,8 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
     public void onStructureFormed() {
         super.onStructureFormed();
 
+        this.readyToUpdate = false;
+
         // Gather the different terminals for each type
         railgunTerminals = this.getMultiblockState().getMatchContext()
                 .getOrDefault(StarTDysonSwarmPredicates.RAILGUN_STORAGE_KEY, new ArrayList<>());
@@ -74,21 +80,19 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
 
         this.setupTerminals();
 
+        this.readyToUpdate = true;
+
     }
 
     @Override
-    public boolean onWorking() {
-        boolean value = super.onWorking();
+    public void onStructureInvalid() {
+        super.onStructureInvalid();
+        collectorTier = 0;
+        railgunTier = 0;
+    }
 
-        // runs checks every 7.2s 500 times = 1hr
-        if (runningTimer % 144 == 0) {
-            doLogic();
-        }
-
-        runningTimer++;
-        if (runningTimer > 72000) runningTimer %= 72000; // resets once every hour of running
-
-        return value;
+    protected RecipeLogic createRecipeLogic(Object... args) {
+        return new StarTDysonSwarmMonitorLogic(this);
     }
 
     private void setupTerminals() {
@@ -111,7 +115,22 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
         }
     }
 
+    private void updateModules() {
+        if (!readyToUpdate) return;
+
+        if (starTDysonRailgunModule != null) {
+            railgunTier = starTDysonRailgunModule.getTier();
+        }
+
+        if (starTDysonCollectorModule != null) {
+            starTDysonCollectorModule.setRailgunTier(railgunTier);
+            starTDysonCollectorModule.setMirrorCount(mirrorCount);
+            starTDysonCollectorModule.setAmplifierCount(amplifierCount);
+        }
+    }
+
     private void doLogic() {
+        if (!readyToUpdate) return;
         /* TODO
          * Update controller ui with counts and avg durability %, run through the durabilities hashmap and deal damage to all dependent on shield count (not in this order).
          * If the durability reaches 0, remove from hashmap, get the tier and type from the id and take 1 off the typeCount array in the position of tier.
@@ -123,6 +142,43 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
         /* TODO should be pretty straight forward to understand what I'm planning here
            Note: don't forget to run this whenever railgun unforms
          */
+    }
+
+    public static class StarTDysonSwarmMonitorLogic extends RecipeLogic {
+        private static final int UPDATE_INTERVAL = 100;
+
+        public StarTDysonSwarmMonitorLogic(StarTDysonSwarmMonitor machine) {
+            super(machine);
+        }
+
+        @NotNull
+        @Override
+        public StarTDysonSwarmMonitor getMachine() {
+            return (StarTDysonSwarmMonitor) super.getMachine();
+        }
+
+        @Override
+        public void serverTick() {
+            var machine = getMachine();
+
+            if (!machine.isFormed || !isWorkingEnabled()) {
+                setStatus(Status.IDLE);
+                isActive = false;
+                return;
+            }
+
+            if (progress == 0 || progress == 50) {
+                if (progress == 0) {
+                    machine.updateModules();
+                    machine.doLogic();
+                }
+                else {
+                    machine.updateModules();
+                }
+            }
+
+            setStatus(Status.WORKING);
+        }
     }
 
 
