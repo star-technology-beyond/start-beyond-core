@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -238,15 +237,26 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
         };
     }
 
-    private String getWeatherType() {
+    private Component getWeatherType() {
         var level = getLevel();
 
         if (level.isThundering())
-            return "Thunder";
+            return Component.translatable("wind.start_core.wind_controller.weather.thunder");
         if (level.isRaining())
-            return "Rain";
+            return Component.translatable("wind.start_core.wind_controller.weather.rain");
 
-        return "Clear";
+        return Component.translatable("wind.start_core.wind_controller.weather.clear");
+    }
+
+    private Component getFluidName() {
+        if (usingLubricant)
+            return Component.translatable("wind.start_core.wind_controller.lubricant");
+        if (usingSeedOil)
+            return Component.translatable("wind.start_core.wind_controller.seed_oil");
+        if (usingFishOil)
+            return Component.translatable("wind.start_core.wind_controller.fish_oil");
+
+        return Component.translatable("wind.start_core.wind_controller.none");
     }
 
     public boolean regressWhenWaiting() {
@@ -270,27 +280,22 @@ public class StarTWindTurbineMachine extends WorkableElectricMultiblockMachine {
             return;
 
         if (isActive()) {
-            textList.add(Component.literal("Generating: ")
-                    .append(Component.literal("%s EU/t".formatted(FormattingUtil.formatNumbers(euT)))
-                            .withStyle(ChatFormatting.GREEN)));
+            textList.add(Component.translatable("wind.start_core.wind_controller.generating",
+                    FormattingUtil.formatNumbers(euT)));
         } else {
-            textList.add(Component.literal("Waiting for Fluid").withStyle(ChatFormatting.YELLOW));
+            textList.add(Component.translatable("wind.start_core.wind_controller.waiting_for_fluid"));
         }
 
-        String fluidName = usingLubricant ? "Lubricant" : usingSeedOil ? "Seed Oil" : usingFishOil ? "Fish Oil" : "None";
-        textList.add(Component.literal("Fluid: ")
-                .append(Component.literal(fluidName)
-                        .withStyle(usingLubricant || usingSeedOil || usingFishOil ? ChatFormatting.AQUA : ChatFormatting.GRAY)));
+        textList.add(Component.translatable("wind.start_core.wind_controller.fluid", getFluidName()));
         textList.add(Component.translatable("wind.start_core.wind_controller.fluid_usage",
                 FormattingUtil.formatNumbers(getFluidPerCycle(tier) * 20L)));
-        textList.add(Component.literal("Dynamo Tier: ")
-                .append(Component.literal(GTValues.VNF[getTier()]).withStyle(ChatFormatting.GOLD)));
-        textList.add(Component.literal("Weather: ")
-                .append(Component.literal(getWeatherType()).withStyle(ChatFormatting.GRAY))
-        );
-        textList.add(Component.literal("Nearby Airspace: ")
-                .append(Component.literal(isCrowded ? "Crowded" : "Clear")
-                        .withStyle(isCrowded ? ChatFormatting.RED : ChatFormatting.GREEN)));
+        textList.add(Component.translatable("wind.start_core.wind_controller.dynamo_tier",
+                GTValues.VNF[getTier()]));
+        textList.add(Component.translatable("wind.start_core.wind_controller.weather",
+                getWeatherType()));
+        textList.add(Component.translatable("wind.start_core.wind_controller.nearby_airspace",
+                Component.translatable(isCrowded ? "wind.start_core.wind_controller.airspace.crowded" :
+                        "wind.start_core.wind_controller.airspace.clear")));
     }
 
     public static class StarTWindTurbineRecipeLogic extends RecipeLogic {

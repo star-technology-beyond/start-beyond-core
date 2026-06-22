@@ -499,6 +499,7 @@ public class LangHandler {
         provider.add("ui.start_core.cross_dimensional_laser.output_per_sec", "§7EU Sent: %s §7EU/t");
         provider.add("ui.start_core.cross_dimensional_laser.hatch.input_per_sec_hover", "EU transferred to this array in the last second expressed in per tick");
         provider.add("ui.start_core.cross_dimensional_laser.hatch.output_per_sec_hover", "EU transferred out of this array in the last second expressed in per tick");
+        
         provider.add("block.start_core.wind_controller.line", "§6§lWind Energy");
         provider.add("start_core.wind_controller.line0", "§7A wind generator whose output and rotor speed rise and fall with wind strength.");
         provider.add("start_core.wind_controller.line1", "§6Lubrication:");
@@ -507,16 +508,25 @@ public class LangHandler {
         provider.add("start_core.wind_controller.line4", "§bRotor Speed: §7Scales with current EU/t. Weather changes the wind curve and is already reflected in output.");
         provider.add("start_core.wind_controller.line5", "§7If another formed Wind Turbine is inside this turbine's airspace radius, output is reduced by §c50%§7.");
         provider.add("config.jade.plugin_start_core.wind_turbine_info", "[Star Technology] Wind Turbine Info");
-        provider.add("wind.start_core.wind_controller.energy", "§eGenerating:§f %s EU/t");
-        provider.add("wind.start_core.wind_controller.fluid", "§6Fluid: %s");
-        provider.add("wind.start_core.wind_controller.fluid_usage", "§6Fluid Usage: §b%s L/s");
-        provider.add("wind.start_core.wind_controller.output_modifier.full", "§6Output Modifier: §a100%");
-        provider.add("wind.start_core.wind_controller.output_modifier.debuff", "§6Output Modifier: §c85%");
+        provider.add("wind.start_core.wind_controller.fluid", "Fluid: %s");
+        provider.add("wind.start_core.wind_controller.fluid_usage", "Fluid Usage: §b%s L/s");
+        provider.add("wind.start_core.wind_controller.output_modifier.full", "Output Modifier: §a100%");
+        provider.add("wind.start_core.wind_controller.output_modifier.debuff", "Output Modifier: §c85%");
+        provider.add("wind.start_core.wind_controller.generating", "Generating: §a%s EU/t");
+        provider.add("wind.start_core.wind_controller.dynamo_tier", "Dynamo Tier: §6%s");
+        provider.add("wind.start_core.wind_controller.weather", "Weather: %s");
+        provider.add("wind.start_core.wind_controller.nearby_airspace", "Nearby Airspace: %s");
         provider.add("wind.start_core.wind_controller.lubricant", "§aLubricant");
         provider.add("wind.start_core.wind_controller.seed_oil", "§cSeed Oil");
         provider.add("wind.start_core.wind_controller.fish_oil", "§cFish Oil");
-        provider.add("wind.start_core.wind_controller.weather_boost", "§bWeather: §f%sx");
-        provider.add("wind.start_core.wind_controller.crowding_penalty", "§4Crowding Penalty: §c-50%");
-        provider.add("wind.start_core.wind_controller.waiting_for_fluid", "Waiting for Fluid");
+        provider.add("wind.start_core.wind_controller.none", "§7None");
+        provider.add("wind.start_core.wind_controller.weather.thunder", "§7Thunder");
+        provider.add("wind.start_core.wind_controller.weather.rain", "§7Rain");
+        provider.add("wind.start_core.wind_controller.weather.clear", "§7Clear");
+        provider.add("wind.start_core.wind_controller.airspace.crowded", "§cCrowded");
+        provider.add("wind.start_core.wind_controller.airspace.clear", "§aClear");
+        provider.add("wind.start_core.wind_controller.weather_boost", "Weather: §f%sx");
+        provider.add("wind.start_core.wind_controller.crowding_penalty", "Crowding Penalty: §c-50%");
+        provider.add("wind.start_core.wind_controller.waiting_for_fluid", "§eWaiting for Fluid");
     }
 }
