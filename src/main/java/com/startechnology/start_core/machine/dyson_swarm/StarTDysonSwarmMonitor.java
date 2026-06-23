@@ -116,6 +116,13 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
     }
 
     private void updateModules() {
+        for (StarTModularInterfaceHatchPartMachine railgunTerminal : railgunTerminals) {
+            if (!railgunTerminal.checkSupportedModule()) {
+                railgunTier = 0;
+                //TODO eject all swarms
+            }
+        }
+
         if (!readyToUpdate) return;
 
         if (starTDysonRailgunModule != null) {

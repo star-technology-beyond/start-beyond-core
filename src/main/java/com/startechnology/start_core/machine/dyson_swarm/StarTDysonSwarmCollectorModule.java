@@ -11,13 +11,11 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.startechnology.start_core.machine.modular.StarTModularInterfaceHatchPartMachine;
 
-import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import net.minecraft.network.chat.Component;
@@ -45,11 +43,8 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
     @Setter
     private int railgunTier;
 
-    @Persisted
-    private int runningTimer = 0;
-
-    private boolean readyToUpdate;
-    private StarTDysonSwarmMonitor starTDysonSwarmMonitor;
+    private StarTModularInterfaceHatchPartMachine node;
+    private boolean ready;
 
     public StarTDysonSwarmCollectorModule(IMachineBlockEntity holder, int tier, ResourceLocation... acceptedMultiblockIds) {
         super(holder);
@@ -62,21 +57,18 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
     public void onStructureFormed() {
         super.onStructureFormed();
 
-        this.readyToUpdate = false;
+        this.ready = false;
 
         this.setupTerminals();
 
-        this.readyToUpdate = true;
+        this.ready = true;
     }
 
     @Override
     public void onStructureInvalid() {
         super.onStructureInvalid();
 
-        mirrorCount = 0;
-        amplifierCount = 0;
-        railgunTier = 0;
-        euT = 0;
+        resetModule();
     }
 
     protected RecipeLogic createRecipeLogic(Object... args) {
@@ -86,25 +78,31 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
     private void setupTerminals() {
         for (IMultiPart part : getParts()) {
             if (part instanceof  StarTModularInterfaceHatchPartMachine terminal) {
-                terminal.setSupportedModules(acceptedMultiblockIds);
-                terminal.resetSupportedModule();
-
+                this.node = terminal;
             }
         }
     }
 
 //  Get mirror, and amplifier counts. Then work out the power output based off those nums. Then output the power.
     private void doLogic() {
-        if(!this.readyToUpdate) return;
 
-        System.out.printf("Mirror Count: %d\n", this.mirrorCount);
-        System.out.printf("Amplifier Count: %d\n", this.amplifierCount);
-        System.out.printf("Railgun Tier: %d\n", this.railgunTier);
+        if(!node.checkSupportedModule()) {
+            resetModule();
+            return;
+        }
 
         double tierMultiplier = (this.railgunTier == GTValues.UHV) ? 1.0075 :
-                (this.railgunTier == GTValues.UEV) ? 1.005 : 1.0025;
+                (this.railgunTier == GTValues.UEV) ? 1.005 : (this.railgunTier == GTValues.UIV) ? 1.0025 : 0;
 
         euT = (int) Math.floor(this.mirrorCount * Math.pow(tierMultiplier, this.amplifierCount) * GTValues.V[railgunTier]);
+    }
+
+    private void resetModule() {
+        mirrorCount = 0;
+        amplifierCount = 0;
+        railgunTier = 0;
+        euT = 0;
+        ready = false;
     }
 
     public boolean canVoidRecipeOutputs(RecipeCapability<?> capability) {
@@ -157,7 +155,7 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
         public void serverTick() {
             var machine = getMachine();
 
-            if (!machine.isFormed || !isWorkingEnabled()) {
+            if (!machine.isFormed || !isWorkingEnabled() || !machine.ready) {
                 machine.euT = 0;
                 setStatus(Status.IDLE);
                 isActive = false;

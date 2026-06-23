@@ -18,11 +18,10 @@ public class StarTDysonSwarmRailgunModule extends WorkableElectricMultiblockMach
     @Getter
     private final int tier;
 
-    private StarTDysonSwarmMonitor starTDysonSwarmMonitor;
-
     @Persisted
     private int runningTimer = 0;
 
+    private StarTModularInterfaceHatchPartMachine node;
     private boolean readyToUpdate;
 
     public StarTDysonSwarmRailgunModule(IMachineBlockEntity holder, int tier, ResourceLocation... acceptedMultiblockIds) {
@@ -65,9 +64,7 @@ public class StarTDysonSwarmRailgunModule extends WorkableElectricMultiblockMach
     private void setupTerminals() {
         for (IMultiPart part : getParts()) {
             if (part instanceof  StarTModularInterfaceHatchPartMachine terminal) {
-                terminal.setSupportedModules(acceptedMultiblockIds);
-                terminal.resetSupportedModule();
-
+                this.node = terminal;
             }
         }
     }

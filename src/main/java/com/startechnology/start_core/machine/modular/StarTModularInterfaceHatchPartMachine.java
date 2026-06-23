@@ -400,4 +400,8 @@ public class StarTModularInterfaceHatchPartMachine extends TieredIOPartMachine i
     public void invalidateSupportedModule() {
         setUnsupported();
     }
+
+    public boolean checkSupportedModule() {
+        return isSupportedModule;
+    }
 }

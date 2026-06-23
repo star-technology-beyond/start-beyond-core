@@ -185,7 +185,7 @@ public class StarTDysonSwarmMachines {
                     .where("D", Predicates.blocks(StarTMachineUtils.getKjsBlock("extreme_temperature_smelting_casing")))
                     .where("E", Predicates.blocks(StarTMachineUtils.getKjsBlock("magmada_alloy_coil_block")))
                     .where("F", Predicates.blocks(StarTMachineUtils.getKjsBlock("enriched_naquadah_firebox_casing")))
-                    .where("G", Predicates.blocks(StarTMachineUtils.getKjsBlock("astrenalloy_nx_frame")))
+                    .where("G", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("astrenalloy_nx_frame")))
                     .where("H", Predicates.blocks(StarTMachineUtils.getKjsBlock("reinforced_brimstone_casing")))
                     .where("I", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("uhv_ultimate_battery")))
                     .where("J", Predicates.blocks(StarTMachineUtils.getGTCEuBlock("atomic_casing")))
