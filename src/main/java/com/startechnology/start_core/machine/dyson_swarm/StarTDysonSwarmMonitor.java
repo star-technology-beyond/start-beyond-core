@@ -4,6 +4,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.startechnology.start_core.machine.modular.StarTModularInterfaceHatchPartMachine;
 import lombok.Getter;
 import lombok.Setter;
@@ -205,20 +206,21 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
                 else {
                     machine.updateModules();
                 }
-            }
 
-            if (machine.railgunTier == 0 && machine.collectorTier == 0) {
-                setWaiting(Component.translatable("dyson_swarm.start_core.monitor.module_waiting_reason"));
-                isActive = false;
-                return;
-            } else if (machine.railgunTier == 0) {
-                setWaiting(Component.translatable("dyson_swarm.start_core.monitor.railgun_waiting_reason"));
-                isActive = false;
-                return;
-            } else if (machine.collectorTier == 0) {
-                setWaiting(Component.translatable("dyson_swarm.start_core.monitor.collector_waiting_reason"));
-                isActive = false;
-                return;
+                // Checks if any modules aren't connected (in if so it doesn't get stuck here)
+                if (machine.railgunTier == 0 && machine.collectorTier == 0) {
+                    setWaiting(Component.translatable("dyson_swarm.start_core.monitor.module_waiting_reason"));
+                    isActive = false;
+                    return;
+                } else if (machine.railgunTier == 0) {
+                    setWaiting(Component.translatable("dyson_swarm.start_core.monitor.railgun_waiting_reason"));
+                    isActive = false;
+                    return;
+                } else if (machine.collectorTier == 0) {
+                    setWaiting(Component.translatable("dyson_swarm.start_core.monitor.collector_waiting_reason"));
+                    isActive = false;
+                    return;
+                }
             }
 
             isActive = true;
