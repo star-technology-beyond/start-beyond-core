@@ -8,7 +8,6 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.startechnology.start_core.machine.modular.StarTModularInterfaceHatchPartMachine;
 
 import java.util.Arrays;
@@ -26,7 +25,7 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
     protected List<ResourceLocation> acceptedMultiblockIds;
 
     @Getter
-    private int euT = 0;
+    private long euT = 0L;
 
     @Getter
     private final int tier;
@@ -86,7 +85,7 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
 //  Get mirror, and amplifier counts. Then work out the power output based off those nums. Then output the power.
     private void doLogic() {
 
-        if(!node.checkSupportedModule()) {
+        if(!node.isCurrentlyLinked()) {
             resetModule();
             return;
         }
@@ -94,14 +93,14 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
         double tierMultiplier = (this.railgunTier == GTValues.UHV) ? 1.0075 :
                 (this.railgunTier == GTValues.UEV) ? 1.005 : (this.railgunTier == GTValues.UIV) ? 1.0025 : 0;
 
-        euT = (int) Math.floor(this.mirrorCount * Math.pow(tierMultiplier, this.amplifierCount) * GTValues.V[railgunTier]);
+        euT = (long) Math.floor(this.mirrorCount * Math.pow(tierMultiplier, this.amplifierCount) * GTValues.V[railgunTier]);
     }
 
     private void resetModule() {
         mirrorCount = 0;
         amplifierCount = 0;
         railgunTier = 0;
-        euT = 0;
+        euT = 0L;
         ready = false;
     }
 
@@ -142,7 +141,7 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
         private void produceEnergy() {
             EnergyContainerList energyContainer = getMachine().energyContainer;
 
-            if (energyContainer == null || getMachine().euT <= 0) return;
+            if (energyContainer == null || getMachine().euT <= 0L) return;
 
             long resultEnergy = energyContainer.getEnergyStored() + getMachine().euT;
 
@@ -156,7 +155,7 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
             var machine = getMachine();
 
             if (!machine.isFormed || !isWorkingEnabled() || !machine.ready) {
-                machine.euT = 0;
+                machine.euT = 0L;
                 setStatus(Status.IDLE);
                 isActive = false;
                 return;
@@ -166,7 +165,7 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
                 machine.doLogic();
             }
 
-            isActive = machine.euT > 0;
+            isActive = machine.euT > 0L;
             setStatus(isActive ? Status.WORKING : Status.IDLE);
 
             progress = (progress + 1) % UPDATE_INTERVAL;

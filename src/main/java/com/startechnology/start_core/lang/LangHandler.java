@@ -532,5 +532,9 @@ public class LangHandler {
         provider.add("dyson_swarm.start_core.collector_module.generating", "§eGenerating:§f %s EU/t");
         provider.add("dyson_swarm.start_core.mirror_count", "Mirror Count: %s");
         provider.add("dyson_swarm.start_core.amplifier_count", "Amplifier Count: %s");
+        provider.add("dyson_swarm.start_core.shield_count", "Shield Count: %s");
+        provider.add("dyson_swarm.start_core.monitor.module_waiting_reason", "Waiting for modules to be connected");
+        provider.add("dyson_swarm.start_core.monitor.railgun_waiting_reason", "Waiting for railgun module connection");
+        provider.add("dyson_swarm.start_core.monitor.collector_waiting_reason", "Waiting for collector module connection");
     }
 }
