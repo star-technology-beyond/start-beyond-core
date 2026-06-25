@@ -146,8 +146,7 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
 
     private void runBreakage() {
         if (!readyToUpdate) return;
-        /* TODO
-         * Update controller ui with counts and avg durability %, run through the durabilities hashmap and deal damage to all dependent on shield count (not in this order).
+        /* Update controller ui with counts and avg durability %, run through the durabilities hashmap and deal damage to all dependent on shield count (not in this order).
          * If the durability reaches 0, remove from hashmap, get the tier and type from the id and take 1 off the typeCount array in the position of tier.
          */
 
@@ -227,6 +226,11 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
             setStatus(Status.WORKING);
 
             progress = (progress + 1) % UPDATE_INTERVAL;
+        }
+
+        @Override
+        public int getMaxProgress() {
+            return UPDATE_INTERVAL;
         }
     }
 
