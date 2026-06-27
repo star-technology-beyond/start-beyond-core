@@ -30,9 +30,6 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
     @Getter
     private final int tier;
 
-    @Getter
-    private final int[] maxSwarmCounts = { 250, 500, 1000 }; //placeholder nums, may change when balancing
-
     @Setter
     private int mirrorCount;
 
@@ -84,11 +81,6 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
 
 //  Get mirror, and amplifier counts. Then work out the power output based off those nums. Then output the power.
     private void doLogic() {
-
-        if(!node.isCurrentlyLinked()) {
-            resetModule();
-            return;
-        }
 
         double tierMultiplier = (this.railgunTier == GTValues.UHV) ? 1.0075 :
                 (this.railgunTier == GTValues.UEV) ? 1.005 : (this.railgunTier == GTValues.UIV) ? 1.0025 : 0;
@@ -162,7 +154,18 @@ public class StarTDysonSwarmCollectorModule extends WorkableElectricMultiblockMa
             }
 
             if (progress == 0) {
-                machine.doLogic();
+                if (machine.node.isCurrentlyLinked()) {
+                    setWaiting(Component.translatable("dyson_swarm.start_core.collector.no_link_waiting_reason"));
+                    machine.resetModule();
+                    isActive = false;
+                    return;
+                }
+                else if (machine.amplifierCount + machine.mirrorCount == 0) {
+                    setWaiting(Component.translatable("dyson_swarm.start_core.collector_module.no_swarms_waiting_reason"));
+                    isActive = false;
+                    return;
+                }
+                else machine.doLogic();
             }
 
             isActive = machine.euT > 0L;

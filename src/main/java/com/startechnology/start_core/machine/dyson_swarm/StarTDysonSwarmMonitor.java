@@ -26,6 +26,7 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
     // using these 4 to display in controller and to communicate between the 3 locations
     @Getter
     private int totalSwarmCount = 0;
+
     @Getter
     @Setter
     private int mirrorCount = 0;
@@ -38,9 +39,23 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
     @Setter
     private int amplifierCount = 0;
 
+    //Desired swarm counts for variadic implementation
+    @Getter
+    @Setter
+    private Integer desiredMirrorCount;
+
+    @Getter
+    @Setter
+    private Integer desiredShieldCount;
+
+    @Getter
+    @Setter
+    private Integer desiredAmplifierCount;
+
     private int collectorTier = 0;
     private int railgunTier = 0;
-    private int maxSwarmCount;
+    private int oldRailgunTier = 0;
+    private Integer maxSwarmCount;
 
     private boolean readyToUpdate;
     private StarTDysonSwarmCollectorModule starTDysonCollectorModule;
@@ -133,14 +148,26 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
 
         if (starTDysonRailgunModule != null) {
             this.railgunTier = starTDysonRailgunModule.getTier();
+            this.oldRailgunTier = starTDysonRailgunModule.getTier();
+            starTDysonRailgunModule.setMaxSwarmCount(maxSwarmCount);
         }
 
         if (starTDysonCollectorModule != null) {
             this.collectorTier = starTDysonCollectorModule.getTier();
+            this.setMaxSwarmCount(this.collectorTier);
             starTDysonCollectorModule.setRailgunTier(railgunTier);
             starTDysonCollectorModule.setMirrorCount(mirrorCount);
             starTDysonCollectorModule.setAmplifierCount(amplifierCount);
             this.CollectorEUT = starTDysonCollectorModule.getEuT();
+        }
+    }
+    private void setMaxSwarmCount(int tier) {
+        int[] maxCounts = { 250, 500, 1000 }; //placeholder nums, may change when balancing
+
+        switch (tier) {
+            case GTValues.UHV -> this.maxSwarmCount = maxCounts[0];
+            case GTValues.UEV -> this.maxSwarmCount = maxCounts[1];
+            case GTValues.UIV -> this.maxSwarmCount = maxCounts[2];
         }
     }
 
@@ -206,17 +233,15 @@ public class StarTDysonSwarmMonitor extends WorkableElectricMultiblockMachine {
                     machine.updateModules();
                 }
 
-                // Checks if any modules aren't connected (in if so it doesn't get stuck here)
+                /* Checks if any modules aren't connected (in if so it doesn't get stuck here)
+                   No collector waiting reason because swarms should technically still be getting damaged even if not used for power
+                 */
                 if (machine.railgunTier == 0 && machine.collectorTier == 0) {
                     setWaiting(Component.translatable("dyson_swarm.start_core.monitor.module_waiting_reason"));
                     isActive = false;
                     return;
                 } else if (machine.railgunTier == 0) {
                     setWaiting(Component.translatable("dyson_swarm.start_core.monitor.railgun_waiting_reason"));
-                    isActive = false;
-                    return;
-                } else if (machine.collectorTier == 0) {
-                    setWaiting(Component.translatable("dyson_swarm.start_core.monitor.collector_waiting_reason"));
                     isActive = false;
                     return;
                 }

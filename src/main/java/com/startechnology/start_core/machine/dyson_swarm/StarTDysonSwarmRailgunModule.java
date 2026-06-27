@@ -6,6 +6,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.startechnology.start_core.machine.modular.StarTModularInterfaceHatchPartMachine;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Arrays;
@@ -17,6 +18,9 @@ public class StarTDysonSwarmRailgunModule extends WorkableElectricMultiblockMach
 
     @Getter
     private final int tier;
+
+    @Setter
+    private Integer maxSwarmCount;
 
     @Persisted
     private int runningTimer = 0;
