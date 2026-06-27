@@ -2,6 +2,7 @@ package com.startechnology.start_core.api.capability;
 
 import java.util.function.Consumer;
 
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 
@@ -11,6 +12,9 @@ public interface IStarTModularSupportedModules {
 
     /* This returns an optional consumer on connection */
     Consumer<IStarTModularSupportedModules> getOnSupportedConsumer();
+
+    /* This returns an optional controller consumer on connection */
+    Consumer<MultiblockControllerMachine> getOnSupportedMachineControllerConsumer();
 
     /* Force invalidate this modular support item */
     void invalidateSupportedModule();
