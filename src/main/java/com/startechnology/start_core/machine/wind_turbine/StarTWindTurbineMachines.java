@@ -34,6 +34,8 @@ public class StarTWindTurbineMachines {
         int tier,
         MultiblockMachineBuilder builder
     ) {
+        int turbineRadius = StarTWindTurbineMachine.getCrowdingRadius(tier);
+        int fluidPerCycle = StarTWindTurbineMachine.getFluidPerCycle(tier);
         return builder
             .langValue("%s Wind Turbine".formatted(GTValues.VNF[tier] + "§r"))
             .rotationState(RotationState.NON_Y_AXIS)
@@ -44,13 +46,13 @@ public class StarTWindTurbineMachines {
                 Component.translatable("start_core.wind_controller.line0"),
                 Component.translatable("block.start_core.breaker_line"),
                 Component.translatable("start_core.wind_controller.line1"),
-                Component.translatable("start_core.wind_controller.line2"),
-                Component.translatable("block.start_core.breaker_line"),
+                Component.translatable("start_core.wind_controller.line2", fluidPerCycle),
                 Component.translatable("start_core.wind_controller.line3"),
+                Component.translatable("block.start_core.breaker_line"),
                 Component.translatable("start_core.wind_controller.line4"),
-                Component.empty(),
+                Component.translatable("block.start_core.breaker_line"),
                 Component.translatable("start_core.wind_controller.line5"),
-                Component.translatable("block.start_core.breaker_line")
+                Component.translatable("start_core.wind_controller.line6", turbineRadius, turbineRadius, turbineRadius)
             )
             .pattern(definition -> switch (tier) {
                 case MV -> FactoryBlockPattern.start()

@@ -502,14 +502,15 @@ public class LangHandler {
         
         provider.add("block.start_core.wind_controller.line", "§6§lWind Energy");
         provider.add("start_core.wind_controller.line0", "§7A wind generator whose output and rotor speed rise and fall with wind strength.");
-        provider.add("start_core.wind_controller.line1", "§6Lubrication:");
-        provider.add("start_core.wind_controller.line2", "§7Consumes fluid while running: LV §f80 L/s§7, MV §f240 L/s§7, HV §f720 L/s§7.");
-        provider.add("start_core.wind_controller.line3", "§fLubricant§7 gives full output. §fSeed Oil§7 and §fFish Oil§7 run at §c85%§7 output.");
-        provider.add("start_core.wind_controller.line4", "§bRotor Speed: §7Scales with current EU/t. Weather changes the wind curve and is already reflected in output.");
-        provider.add("start_core.wind_controller.line5", "§7If another formed Wind Turbine is inside this turbine's airspace radius, output is reduced by §c50%§7.");
+        provider.add("start_core.wind_controller.line1", "§e§lLubrication");
+        provider.add("start_core.wind_controller.line2", "§7Consumes fluid while running: §f%d mb per cycle");
+        provider.add("start_core.wind_controller.line3", "§fLubricant§7 gives full output. §fSeed Oil, Fish Oil, §7and §fPlant Oil run at §c85%§7 output.");
+        provider.add("start_core.wind_controller.line4", "§b§lRotor Speed\n§7Scales with current EU/t. Weather changes the wind curve and is already reflected in output.");
+        provider.add("start_core.wind_controller.line5", "§c§lAirspace\n§7If another formed Wind Turbine is inside this turbine's airspace radius, output is reduced by §c50%§7.");
+        provider.add("start_core.wind_controller.line6", "§cMinimum Airspace Radius: §f%d§7x§f%d§7x§f%d");
         provider.add("config.jade.plugin_start_core.wind_turbine_info", "[Star Technology] Wind Turbine Info");
         provider.add("wind.start_core.wind_controller.fluid", "Fluid: %s");
-        provider.add("wind.start_core.wind_controller.fluid_usage", "Fluid Usage: §b%s L/s");
+        provider.add("wind.start_core.wind_controller.fluid_usage", "Fluid Usage: §b%s mb/s");
         provider.add("wind.start_core.wind_controller.output_modifier.full", "Output Modifier: §a100%");
         provider.add("wind.start_core.wind_controller.output_modifier.debuff", "Output Modifier: §c85%");
         provider.add("wind.start_core.wind_controller.generating", "Generating: §a%s EU/t");
